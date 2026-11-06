@@ -1,0 +1,15 @@
+{
+  "name": "Burn Creek Speedshop",
+  "short_name": "Speedshop",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0c0e",
+  "theme_color": "#ff5500",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3067/3067451.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

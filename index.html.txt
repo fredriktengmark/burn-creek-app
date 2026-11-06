@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burn Creek Speedshop</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Teko:wght@600;700&family=Chakra+Petch:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --fire-orange: #ff5500;
+      --nitro-yellow: #ffb700;
+      --card-bg: #1c1e22;
+      --border-steel: #2e3238;
+      --led-green: #00ff66;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body { 
+      background-color: #0b0c0e;
+      background-image: 
+        radial-gradient(#1f2228 15%, transparent 16%), 
+        radial-gradient(#1f2228 15%, transparent 16%);
+      background-size: 16px 16px;
+      background-position: 0 0, 8px 8px;
+      color: #e5e5e5; 
+      font-family: 'Chakra Petch', sans-serif;
+      display: flex; 
+      justify-content: center; 
+      min-height: 100vh;
+    }
+
+    #app-container { 
+      width: 100%; 
+      max-width: 500px; 
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+      background: #121417; 
+      border-left: 2px solid #222;
+      border-right: 2px solid #222;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+    }
+    
+    .hazard-stripe {
+      height: 6px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #f5a623,
+        #f5a623 12px,
+        #111 12px,
+        #111 24px
+      );
+      width: 100%;
+    }
+
+    header { 
+      background: linear-gradient(180deg, #1f2228 0%, #131418 100%); 
+      padding: 14px 16px; 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center; 
+      border-bottom: 2px solid #ff5500;
+    }
+    
+    .brand-title { 
+      font-family: 'Black Ops One', cursive;
+      font-size: 1.25rem; 
+      color: #fff; 
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 0px #000, 0 0 10px rgba(255, 85, 0, 0.4);
+    }
+    .brand-title span { color: var(--fire-orange); }
+
+    .tree-lights {
+      display: inline-flex;
+      gap: 4px;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    .tree-light {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #333;
+    }
+    .tree-light.yellow { background: var(--nitro-yellow); box-shadow: 0 0 6px var(--nitro-yellow); }
+    .tree-light.green { background: var(--led-green); box-shadow: 0 0 8px var(--led-green); }
+
+    .btn-killswitch {
+      background: #2a1111;
+      border: 1px solid #771111;
+      color: #ff6666;
+      padding: 5px 10px;
+      font-family: 'Teko', sans-serif;
+      font-size: 1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+
+    nav { 
+      display: flex; 
+      background: #16181d; 
+      border-bottom: 1px solid var(--border-steel); 
+    }
+    nav button { 
+      flex: 1; 
+      padding: 12px 6px; 
+      background: none; 
+      border: none; 
+      color: #7b8390; 
+      font-family: 'Teko', sans-serif;
+      font-size: 1.35rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer; 
+      border-bottom: 3px solid transparent; 
+      transition: all 0.2s ease;
+    }
+    nav button.active { 
+      color: #fff; 
+      background: rgba(255, 85, 0, 0.08);
+      border-bottom: 3px solid var(--fire-orange); 
+      text-shadow: 0 0 8px rgba(255, 85, 0, 0.6);
+    }
+
+    .view { display: none; padding: 16px; flex: 1; overflow-y: auto; }
+    .view.active { display: block; }
+
+    .auth-box { 
+      padding: 30px 16px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 14px; 
+      background: #17191d;
+      border: 1px solid var(--border-steel);
+      border-radius: 6px;
+      margin-top: 20px;
+    }
+    .auth-box input { 
+      padding: 12px; 
+      border-radius: 4px; 
+      border: 1px solid #333842; 
+      background: #0c0d10; 
+      color: #fff; 
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.95rem;
+    }
+    .auth-box input:focus {
+      outline: none;
+      border-color: var(--fire-orange);
+      box-shadow: 0 0 8px rgba(255,85,0,0.3);
+    }
+
+    .btn-pedal { 
+      background: linear-gradient(180deg, #ff6600 0%, #cc3300 100%); 
+      color: #fff; 
+      border: none; 
+      padding: 12px; 
+      border-radius: 4px; 
+      font-family: 'Teko', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer; 
+      box-shadow: 0 4px 0 #881e00;
+      text-shadow: 1px 1px 2px #000;
+    }
+    .btn-pedal:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #881e00;
+    }
+    .btn-wrench { 
+      background: #252830; 
+      border: 1px solid #3d434f;
+      color: #ccc;
+    }
+
+    .post-creator { 
+      background: linear-gradient(180deg, #1b1e24 0%, #15171b 100%); 
+      border: 1px solid #2c3038; 
+      border-radius: 6px; 
+      padding: 14px; 
+      margin-bottom: 18px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 12px; 
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+    }
+    .post-creator textarea { 
+      background: #0d0e11; 
+      border: 1px solid #2e323b; 
+      border-radius: 4px; 
+      color: #fff; 
+      padding: 10px; 
+      resize: none; 
+      height: 70px; 
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .post-card { 
+      background: #17191e; 
+      border: 1px solid #262931; 
+      border-left: 4px solid var(--fire-orange); 
+      border-radius: 4px; 
+      padding: 14px; 
+      margin-bottom: 14px; 
+      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+    }
+    .post-header { 
+      display: flex; 
+      justify-content: space-between; 
+      font-size: 0.8rem; 
+      color: #7b8390; 
+      margin-bottom: 8px; 
+      border-bottom: 1px dashed #262931;
+      padding-bottom: 6px;
+    }
+    .post-author { 
+      font-family: 'Teko', sans-serif;
+      font-size: 1.25rem;
+      letter-spacing: 1px;
+      color: var(--nitro-yellow); 
+      text-transform: uppercase;
+    }
+    .post-image { 
+      width: 100%; 
+      border-radius: 4px; 
+      margin-top: 10px; 
+      border: 1px solid #333842; 
+      max-height: 400px; 
+      object-fit: cover; 
+    }
+
+    .todo-item { 
+      display: flex; 
+      align-items: center; 
+      gap: 12px; 
+      background: #17191e; 
+      border: 1px solid #262931;
+      padding: 12px; 
+      border-radius: 4px; 
+      margin-bottom: 10px; 
+      cursor: pointer;
+    }
+    .todo-item.done { 
+      background: #101214; 
+      border-color: #1a1c20;
+    }
+    .todo-item.done span { 
+      text-decoration: line-through; 
+      color: #555c66; 
+    }
+    .todo-badge {
+      font-size: 0.75rem;
+      background: #22262e;
+      color: var(--nitro-yellow);
+      padding: 2px 6px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app-container">
+  <div class="hazard-stripe"></div>
+
+  <!-- INLOGGNING -->
+  <div id="auth-view" class="view active">
+    <div style="text-align: center; margin: 30px 0 10px 0;">
+      <h1 class="brand-title" style="font-size: 1.8rem;">BURN CREEK <span>SPEEDSHOP</span></h1>
+      <p style="color: #777; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">Depå & Loggbok</p>
+    </div>
+    
+    <div class="auth-box">
+      <input type="text" id="auth-name" placeholder="FÖRARNAMN (VID REGISTRERING)">
+      <input type="email" id="auth-email" placeholder="E-POST">
+      <input type="password" id="auth-password" placeholder="LÖSENORD">
+      <button class="btn-pedal" onclick="login()">PELLE I BOTTEN (LOGGA IN)</button>
+      <button class="btn-pedal btn-wrench" onclick="register()">NYTT PIT-PASS (SKAPA KONTO)</button>
+      <p id="auth-error" style="color: #ff4444; font-size: 0.85rem; text-align: center;"></p>
+    </div>
+  </div>
+
+  <!-- HUVUDVY -->
+  <div id="main-view" style="display: none; flex-direction: column; height: 100vh;">
+    <header>
+      <div>
+        <span class="brand-title">SPEED<span>SHOP</span></span>
+        <div class="tree-lights">
+          <div class="tree-light yellow"></div>
+          <div class="tree-light yellow"></div>
+          <div class="tree-light green"></div>
+        </div>
+      </div>
+      <div>
+        <span id="user-display" style="font-size: 0.95rem; color: var(--nitro-yellow); font-family: 'Teko', sans-serif; letter-spacing: 1px; margin-right: 8px;"></span>
+        <button class="btn-killswitch" onclick="logout()">KILL SWITCH</button>
+      </div>
+    </header>
+
+    <nav>
+      <button class="tab-btn active" onclick="switchTab('feed')">PIT SNACK & BILDER</button>
+      <button class="tab-btn" onclick="switchTab('todo')">INKÖP / ATT FIXA</button>
+    </nav>
+
+    <!-- FLÖDE -->
+    <div id="feed-tab" class="view active">
+      <div class="post-creator">
+        <textarea id="post-text" placeholder="Rapport från lyften, mekstatus eller bytesdelar..."></textarea>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="file" id="post-file" accept="image/*" style="display: none;" onchange="updateFileName()">
+          <button class="btn-pedal btn-wrench" onclick="document.getElementById('post-file').click()" style="padding: 6px 14px; font-size: 1.1rem;">📷 FOTA / BILD</button>
+          <span id="file-chosen" style="font-size: 0.8rem; color: #aaa; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;"></span>
+          <button class="btn-pedal" style="margin-left: auto; padding: 6px 18px; font-size: 1.1rem;" onclick="publishPost()">BRÄNN AV</button>
+        </div>
+      </div>
+      <div id="posts-container">Laddar depåloggen...</div>
+    </div>
+
+    <!-- INKÖP / ATT GÖRA -->
+    <div id="todo-tab" class="view">
+      <div style="display: flex; gap: 8px; margin-bottom: 16px;">
+        <input type="text" id="todo-input" placeholder="T.ex. kapskivor, 10L E85, kaffe, bromsrengöring..." style="flex: 1; padding: 10px; border-radius: 4px; border: 1px solid #333842; background: #0c0d10; color: #fff; font-family: 'Chakra Petch', sans-serif;">
+        <button class="btn-pedal" style="padding: 8px 16px; font-size: 1.1rem;" onclick="addTodo()">LÄGG TILL</button>
+      </div>
+      <div id="todos-container"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Firebase SDKs för webbläsare -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAyn6xM-pkDVK7ojbQXCjfHO07P8rwevMQ",
+    authDomain: "burncreekspeedshop.firebaseapp.com",
+    projectId: "burncreekspeedshop",
+    storageBucket: "burncreekspeedshop.firebasestorage.app",
+    messagingSenderId: "611870239128",
+    appId: "1:611870239128:web:5e8973ec49556be0f823ed"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
+  const storage = firebase.storage();
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      document.getElementById('auth-view').style.display = 'none';
+      document.getElementById('main-view').style.display = 'flex';
+      document.getElementById('user-display').innerText = `FÖRARE: ${user.displayName || user.email.split('@')[0]}`;
+      loadFeed();
+      loadTodos();
+    } else {
+      document.getElementById('auth-view').style.display = 'block';
+      document.getElementById('main-view').style.display = 'none';
+    }
+  });
+
+  async function register() {
+    const name = document.getElementById('auth-name').value.trim();
+    const email = document.getElementById('auth-email').value.trim();
+    const pass = document.getElementById('auth-password').value;
+    if (!name) return alert('Ange förarnamn!');
+    try {
+      const res = await auth.createUserWithEmailAndPassword(email, pass);
+      await res.user.updateProfile({ displayName: name });
+      location.reload();
+    } catch (err) { document.getElementById('auth-error').innerText = err.message; }
+  }
+
+  async function login() {
+    const email = document.getElementById('auth-email').value.trim();
+    const pass = document.getElementById('auth-password').value;
+    try {
+      await auth.signInWithEmailAndPassword(email, pass);
+    } catch (err) { document.getElementById('auth-error').innerText = err.message; }
+  }
+
+  function logout() { auth.signOut(); }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) => b.classList.toggle('active', (i === 0 && tab === 'feed') || (i === 1 && tab === 'todo')));
+    document.getElementById('feed-tab').classList.toggle('active', tab === 'feed');
+    document.getElementById('todo-tab').classList.toggle('active', tab === 'todo');
+  }
+
+  function updateFileName() {
+    const f = document.getElementById('post-file').files[0];
+    document.getElementById('file-chosen').innerText = f ? f.name : '';
+  }
+
+  async function publishPost() {
+    const text = document.getElementById('post-text').value.trim();
+    const file = document.getElementById('post-file').files[0];
+    if (!text && !file) return;
+
+    let imageUrl = '';
+    if (file) {
+      const ref = storage.ref(`posts/${Date.now()}_${file.name}`);
+      const upload = await ref.put(file);
+      imageUrl = await upload.ref.getDownloadURL();
+    }
+
+    await db.collection('posts').add({
+      text: text,
+      imageUrl: imageUrl,
+      author: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    document.getElementById('post-text').value = '';
+    document.getElementById('post-file').value = '';
+    document.getElementById('file-chosen').innerText = '';
+  }
+
+  function loadFeed() {
+    db.collection('posts').orderBy('createdAt', 'desc').limit(25).onSnapshot(snapshot => {
+      const container = document.getElementById('posts-container');
+      container.innerHTML = '';
+      snapshot.forEach(doc => {
+        const p = doc.data();
+        const date = p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString('sv-SE', { hour: '2-digit', minute: '2-digit' }) : 'Nyss';
+        container.innerHTML += `
+          <div class="post-card">
+            <div class="post-header">
+              <span class="post-author">${p.author}</span>
+              <span>${date}</span>
+            </div>
+            ${p.text ? `<p style="font-size: 0.95rem; line-height: 1.4;">${p.text}</p>` : ''}
+            ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-image" loading="lazy">` : ''}
+          </div>
+        `;
+      });
+    });
+  }
+
+  async function addTodo() {
+    const input = document.getElementById('todo-input');
+    const val = input.value.trim();
+    if (!val) return;
+    await db.collection('todos').add({ text: val, done: false, addedBy: auth.currentUser.displayName || 'Depå' });
+    input.value = '';
+  }
+
+  function toggleTodo(id, currentStatus) {
+    db.collection('todos').doc(id).update({ done: !currentStatus });
+  }
+
+  function loadTodos() {
+    db.collection('todos').onSnapshot(snapshot => {
+      const container = document.getElementById('todos-container');
+      container.innerHTML = '';
+      snapshot.forEach(doc => {
+        const t = doc.data();
+        container.innerHTML += `
+          <div class="todo-item ${t.done ? 'done' : ''}" onclick="toggleTodo('${doc.id}', ${t.done})">
+            <input type="checkbox" ${t.done ? 'checked' : ''} style="cursor: pointer; accent-color: var(--fire-orange);">
+            <span style="flex: 1;">${t.text}</span>
+            <span class="todo-badge">${t.addedBy}</span>
+          </div>
+        `;
+      });
+    });
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+</script>
+</body>
+</html>
