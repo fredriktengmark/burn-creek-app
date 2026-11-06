@@ -480,7 +480,7 @@
         <p style="font-size: 0.75rem; color: #88786d; margin-top: 4px;">Cylindrar: Höger (passagerarsida) = 1-2-3-4 | Vänster (förarsida) = 5-6-7-8</p>
       </div>
 
-      <!-- MOPAR (CHRYSLER, DODGE, PLYMOUTH) -->
+      <!-- MOPAR -->
       <div class="spec-card">
         <div class="spec-title">
           <span>CHRYSLER / MOPAR V8</span>
@@ -727,22 +727,31 @@
       imageUrl = await upload.ref.getDownloadURL();
     }
 
-    await db.collection('posts').add({
-      text: text,
-      imageUrl: imageUrl,
-      author: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    try {
+      await db.collection('posts').add({
+        text: text,
+        imageUrl: imageUrl,
+        author: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
 
-    document.getElementById('post-text').value = '';
-    document.getElementById('post-file').value = '';
-    document.getElementById('file-chosen').innerText = '';
+      document.getElementById('post-text').value = '';
+      document.getElementById('post-file').value = '';
+      document.getElementById('file-chosen').innerText = '';
+    } catch (err) {
+      alert('Kunde inte publicera inlägg: ' + err.message);
+      console.error('Fel vid publicering:', err);
+    }
   }
 
   function loadFeed() {
     db.collection('posts').orderBy('createdAt', 'desc').limit(25).onSnapshot(snapshot => {
       const container = document.getElementById('posts-container');
       container.innerHTML = '';
+      if (snapshot.empty) {
+        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 15px;">Inga inlägg i depåloggen än.</p>';
+        return;
+      }
       snapshot.forEach(doc => {
         const p = doc.data();
         const date = p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString('sv-SE', { hour: '2-digit', minute: '2-digit' }) : 'Nyss';
@@ -757,6 +766,8 @@
           </div>
         `;
       });
+    }, err => {
+      console.error('Fel vid hämtning av flöde:', err);
     });
   }
 
@@ -764,28 +775,53 @@
     const input = document.getElementById('todo-input');
     const val = input.value.trim();
     if (!val) return;
-    await db.collection('todos').add({ text: val, done: false, addedBy: auth.currentUser.displayName || 'Depå' });
-    input.value = '';
+
+    const user = auth.currentUser;
+    const authorName = user ? (user.displayName || user.email.split('@')[0]) : 'Depå';
+
+    try {
+      await db.collection('todos').add({ 
+        text: val, 
+        done: false, 
+        addedBy: authorName,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      input.value = '';
+    } catch (err) {
+      alert('Kunde inte spara: ' + err.message);
+      console.error('Fel vid sparning av todo:', err);
+    }
   }
 
   function toggleTodo(id, currentStatus) {
-    db.collection('todos').doc(id).update({ done: !currentStatus });
+    db.collection('todos').doc(id).update({ 
+      done: !currentStatus 
+    }).catch(err => {
+      alert('Kunde inte uppdatera: ' + err.message);
+      console.error('Fel vid toggle:', err);
+    });
   }
 
   function loadTodos() {
-    db.collection('todos').onSnapshot(snapshot => {
+    db.collection('todos').orderBy('createdAt', 'desc').onSnapshot(snapshot => {
       const container = document.getElementById('todos-container');
       container.innerHTML = '';
+      if (snapshot.empty) {
+        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 10px;">Inga punkter på listan än.</p>';
+        return;
+      }
       snapshot.forEach(doc => {
         const t = doc.data();
         container.innerHTML += `
           <div class="todo-item ${t.done ? 'done' : ''}" onclick="toggleTodo('${doc.id}', ${t.done})">
             <input type="checkbox" ${t.done ? 'checked' : ''} style="cursor: pointer; accent-color: var(--rust-primary);">
             <span style="flex: 1;">${t.text}</span>
-            <span class="todo-badge">${t.addedBy}</span>
+            <span class="todo-badge">${t.addedBy || 'Depå'}</span>
           </div>
         `;
       });
+    }, err => {
+      console.error('Fel vid hämtning av todos:', err);
     });
   }
 
