@@ -335,6 +335,49 @@
       padding: 3px 7px;
       border-radius: 3px;
     }
+
+    /* KALKYLATOR STILAR */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .calc-field {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .calc-field label {
+      font-size: 0.75rem;
+      color: var(--cream-muted);
+      text-transform: uppercase;
+    }
+    .calc-field input, .calc-field select {
+      background: #0d0a08;
+      border: 1px solid #45362c;
+      color: var(--cream-text);
+      padding: 7px;
+      border-radius: 3px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.9rem;
+    }
+    .calc-result-box {
+      margin-top: 10px;
+      background: #140f0c;
+      border: 1px dashed var(--rust-primary);
+      border-radius: 4px;
+      padding: 10px;
+      text-align: center;
+    }
+    .calc-result-val {
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 1.35rem;
+      color: var(--rust-glow);
+      display: block;
+      margin-top: 2px;
+      text-shadow: 0 0 8px rgba(217, 98, 43, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -405,6 +448,140 @@
 
     <!-- MEK-DATA OCH VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
+
+      <!-- KALKYLATOR 1: RPM & UTVÄXLING -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>RPM- & FARTKALKYLATOR</span>
+          <span class="spec-badge">DRIVLINA</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted);">Räkna ut motorvarv vid vald marschfart:</p>
+        
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Hastighet (km/h)</label>
+            <input type="number" id="calc-speed" value="100" oninput="calcRpm()">
+          </div>
+          <div class="calc-field">
+            <label>Däckhöjd (tum)</label>
+            <input type="number" id="calc-tire" step="0.5" value="28" oninput="calcRpm()">
+          </div>
+          <div class="calc-field">
+            <label>Bakaxelutväxling</label>
+            <input type="number" id="calc-axle" step="0.01" value="3.73" oninput="calcRpm()">
+          </div>
+          <div class="calc-field">
+            <label>Växellåda (växel)</label>
+            <select id="calc-trans" onchange="calcRpm()">
+              <option value="1.00">1:1 (TH350 / TH400 / PG / 4-vxl)</option>
+              <option value="0.70">0.70 (TH700R4 / 4L60E Overdrive)</option>
+              <option value="0.75">0.75 (4L80E Overdrive)</option>
+              <option value="0.67">0.67 (Ford AOD)</option>
+              <option value="0.64">0.64 (T56 6:e växel)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc-result-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Beräknat motorvarv:</span>
+          <span class="calc-result-val" id="res-rpm">2795 RPM</span>
+        </div>
+      </div>
+
+      <!-- KALKYLATOR 2: FÖRGASARSTORLEK (CFM) -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>FÖRGASARSTORLEK (CFM)</span>
+          <span class="spec-badge">BRÄNSLE</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted);">Optimal CFM för motorvolym & maxvarv:</p>
+
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Motorvolym (CID)</label>
+            <input type="number" id="calc-cid" value="350" oninput="calcCfm()">
+          </div>
+          <div class="calc-field">
+            <label>Maxvarv (RPM)</label>
+            <input type="number" id="calc-maxrpm" value="6000" oninput="calcCfm()">
+          </div>
+          <div class="calc-field" style="grid-column: span 2;">
+            <label>Motortyp (Volymetrisk verkningsgrad)</label>
+            <select id="calc-ve" onchange="calcCfm()">
+              <option value="0.80">Original / Standard gatbil (80 % VE)</option>
+              <option value="0.85" selected>Mild trimmad / Edelbrock insug & kam (85 % VE)</option>
+              <option value="0.95">Vass gat-/strippenmaskin med portade toppar (95 % VE)</option>
+              <option value="1.05">Ren Race / Högvarvig dragracing (105 % VE)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="calc-result-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Rekommenderad förgasare:</span>
+          <span class="calc-result-val" id="res-cfm">516 CFM</span>
+          <span style="font-size: 0.75rem; color: var(--cream-muted); display: block; margin-top: 3px;">(Närmaste standard: 500–600 CFM)</span>
+        </div>
+      </div>
+
+      <!-- KALKYLATOR 3: MOTORVOLYM (BORR & SLAG) -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>MOTORVOLYM (CID / LITER)</span>
+          <span class="spec-badge">BLOCK & VEVAXEL</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted);">Räkna ut volym baserat på borr och slag i tum:</p>
+
+        <div class="calc-grid">
+          <div class="calc-field">
+            <label>Antal cylindrar</label>
+            <select id="calc-cyls" onchange="calcDisplacement()">
+              <option value="8" selected>V8 (8 cyl)</option>
+              <option value="6">Rak 6:a / V6 (6 cyl)</option>
+              <option value="4">4 cyl</option>
+            </select>
+          </div>
+          <div class="calc-field">
+            <label>Borrning (Bore i tum)</label>
+            <input type="number" id="calc-bore" step="0.005" value="4.000" oninput="calcDisplacement()">
+          </div>
+          <div class="calc-field" style="grid-column: span 2;">
+            <label>Slaglängd (Stroke i tum)</label>
+            <input type="number" id="calc-stroke" step="0.005" value="3.480" oninput="calcDisplacement()">
+          </div>
+        </div>
+
+        <div class="calc-result-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Total slagvolym:</span>
+          <span class="calc-result-val" id="res-disp">349.8 CID (5.73 Liter)</span>
+        </div>
+      </div>
+
+      <!-- EL: RELÄSCHEMA & KABELAREOR -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>BOSCH RELÄ & KABELAREOR</span>
+          <span class="spec-badge">12V VERKSTADSEL</span>
+        </div>
+        <table class="spec-table">
+          <tr><th>Stift</th><th>Funktion</th></tr>
+          <tr><td><strong>30</strong></td><td>Matning (+) batteri via hängsäkring</td></tr>
+          <tr><td><strong>85</strong></td><td>Styrström: Jord (-) eller via knapp/reläbox</td></tr>
+          <tr><td><strong>86</strong></td><td>Styrström: Tändningsplus (+) från strömbrytare</td></tr>
+          <tr><td><strong>87</strong></td><td>Utgång till förbrukare (kylfläkt, bränslepump, lyktor)</td></tr>
+          <tr><td><strong>87a</strong></td><td>Normalt sluten (spänning när reläet är AV)</td></tr>
+        </table>
+        
+        <p style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 10px; font-weight: 700;">Kabelarea per säkringsstorlek (12V fordon):</p>
+        <table class="spec-table">
+          <tr><th>Säkring</th><th>Minsta kabelarea</th><th>Exempel</th></tr>
+          <tr><td>5–10 A</td><td>1.0 mm²</td><td>Mätare, relästyrning, LED</td></tr>
+          <tr><td>15 A</td><td>1.5 mm²</td><td>Bränslepump (lågtryck), extraljus</td></tr>
+          <tr><td>20–25 A</td><td>2.5 mm²</td><td>Högtryckspump, tändbox/MSD</td></tr>
+          <tr><td>30–40 A</td><td>4.0–6.0 mm²</td><td>Elfläkt hög effekt, elvattenpump</td></tr>
+        </table>
+      </div>
+
+      <!-- CHEVROLET V8 -->
       <div class="spec-card">
         <div class="spec-title">
           <span>CHEVROLET V8 (SBC / BBC)</span>
@@ -435,6 +612,7 @@
         <p style="font-size: 0.75rem; color: #88786d; margin-top: 4px;">Cylindrar: Vänster bank (förarsida) = 1-3-5-7 | Höger bank = 2-4-6-8</p>
       </div>
 
+      <!-- FORD V8 -->
       <div class="spec-card">
         <div class="spec-title">
           <span>FORD V8 (WINDSOR / FE / 385)</span>
@@ -465,6 +643,7 @@
         <p style="font-size: 0.75rem; color: #88786d; margin-top: 4px;">Cylindrar: Höger (passagerarsida) = 1-2-3-4 | Vänster (förarsida) = 5-6-7-8</p>
       </div>
 
+      <!-- MOPAR -->
       <div class="spec-card">
         <div class="spec-title">
           <span>CHRYSLER / MOPAR V8</span>
@@ -484,6 +663,7 @@
         <p style="font-size: 0.75rem; color: #88786d; margin-top: 4px;">Cylindrar: Vänster bank (förarsida) = 1-3-5-7 | Höger bank = 2-4-6-8</p>
       </div>
 
+      <!-- PONTIAC V8 -->
       <div class="spec-card">
         <div class="spec-title">
           <span>PONTIAC V8</span>
@@ -502,6 +682,7 @@
         </div>
       </div>
 
+      <!-- MOMENTTABELL SBC -->
       <div class="spec-card">
         <div class="spec-title">
           <span>MOMENT SBC (305 / 350)</span>
@@ -517,6 +698,23 @@
           <tr><td>Insugsbultar</td><td>30</td><td>41 Nm</td></tr>
         </table>
       </div>
+
+      <!-- TUM / MM OMVANDLING -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TUM TILL MM NYCKLAR</span>
+          <span class="spec-badge">SNABBLISTA</span>
+        </div>
+        <table class="spec-table">
+          <tr><th>Tum</th><th>Millimeter</th></tr>
+          <tr><td>1/4" = 6.35 mm</td><td>5/16" = 7.94 mm (~8 mm)</td></tr>
+          <tr><td>3/8" = 9.53 mm (~10 mm)</td><td>7/16" = 11.11 mm (~11 mm)</td></tr>
+          <tr><td>1/2" = 12.7 mm (~13 mm)</td><td>9/16" = 14.29 mm (~14 mm)</td></tr>
+          <tr><td>5/8" = 15.88 mm (~16 mm)</td><td>11/16" = 17.46 mm</td></tr>
+          <tr><td>3/4" = 19.05 mm (~19 mm)</td><td>13/16" (stift) = 20.64 mm (~21 mm)</td></tr>
+        </table>
+      </div>
+
     </div>
   </div>
 </div>
@@ -549,6 +747,9 @@
       document.getElementById('user-display').innerText = `${(user.displayName || user.email.split('@')[0]).toUpperCase()}`;
       loadFeed();
       loadTodos();
+      calcRpm();
+      calcCfm();
+      calcDisplacement();
     } else {
       document.getElementById('auth-view').style.display = 'block';
       document.getElementById('main-view').style.display = 'none';
@@ -712,6 +913,42 @@
         `;
       });
     }, err => console.error(err));
+  }
+
+  /* KALKYLATORFUNKTIONER */
+  function calcRpm() {
+    const kmh = parseFloat(document.getElementById('calc-speed').value) || 0;
+    const tire = parseFloat(document.getElementById('calc-tire').value) || 28;
+    const axle = parseFloat(document.getElementById('calc-axle').value) || 3.73;
+    const trans = parseFloat(document.getElementById('calc-trans').value) || 1.0;
+
+    const mph = kmh * 0.621371;
+    // Formel: RPM = (MPH * Gear Ratio * 336) / Tire Diameter
+    const rpm = Math.round((mph * axle * trans * 336) / tire);
+    document.getElementById('res-rpm').innerText = `${rpm} RPM`;
+  }
+
+  function calcCfm() {
+    const cid = parseFloat(document.getElementById('calc-cid').value) || 0;
+    const rpm = parseFloat(document.getElementById('calc-maxrpm').value) || 0;
+    const ve = parseFloat(document.getElementById('calc-ve').value) || 0.85;
+
+    // Formel: CFM = (CID * RPM * VE) / 3456
+    const cfm = Math.round((cid * rpm * ve) / 3456);
+    document.getElementById('res-cfm').innerText = `${cfm} CFM`;
+  }
+
+  function calcDisplacement() {
+    const cyls = parseInt(document.getElementById('calc-cyls').value) || 8;
+    const bore = parseFloat(document.getElementById('calc-bore').value) || 0;
+    const stroke = parseFloat(document.getElementById('calc-stroke').value) || 0;
+
+    // Formel: CID = (Bore / 2)^2 * PI * Stroke * Cylinders
+    const radius = bore / 2;
+    const cid = Math.PI * Math.pow(radius, 2) * stroke * cyls;
+    const liters = cid * 0.0163871;
+
+    document.getElementById('res-disp').innerText = `${cid.toFixed(1)} CID (${liters.toFixed(2)} Liter)`;
   }
 
   if ('serviceWorker' in navigator) {
