@@ -5,30 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Burn Creek Speedshop</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0d0d0d">
+  <meta name="theme-color" content="#120c09">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Teko:wght@600;700&family=Chakra+Petch:wght@500;700&display=swap" rel="stylesheet">
   
   <style>
     :root {
-      --fire-orange: #ff5500;
-      --nitro-yellow: #ffb700;
-      --card-bg: #1c1e22;
-      --border-steel: #2e3238;
-      --led-green: #00ff66;
+      --speed-copper: #c85a28;
+      --speed-dark-rust: #853310;
+      --speed-cream: #faebd7;
+      --speed-cream-muted: #d4bca0;
+      --metal-dark: #141110;
+      --metal-card: #1d1816;
+      --border-steel: #382c26;
+      --led-green: #2ecc71;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
-      background-color: #0b0c0e;
+      background-color: #0b0908;
       background-image: 
-        radial-gradient(#1f2228 15%, transparent 16%), 
-        radial-gradient(#1f2228 15%, transparent 16%);
+        radial-gradient(#1f1814 15%, transparent 16%), 
+        radial-gradient(#1f1814 15%, transparent 16%);
       background-size: 16px 16px;
       background-position: 0 0, 8px 8px;
-      color: #e5e5e5; 
+      color: #ede2d8; 
       font-family: 'Chakra Petch', sans-serif;
       display: flex; 
       justify-content: center; 
@@ -41,62 +44,59 @@
       min-height: 100vh; 
       display: flex; 
       flex-direction: column; 
-      background: #121417; 
-      border-left: 2px solid #222;
-      border-right: 2px solid #222;
-      box-shadow: 0 0 30px rgba(0,0,0,0.8);
+      background: #120e0c; 
+      border-left: 2px solid #29201b;
+      border-right: 2px solid #29201b;
+      box-shadow: 0 0 35px rgba(0,0,0,0.9);
     }
     
-    .hazard-stripe {
-      height: 6px;
-      background: repeating-linear-gradient(
-        -45deg,
-        #f5a623,
-        #f5a623 12px,
-        #111 12px,
-        #111 24px
-      );
+    /* Schackrutig racing-bård inspirerad av målflaggorna i loggan */
+    .checker-stripe {
+      height: 8px;
+      background-image: 
+        linear-gradient(45deg, #111 25%, transparent 25%), 
+        linear-gradient(-45deg, #111 25%, transparent 25%), 
+        linear-gradient(45deg, transparent 75%, #111 75%), 
+        linear-gradient(-45deg, transparent 75%, #111 75%);
+      background-size: 8px 8px;
+      background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+      background-color: var(--speed-cream);
       width: 100%;
+      border-bottom: 1px solid var(--speed-copper);
     }
 
     header { 
-      background: linear-gradient(180deg, #1f2228 0%, #131418 100%); 
-      padding: 12px 16px; 
+      background: linear-gradient(180deg, #241914 0%, #150f0c 100%); 
+      padding: 10px 16px; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
-      border-bottom: 2px solid #ff5500;
+      border-bottom: 2px solid var(--speed-copper);
     }
     
     .brand-title { 
       font-family: 'Black Ops One', cursive;
-      font-size: 1.25rem; 
-      color: #fff; 
+      font-size: 1.2rem; 
+      color: var(--speed-cream); 
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      text-shadow: 2px 2px 0px #000, 0 0 10px rgba(255, 85, 0, 0.4);
+      text-shadow: 2px 2px 0px #000, 0 0 8px rgba(200, 90, 40, 0.4);
     }
-    .brand-title span { color: var(--fire-orange); }
+    .brand-title span { color: var(--speed-copper); }
 
-    .tree-lights {
-      display: inline-flex;
-      gap: 4px;
-      vertical-align: middle;
-      margin-left: 6px;
-    }
-    .tree-light {
-      width: 8px;
-      height: 8px;
+    .header-logo {
+      height: 36px;
+      width: auto;
+      object-fit: contain;
       border-radius: 50%;
-      background: #333;
+      box-shadow: 0 0 6px rgba(0,0,0,0.8);
+      border: 1px solid var(--speed-copper);
     }
-    .tree-light.yellow { background: var(--nitro-yellow); box-shadow: 0 0 6px var(--nitro-yellow); }
-    .tree-light.green { background: var(--led-green); box-shadow: 0 0 8px var(--led-green); }
 
     .btn-killswitch {
-      background: #2a1111;
-      border: 1px solid #771111;
-      color: #ff6666;
+      background: #24100c;
+      border: 1px solid #631d13;
+      color: #e57368;
       padding: 5px 10px;
       font-family: 'Teko', sans-serif;
       font-size: 1rem;
@@ -108,7 +108,7 @@
 
     nav { 
       display: flex; 
-      background: #16181d; 
+      background: #17120f; 
       border-bottom: 1px solid var(--border-steel); 
     }
     nav button { 
@@ -116,7 +116,7 @@
       padding: 12px 6px; 
       background: none; 
       border: none; 
-      color: #7b8390; 
+      color: #8c796e; 
       font-family: 'Teko', sans-serif;
       font-size: 1.35rem;
       letter-spacing: 1.5px;
@@ -126,10 +126,10 @@
       transition: all 0.2s ease;
     }
     nav button.active { 
-      color: #fff; 
-      background: rgba(255, 85, 0, 0.08);
-      border-bottom: 3px solid var(--fire-orange); 
-      text-shadow: 0 0 8px rgba(255, 85, 0, 0.6);
+      color: var(--speed-cream); 
+      background: rgba(200, 90, 40, 0.12);
+      border-bottom: 3px solid var(--speed-copper); 
+      text-shadow: 0 0 6px rgba(200, 90, 40, 0.5);
     }
 
     .view { display: none; padding: 16px; flex: 1; overflow-y: auto; }
@@ -140,30 +140,31 @@
       display: flex; 
       flex-direction: column; 
       gap: 14px; 
-      background: #17191d;
+      background: var(--metal-card);
       border: 1px solid var(--border-steel);
       border-radius: 6px;
       margin-top: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     }
     .auth-box input { 
       padding: 12px; 
       border-radius: 4px; 
-      border: 1px solid #333842; 
-      background: #0c0d10; 
-      color: #fff; 
+      border: 1px solid #3d3029; 
+      background: #0d0a09; 
+      color: var(--speed-cream); 
       font-family: 'Chakra Petch', sans-serif;
       font-size: 0.95rem;
     }
     .auth-box input:focus {
       outline: none;
-      border-color: var(--fire-orange);
-      box-shadow: 0 0 8px rgba(255,85,0,0.3);
+      border-color: var(--speed-copper);
+      box-shadow: 0 0 8px rgba(200, 90, 40, 0.4);
     }
 
     .btn-pedal { 
-      background: linear-gradient(180deg, #ff6600 0%, #cc3300 100%); 
-      color: #fff; 
-      border: none; 
+      background: linear-gradient(180deg, var(--speed-copper) 0%, var(--speed-dark-rust) 100%); 
+      color: var(--speed-cream); 
+      border: 1px solid #732a0c; 
       padding: 12px; 
       border-radius: 4px; 
       font-family: 'Teko', sans-serif;
@@ -171,35 +172,36 @@
       letter-spacing: 1.5px;
       text-transform: uppercase;
       cursor: pointer; 
-      box-shadow: 0 4px 0 #881e00;
+      box-shadow: 0 4px 0 #4f1b06;
       text-shadow: 1px 1px 2px #000;
     }
     .btn-pedal:active {
       transform: translateY(2px);
-      box-shadow: 0 2px 0 #881e00;
+      box-shadow: 0 2px 0 #4f1b06;
     }
     .btn-wrench { 
-      background: #252830; 
-      border: 1px solid #3d434f;
-      color: #ccc;
+      background: #261f1c; 
+      border: 1px solid var(--border-steel);
+      color: var(--speed-cream-muted);
+      box-shadow: 0 4px 0 #181311;
     }
 
     .post-creator { 
-      background: linear-gradient(180deg, #1b1e24 0%, #15171b 100%); 
-      border: 1px solid #2c3038; 
+      background: linear-gradient(180deg, #1f1916 0%, #171210 100%); 
+      border: 1px solid var(--border-steel); 
       border-radius: 6px; 
       padding: 14px; 
       margin-bottom: 18px; 
       display: flex; 
       flex-direction: column; 
       gap: 12px; 
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
     }
     .post-creator textarea { 
-      background: #0d0e11; 
-      border: 1px solid #2e323b; 
+      background: #0d0a09; 
+      border: 1px solid #382c26; 
       border-radius: 4px; 
-      color: #fff; 
+      color: #ede2d8; 
       padding: 10px; 
       resize: none; 
       height: 70px; 
@@ -208,35 +210,35 @@
     }
 
     .post-card { 
-      background: #17191e; 
-      border: 1px solid #262931; 
-      border-left: 4px solid var(--fire-orange); 
+      background: var(--metal-card); 
+      border: 1px solid #2f2520; 
+      border-left: 4px solid var(--speed-copper); 
       border-radius: 4px; 
       padding: 14px; 
       margin-bottom: 14px; 
-      box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+      box-shadow: 0 3px 8px rgba(0,0,0,0.4);
     }
     .post-header { 
       display: flex; 
       justify-content: space-between; 
       font-size: 0.8rem; 
-      color: #7b8390; 
+      color: #8f7d73; 
       margin-bottom: 8px; 
-      border-bottom: 1px dashed #262931;
+      border-bottom: 1px dashed #302621;
       padding-bottom: 6px;
     }
     .post-author { 
       font-family: 'Teko', sans-serif;
       font-size: 1.25rem;
       letter-spacing: 1px;
-      color: var(--nitro-yellow); 
+      color: var(--speed-cream); 
       text-transform: uppercase;
     }
     .post-image { 
       width: 100%; 
       border-radius: 4px; 
       margin-top: 10px; 
-      border: 1px solid #333842; 
+      border: 1px solid #382c26; 
       max-height: 400px; 
       object-fit: cover; 
     }
@@ -245,25 +247,26 @@
       display: flex; 
       align-items: center; 
       gap: 12px; 
-      background: #17191e; 
-      border: 1px solid #262931;
+      background: var(--metal-card); 
+      border: 1px solid #2f2520;
       padding: 12px; 
       border-radius: 4px; 
       margin-bottom: 10px; 
       cursor: pointer;
     }
     .todo-item.done { 
-      background: #101214; 
-      border-color: #1a1c20;
+      background: #110e0c; 
+      border-color: #211915;
     }
     .todo-item.done span { 
       text-decoration: line-through; 
-      color: #555c66; 
+      color: #63534a; 
     }
     .todo-badge {
       font-size: 0.75rem;
-      background: #22262e;
-      color: var(--nitro-yellow);
+      background: #2b221d;
+      color: var(--speed-copper);
+      border: 1px solid #42342c;
       padding: 2px 6px;
       border-radius: 3px;
     }
@@ -272,15 +275,15 @@
 <body>
 
 <div id="app-container">
-  <div class="hazard-stripe"></div>
+  <div class="checker-stripe"></div>
 
   <!-- INLOGGNING -->
   <div id="auth-view" class="view active">
-    <div style="text-align: center; margin: 20px 0 10px 0;">
-      <!-- LOGGA PÅ INLOGGNINGSSKÄRMEN -->
-      <img src="logo.png" alt="Speedshop Logo" style="max-width: 180px; width: 60%; height: auto; margin-bottom: 12px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); display: block; margin-left: auto; margin-right: auto;" onerror="this.style.display='none'">
-      <h1 class="brand-title" style="font-size: 1.8rem;">BURN CREEK <span>SPEEDSHOP</span></h1>
-      <p style="color: #777; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">Depå & Loggbok</p>
+    <div style="text-align: center; margin: 25px 0 10px 0;">
+      <!-- ER RUNDA LOGGA MED PATINATILLÄGG -->
+      <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 200px; width: 65%; height: auto; margin-bottom: 14px; border-radius: 50%; box-shadow: 0 6px 18px rgba(0,0,0,0.85); border: 2px solid var(--speed-copper); display: block; margin-left: auto; margin-right: auto;" onerror="this.style.display='none'">
+      <h1 class="brand-title" style="font-size: 1.7rem; letter-spacing: 2px;">BURN CREEK <span>SPEEDSHOP</span></h1>
+      <p style="color: var(--speed-cream-muted); font-size: 0.85rem; letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; font-weight: 700;">BRÄNNEHYLTE • EST. 2026</p>
     </div>
     
     <div class="auth-box">
@@ -289,25 +292,19 @@
       <input type="password" id="auth-password" placeholder="LÖSENORD (MINST 6 TECKEN)">
       <button class="btn-pedal" onclick="login()">PELLE I BOTTEN (LOGGA IN)</button>
       <button class="btn-pedal btn-wrench" onclick="register()">NYTT PIT-PASS (SKAPA KONTO)</button>
-      <p id="auth-error" style="color: #ff4444; font-size: 0.85rem; text-align: center;"></p>
+      <p id="auth-error" style="color: #e57368; font-size: 0.85rem; text-align: center;"></p>
     </div>
   </div>
 
   <!-- HUVUDVY (INLOGGAD) -->
   <div id="main-view" style="display: none; flex-direction: column; height: 100vh;">
     <header>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <!-- LITEN LOGGA I HEADERN -->
-        <img src="logo.png" alt="Logo" style="height: 30px; width: auto; object-fit: contain;" onerror="this.style.display='none'">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="logo.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
         <span class="brand-title">SPEED<span>SHOP</span></span>
-        <div class="tree-lights">
-          <div class="tree-light yellow"></div>
-          <div class="tree-light yellow"></div>
-          <div class="tree-light green"></div>
-        </div>
       </div>
       <div>
-        <span id="user-display" style="font-size: 0.95rem; color: var(--nitro-yellow); font-family: 'Teko', sans-serif; letter-spacing: 1px; margin-right: 8px;"></span>
+        <span id="user-display" style="font-size: 0.95rem; color: var(--speed-cream); font-family: 'Teko', sans-serif; letter-spacing: 1px; margin-right: 8px;"></span>
         <button class="btn-killswitch" onclick="logout()">KILL SWITCH</button>
       </div>
     </header>
@@ -324,7 +321,7 @@
         <div style="display: flex; gap: 8px; align-items: center;">
           <input type="file" id="post-file" accept="image/*" style="display: none;" onchange="updateFileName()">
           <button class="btn-pedal btn-wrench" onclick="document.getElementById('post-file').click()" style="padding: 6px 14px; font-size: 1.1rem;">📷 FOTA / BILD</button>
-          <span id="file-chosen" style="font-size: 0.8rem; color: #aaa; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;"></span>
+          <span id="file-chosen" style="font-size: 0.8rem; color: #a89487; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;"></span>
           <button class="btn-pedal" style="margin-left: auto; padding: 6px 18px; font-size: 1.1rem;" onclick="publishPost()">BRÄNN AV</button>
         </div>
       </div>
@@ -334,7 +331,7 @@
     <!-- INKÖP / ATT GÖRA -->
     <div id="todo-tab" class="view">
       <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-        <input type="text" id="todo-input" placeholder="T.ex. kapskivor, 10L E85, kaffe, bromsrengöring..." style="flex: 1; padding: 10px; border-radius: 4px; border: 1px solid #333842; background: #0c0d10; color: #fff; font-family: 'Chakra Petch', sans-serif;">
+        <input type="text" id="todo-input" placeholder="T.ex. kapskivor, 10L E85, kaffe, bromsrengöring..." style="flex: 1; padding: 10px; border-radius: 4px; border: 1px solid #3d3029; background: #0d0a09; color: var(--speed-cream); font-family: 'Chakra Petch', sans-serif;">
         <button class="btn-pedal" style="padding: 8px 16px; font-size: 1.1rem;" onclick="addTodo()">LÄGG TILL</button>
       </div>
       <div id="todos-container"></div>
@@ -478,7 +475,7 @@
         const t = doc.data();
         container.innerHTML += `
           <div class="todo-item ${t.done ? 'done' : ''}" onclick="toggleTodo('${doc.id}', ${t.done})">
-            <input type="checkbox" ${t.done ? 'checked' : ''} style="cursor: pointer; accent-color: var(--fire-orange);">
+            <input type="checkbox" ${t.done ? 'checked' : ''} style="cursor: pointer; accent-color: var(--speed-copper);">
             <span style="flex: 1;">${t.text}</span>
             <span class="todo-badge">${t.addedBy}</span>
           </div>
