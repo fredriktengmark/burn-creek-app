@@ -61,7 +61,7 @@
 
     header { 
       background: linear-gradient(180deg, #1f2228 0%, #131418 100%); 
-      padding: 14px 16px; 
+      padding: 12px 16px; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
@@ -136,14 +136,14 @@
     .view.active { display: block; }
 
     .auth-box { 
-      padding: 30px 16px; 
+      padding: 24px 16px; 
       display: flex; 
       flex-direction: column; 
       gap: 14px; 
       background: #17191d;
       border: 1px solid var(--border-steel);
       border-radius: 6px;
-      margin-top: 20px;
+      margin-top: 15px;
     }
     .auth-box input { 
       padding: 12px; 
@@ -276,7 +276,9 @@
 
   <!-- INLOGGNING -->
   <div id="auth-view" class="view active">
-    <div style="text-align: center; margin: 30px 0 10px 0;">
+    <div style="text-align: center; margin: 20px 0 10px 0;">
+      <!-- LOGGA PÅ INLOGGNINGSSKÄRMEN -->
+      <img src="logo.png" alt="Speedshop Logo" style="max-width: 180px; width: 60%; height: auto; margin-bottom: 12px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.7)); display: block; margin-left: auto; margin-right: auto;" onerror="this.style.display='none'">
       <h1 class="brand-title" style="font-size: 1.8rem;">BURN CREEK <span>SPEEDSHOP</span></h1>
       <p style="color: #777; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 4px;">Depå & Loggbok</p>
     </div>
@@ -284,17 +286,19 @@
     <div class="auth-box">
       <input type="text" id="auth-name" placeholder="FÖRARNAMN (VID REGISTRERING)">
       <input type="email" id="auth-email" placeholder="E-POST">
-      <input type="password" id="auth-password" placeholder="LÖSENORD">
+      <input type="password" id="auth-password" placeholder="LÖSENORD (MINST 6 TECKEN)">
       <button class="btn-pedal" onclick="login()">PELLE I BOTTEN (LOGGA IN)</button>
       <button class="btn-pedal btn-wrench" onclick="register()">NYTT PIT-PASS (SKAPA KONTO)</button>
       <p id="auth-error" style="color: #ff4444; font-size: 0.85rem; text-align: center;"></p>
     </div>
   </div>
 
-  <!-- HUVUDVY -->
+  <!-- HUVUDVY (INLOGGAD) -->
   <div id="main-view" style="display: none; flex-direction: column; height: 100vh;">
     <header>
-      <div>
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <!-- LITEN LOGGA I HEADERN -->
+        <img src="logo.png" alt="Logo" style="height: 30px; width: auto; object-fit: contain;" onerror="this.style.display='none'">
         <span class="brand-title">SPEED<span>SHOP</span></span>
         <div class="tree-lights">
           <div class="tree-light yellow"></div>
@@ -338,7 +342,7 @@
   </div>
 </div>
 
-<!-- Firebase SDKs för webbläsare -->
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -381,7 +385,9 @@
       const res = await auth.createUserWithEmailAndPassword(email, pass);
       await res.user.updateProfile({ displayName: name });
       location.reload();
-    } catch (err) { document.getElementById('auth-error').innerText = err.message; }
+    } catch (err) { 
+      document.getElementById('auth-error').innerText = err.message; 
+    }
   }
 
   async function login() {
@@ -389,7 +395,9 @@
     const pass = document.getElementById('auth-password').value;
     try {
       await auth.signInWithEmailAndPassword(email, pass);
-    } catch (err) { document.getElementById('auth-error').innerText = err.message; }
+    } catch (err) { 
+      document.getElementById('auth-error').innerText = err.message; 
+    }
   }
 
   function logout() { auth.signOut(); }
