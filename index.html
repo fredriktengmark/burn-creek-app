@@ -602,7 +602,7 @@
           <div class="menu-card-icon">🛡️</div>
           <div class="menu-card-content">
             <h3 style="color: var(--led-green);">ADMINPANEL</h3>
-            <p>Godkänn nya användare till verkstadsappen.</p>
+            <p>Godkänn och hantera medlemmar i verkstadsappen.</p>
           </div>
         </div>
       </div>
@@ -788,10 +788,9 @@
     <div id="admin-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
-          <span>ANVÄNDARGODKÄNNANDE</span>
-          <span class="spec-badge">FREDRIK ONLY</span>
+          <span>ANVÄNDARHANTERING</span>
+          <span class="spec-badge">ADMIN</span>
         </div>
-        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 12px;">Nya konton som väntar på godkännande:</p>
         <div id="admin-users-list">Laddar användare...</div>
       </div>
     </div>
@@ -826,15 +825,15 @@
       const email = user.email.toLowerCase();
       isAdmin = (email === ADMIN_EMAIL.toLowerCase());
 
-      // Kontrollera om användaren är godkänd i 'users'
-      const userDoc = await db.collection('users').doc(user.uid).get();
+      // Hämta eller skapa användardokument i 'users'
+      const userRef = db.collection('users').doc(user.uid);
+      const userDoc = await userRef.get();
       
       if (!userDoc.exists) {
-        // Skapa profil om den saknas
-        await db.collection('users').doc(user.uid).set({
+        await userRef.set({
           name: user.displayName || email.split('@')[0],
           email: email,
-          approved: isAdmin, // Fredrik blir automatiskt godkänd
+          approved: isAdmin,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
       }
@@ -935,42 +934,83 @@
     }
   }
 
-  /* ADMIN: GODKÄNN / RADERA ANVÄNDARE */
+  /* ADMIN: VISA OCH HANTERA BÅDE GODKÄNDA OCH VÄNTANDE ANVÄNDARE */
   function loadAdminUsers() {
     db.collection('users').onSnapshot(snapshot => {
       const container = document.getElementById('admin-users-list');
       container.innerHTML = '';
-      let pendingCount = 0;
+
+      if (snapshot.empty) {
+        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem;">Inga användare hittades i databasen.</p>';
+        return;
+      }
+
+      const pendingUsers = [];
+      const approvedUsers = [];
 
       snapshot.forEach(doc => {
-        const u = doc.data();
-        if (u.email === ADMIN_EMAIL.toLowerCase()) return;
+        const u = { id: doc.id, ...doc.data() };
+        if (u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return;
 
-        pendingCount++;
-        container.innerHTML += `
-          <div style="display: flex; justify-content: space-between; align-items: center; background: #0d0a08; border: 1px solid #332720; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
-            <div>
-              <div style="font-weight: 700; color: #eedcc0;">${u.name}</div>
-              <div style="font-size: 0.75rem; color: #aa957c;">${u.email}</div>
-              <div style="font-size: 0.75rem; margin-top: 2px; color: ${u.approved ? 'var(--led-green)' : '#e67e22'};">
-                ${u.approved ? '● Godkänd' : '○ Väntar på godkännande'}
-              </div>
-            </div>
-            <div style="display: flex; gap: 6px;">
-              ${!u.approved ? `
-                <button class="btn-speed" style="padding: 6px 10px; font-size: 0.75rem;" onclick="approveUser('${doc.id}')">GODKÄNN</button>
-              ` : `
-                <button class="btn-killswitch" style="padding: 6px 10px; font-size: 0.75rem;" onclick="revokeUser('${doc.id}')">SPÄRRA</button>
-              `}
-              <button class="btn-killswitch" style="padding: 6px 8px; font-size: 0.75rem;" onclick="deleteUser('${doc.id}')">RADERA</button>
-            </div>
-          </div>
-        `;
+        if (u.approved) {
+          approvedUsers.push(u);
+        } else {
+          pendingUsers.push(u);
+        }
       });
 
-      if (pendingCount === 0) {
-        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem;">Inga andra användare registrerade.</p>';
+      let html = '';
+
+      // VÄNTAR PÅ GODKÄNNANDE
+      html += `<div style="font-family: 'Alfa Slab One', cursive; font-size: 0.85rem; color: #e67e22; margin-bottom: 8px; text-transform: uppercase;">
+        ⏳ Väntar på godkännande (${pendingUsers.length})
+      </div>`;
+
+      if (pendingUsers.length === 0) {
+        html += '<p style="color: var(--cream-muted); font-size: 0.8rem; margin-bottom: 16px;">Inga nya ansökningar just nu.</p>';
+      } else {
+        pendingUsers.forEach(u => {
+          html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #160f0b; border: 1px solid #74290a; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
+              <div>
+                <div style="font-weight: 700; color: #eedcc0; font-size: 0.95rem;">${u.name || 'Namnlös'}</div>
+                <div style="font-size: 0.75rem; color: #aa957c;">${u.email || 'Ingen e-post'}</div>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-speed" style="padding: 6px 12px; font-size: 0.75rem;" onclick="approveUser('${u.id}')">GODKÄNN</button>
+                <button class="btn-killswitch" style="padding: 6px 8px; font-size: 0.75rem;" onclick="deleteUser('${u.id}')">RADERA</button>
+              </div>
+            </div>
+          `;
+        });
+        html += '<div style="margin-bottom: 16px;"></div>';
       }
+
+      // GODKÄNDA MEDLEMMAR
+      html += `<div style="font-family: 'Alfa Slab One', cursive; font-size: 0.85rem; color: var(--led-green); margin-bottom: 8px; text-transform: uppercase;">
+        ✓ Godkända medlemmar (${approvedUsers.length})
+      </div>`;
+
+      if (approvedUsers.length === 0) {
+        html += '<p style="color: var(--cream-muted); font-size: 0.8rem;">Inga aktiva medlemmar registrerade än.</p>';
+      } else {
+        approvedUsers.forEach(u => {
+          html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #0d0a08; border: 1px solid #332720; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
+              <div>
+                <div style="font-weight: 700; color: #eedcc0; font-size: 0.95rem;">${u.name || 'Namnlös'}</div>
+                <div style="font-size: 0.75rem; color: #aa957c;">${u.email || 'Ingen e-post'}</div>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-killswitch" style="padding: 6px 10px; font-size: 0.75rem;" onclick="revokeUser('${u.id}')">SPÄRRA</button>
+                <button class="btn-killswitch" style="padding: 6px 8px; font-size: 0.75rem;" onclick="deleteUser('${u.id}')">RADERA</button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      container.innerHTML = html;
     });
   }
 
@@ -1022,7 +1062,7 @@
     });
   }
 
-  /* STATUS / KAFFE */
+  /* FLERANVÄNDAR-STATUS (ÄR NÅGON I GARAGET?) */
   async function checkInGarage() {
     const user = auth.currentUser;
     if (!user) return alert('Du måste vara inloggad!');
