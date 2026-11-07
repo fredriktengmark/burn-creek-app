@@ -825,7 +825,6 @@
       const email = user.email.toLowerCase();
       isAdmin = (email === ADMIN_EMAIL.toLowerCase());
 
-      // Hämta eller skapa användardokument i 'users'
       const userRef = db.collection('users').doc(user.uid);
       const userDoc = await userRef.get();
       
@@ -873,24 +872,39 @@
     }
   });
 
+  /* REGISTRERING MED AUTOMATISKT VÄLKOMSTINLÄGG I DEPÅLOGGEN */
   async function register() {
     const name = document.getElementById('auth-name').value.trim();
     const email = document.getElementById('auth-email').value.trim();
     const pass = document.getElementById('auth-password').value;
     if (!name) return alert('Ange förarnamn!');
+
     try {
       const res = await auth.createUserWithEmailAndPassword(email, pass);
       await res.user.updateProfile({ displayName: name });
       
       const isAdm = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+      
+      // Spara användaren i users
       await db.collection('users').doc(res.user.uid).set({
         name: name,
         email: email.toLowerCase(),
         approved: isAdm,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+
+      // Posta automatiskt välkomstinlägg i depåloggen
+      await db.collection('posts').add({
+        text: `🎟️ Ny medlem har kvitterat ut sitt pit-pass: ${name}! Välkommen till Burn Creek Speedshop.`,
+        imageUrl: '',
+        author: 'SPEEDSHOP DEPÅ',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
       location.reload();
-    } catch (err) { document.getElementById('auth-error').innerText = err.message; }
+    } catch (err) { 
+      document.getElementById('auth-error').innerText = err.message; 
+    }
   }
 
   async function login() {
@@ -934,7 +948,7 @@
     }
   }
 
-  /* ADMIN: VISA OCH HANTERA BÅDE GODKÄNDA OCH VÄNTANDE ANVÄNDARE */
+  /* ADMIN: VISA OCH HANTERA ANVÄNDARE */
   function loadAdminUsers() {
     db.collection('users').onSnapshot(snapshot => {
       const container = document.getElementById('admin-users-list');
