@@ -784,13 +784,20 @@
       </div>
     </div>
 
-    <!-- 8. ADMINPANEL (ENDAST SYNLIG FÖR FREDRIK) -->
+    <!-- 8. ADMINPANEL -->
     <div id="admin-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
           <span>ANVÄNDARHANTERING</span>
           <span class="spec-badge">ADMIN</span>
         </div>
+        
+        <div style="margin-bottom: 14px;">
+          <button class="btn-speed btn-wrench" onclick="syncUsersFromPosts()" style="padding: 8px 12px; font-size: 0.8rem; width: 100%;">
+            🔄 SYNKRONISERA BEFINTLIGA PROFILER FRÅN INLÄGG
+          </button>
+        </div>
+
         <div id="admin-users-list">Laddar användare...</div>
       </div>
     </div>
@@ -872,7 +879,6 @@
     }
   });
 
-  /* REGISTRERING MED AUTOMATISKT VÄLKOMSTINLÄGG I DEPÅLOGGEN */
   async function register() {
     const name = document.getElementById('auth-name').value.trim();
     const email = document.getElementById('auth-email').value.trim();
@@ -885,7 +891,6 @@
       
       const isAdm = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
       
-      // Spara användaren i users
       await db.collection('users').doc(res.user.uid).set({
         name: name,
         email: email.toLowerCase(),
@@ -893,7 +898,6 @@
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      // Posta automatiskt välkomstinlägg i depåloggen
       await db.collection('posts').add({
         text: `🎟️ Ny medlem har kvitterat ut sitt pit-pass: ${name}! Välkommen till Burn Creek Speedshop.`,
         imageUrl: '',
@@ -948,7 +952,40 @@
     }
   }
 
-  /* ADMIN: VISA OCH HANTERA ANVÄNDARE */
+  /* SYNKA BEFINTLIGA ANVÄNDARE FRÅN TIDIGARE INLÄGG */
+  async function syncUsersFromPosts() {
+    try {
+      const postsSnap = await db.collection('posts').get();
+      const existingUsers = {};
+      postsSnap.forEach(doc => {
+        const a = doc.data().author;
+        if (a && a !== 'SPEEDSHOP DEPÅ' && a !== 'Depå') {
+          existingUsers[a] = true;
+        }
+      });
+
+      let added = 0;
+      for (const authorName of Object.keys(existingUsers)) {
+        const query = await db.collection('users').where('name', '==', authorName).get();
+        if (query.empty) {
+          await db.collection('users').add({
+            name: authorName,
+            email: `${authorName.toLowerCase()}@burncreek.local`,
+            approved: true,
+            syncedFromPosts: true,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          added++;
+        }
+      }
+
+      alert(`Synkronisering klar! Lade till ${added} befintliga medlemmar i listan.`);
+    } catch (err) {
+      alert('Kunde inte synka profiler: ' + err.message);
+    }
+  }
+
+  /* ADMIN: VISA OCH HANTERA ANVÄNDARE (INKL FREDRIK) */
   function loadAdminUsers() {
     db.collection('users').onSnapshot(snapshot => {
       const container = document.getElementById('admin-users-list');
@@ -961,12 +998,13 @@
 
       const pendingUsers = [];
       const approvedUsers = [];
+      let fredrikUser = null;
 
       snapshot.forEach(doc => {
         const u = { id: doc.id, ...doc.data() };
-        if (u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) return;
-
-        if (u.approved) {
+        if (u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+          fredrikUser = u;
+        } else if (u.approved) {
           approvedUsers.push(u);
         } else {
           pendingUsers.push(u);
@@ -974,6 +1012,21 @@
       });
 
       let html = '';
+
+      // FREDRIKS EGET KONTO HÖGST UPP
+      if (fredrikUser) {
+        html += `
+          <div style="background: #1e1713; border: 2px solid var(--rust-primary); padding: 10px; margin-bottom: 14px; border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 700; color: var(--cream-bg); font-size: 1rem;">👑 ${fredrikUser.name}</div>
+                <div style="font-size: 0.75rem; color: var(--cream-muted);">${fredrikUser.email}</div>
+              </div>
+              <span style="font-size: 0.75rem; background: var(--rust-primary); color: #fff; padding: 2px 6px; border-radius: 3px; font-weight: 700;">ÄGARE / ADMIN</span>
+            </div>
+          </div>
+        `;
+      }
 
       // VÄNTAR PÅ GODKÄNNANDE
       html += `<div style="font-family: 'Alfa Slab One', cursive; font-size: 0.85rem; color: #e67e22; margin-bottom: 8px; text-transform: uppercase;">
@@ -1006,14 +1059,14 @@
       </div>`;
 
       if (approvedUsers.length === 0) {
-        html += '<p style="color: var(--cream-muted); font-size: 0.8rem;">Inga aktiva medlemmar registrerade än.</p>';
+        html += '<p style="color: var(--cream-muted); font-size: 0.8rem;">Inga andra medlemmar godkända än. Använd knappen ovan för att synka in Tony & Håkan.</p>';
       } else {
         approvedUsers.forEach(u => {
           html += `
             <div style="display: flex; justify-content: space-between; align-items: center; background: #0d0a08; border: 1px solid #332720; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
               <div>
                 <div style="font-weight: 700; color: #eedcc0; font-size: 0.95rem;">${u.name || 'Namnlös'}</div>
-                <div style="font-size: 0.75rem; color: #aa957c;">${u.email || 'Ingen e-post'}</div>
+                <div style="font-size: 0.75rem; color: #aa957c;">${u.email || 'Befintlig medlem'}</div>
               </div>
               <div style="display: flex; gap: 6px;">
                 <button class="btn-killswitch" style="padding: 6px 10px; font-size: 0.75rem;" onclick="revokeUser('${u.id}')">SPÄRRA</button>
