@@ -24,7 +24,6 @@
       --card-bg: #221c18;
       --border-rivet: #3d3129;
       --led-green: #2ecc71;
-      --led-red: #e74c3c;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -53,6 +52,7 @@
       border-left: 3px double var(--rust-primary);
       border-right: 3px double var(--rust-primary);
       box-shadow: 0 0 40px rgba(0,0,0,0.95);
+      position: relative;
     }
     
     .checker-divider {
@@ -71,7 +71,7 @@
 
     header { 
       background: linear-gradient(180deg, #2a1f1a 0%, #17120e 100%); 
-      padding: 10px 16px; 
+      padding: 10px 14px; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
@@ -97,45 +97,143 @@
       box-shadow: 0 0 8px rgba(0,0,0,0.8);
     }
 
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-nav-trigger {
+      background: linear-gradient(180deg, var(--rust-glow) 0%, var(--rust-deep) 100%);
+      color: var(--cream-bg);
+      border: 1px solid #732a0c;
+      padding: 6px 12px;
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: 4px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+    }
+
     .btn-killswitch {
       background: #2a110c;
       border: 1px solid #77261a;
       color: #ea7a6c;
-      padding: 4px 10px;
+      padding: 5px 8px;
       font-family: 'Teko', sans-serif;
-      font-size: 1.05rem;
-      letter-spacing: 1.5px;
+      font-size: 1rem;
+      letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
       border-radius: 3px;
     }
 
-    nav { 
-      display: flex; 
-      background: #17120e; 
-      border-bottom: 2px solid var(--border-rivet); 
-      overflow-x: auto;
+    /* SUB-BAR VISANDE AKTUELL MODUL & SNABBÅTERGÅNG */
+    .module-breadcrumb {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #191310;
+      padding: 7px 14px;
+      border-bottom: 1px solid var(--border-rivet);
+      font-size: 0.8rem;
     }
-    nav button { 
-      flex: 1; 
-      padding: 10px 6px; 
-      background: none; 
-      border: none; 
-      color: var(--cream-muted); 
+    .current-module-title {
       font-family: 'Alfa Slab One', cursive;
-      font-size: 0.72rem;
+      color: var(--rust-glow);
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      cursor: pointer; 
-      border-bottom: 3px solid transparent; 
-      transition: all 0.2s ease;
-      white-space: nowrap;
     }
-    nav button.active { 
-      color: var(--cream-bg); 
-      background: rgba(179, 75, 30, 0.15);
-      border-bottom: 3px solid var(--rust-primary); 
-      text-shadow: 0 0 8px rgba(217, 98, 43, 0.6);
+    .btn-quick-menu {
+      background: none;
+      border: none;
+      color: var(--cream-muted);
+      cursor: pointer;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.8rem;
+      text-decoration: underline;
+    }
+
+    /* HELSKÄRMS NAV-MODAL / VERKTYGSLÅDAN */
+    #menu-overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(11, 8, 7, 0.98);
+      z-index: 100;
+      flex-direction: column;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    #menu-overlay.open {
+      display: flex;
+    }
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--rust-primary);
+      padding-bottom: 10px;
+    }
+    .menu-header h2 {
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 1.3rem;
+      color: var(--cream-bg);
+      letter-spacing: 1px;
+    }
+    .btn-close-menu {
+      background: #2a110c;
+      border: 1px solid #77261a;
+      color: #ea7a6c;
+      padding: 4px 12px;
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    .menu-card {
+      background: linear-gradient(180deg, #221a15 0%, #16110e 100%);
+      border: 1px solid var(--border-rivet);
+      border-left: 5px solid var(--rust-primary);
+      border-radius: 5px;
+      padding: 14px 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .menu-card:active {
+      transform: scale(0.98);
+      border-left-color: var(--rust-glow);
+    }
+    .menu-card-icon {
+      font-size: 1.8rem;
+      min-width: 36px;
+      text-align: center;
+    }
+    .menu-card-content h3 {
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 1rem;
+      color: var(--cream-bg);
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+    .menu-card-content p {
+      font-size: 0.8rem;
+      color: var(--cream-muted);
+      line-height: 1.3;
     }
 
     .view { display: none; padding: 16px; flex: 1; overflow-y: auto; }
@@ -311,7 +409,6 @@
       white-space: nowrap;
     }
 
-    /* STATUSPANEL (ÄR NÅGON I GARAGET) */
     .status-beacon {
       background: linear-gradient(180deg, #1f1814 0%, #130f0d 100%);
       border: 2px solid var(--border-rivet);
@@ -374,7 +471,6 @@
       text-transform: uppercase;
     }
 
-    /* KONTAKTKORT STILAR */
     .contact-item {
       display: flex;
       justify-content: space-between;
@@ -428,34 +524,96 @@
 
   <!-- HUVUDVY (INLOGGAD) -->
   <div id="main-view" style="display: none; flex-direction: column; height: 100vh;">
+    
+    <!-- HEADER -->
     <header>
-      <div style="display: flex; align-items: center; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
         <img src="logo.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
         <div>
           <span class="brand-title">SPEED<span>SHOP</span></span>
           <div style="font-size: 0.65rem; color: var(--rust-glow); font-family: 'Rye', cursive; letter-spacing: 1px;">BRÄNNEHYLTE</div>
         </div>
       </div>
-      <div>
-        <span id="user-display" style="font-size: 0.95rem; color: var(--cream-bg); font-family: 'Alfa Slab One', cursive; letter-spacing: 1px; margin-right: 8px;"></span>
-        <button class="btn-killswitch" onclick="logout()">KILL SWITCH</button>
+      <div class="header-actions">
+        <button class="btn-nav-trigger" onclick="toggleMenu()">☰ VERKTYGSLÅDA</button>
+        <button class="btn-killswitch" onclick="logout()">KILL</button>
       </div>
     </header>
 
-    <nav>
-      <button class="tab-btn active" onclick="switchTab('feed')">DEPÅLOGG</button>
-      <button class="tab-btn" onclick="switchTab('board')">TAVLAN</button>
-      <button class="tab-btn" onclick="switchTab('market')">SKROTNISSE</button>
-      <button class="tab-btn" onclick="switchTab('guests')">GÄSTMEK</button>
-      <button class="tab-btn" onclick="switchTab('todo')">ATT FIXA</button>
-      <button class="tab-btn" onclick="switchTab('tips')">MEK-DATA</button>
-      <button class="tab-btn" onclick="switchTab('contacts')">KONTAKTER</button>
-    </nav>
+    <!-- BREADCRUMB / MODULSTATUS -->
+    <div class="module-breadcrumb">
+      <span id="breadcrumb-title" class="current-module-title">DEPÅLOGG & BILDER</span>
+      <button class="btn-quick-menu" onclick="toggleMenu()">Växla modul ⚙️</button>
+    </div>
 
-    <!-- FLÖDE MED "ÄR NÅGON I GARAGET?" -->
-    <div id="feed-tab" class="view active">
+    <!-- HELSKÄRMS NAVIGERINGSMENY / DASHBOARD -->
+    <div id="menu-overlay">
+      <div class="menu-header">
+        <h2>VERKTYGSLÅDAN</h2>
+        <button class="btn-close-menu" onclick="toggleMenu()">STÄNG ✕</button>
+      </div>
       
-      <!-- STATUSINDIKATOR & KAFFEKNAPP -->
+      <div class="menu-grid">
+        <div class="menu-card" onclick="openModule('feed', 'DEPÅLOGG & BILDER')">
+          <div class="menu-card-icon">🏁</div>
+          <div class="menu-card-content">
+            <h3>DEPÅLOGGEN</h3>
+            <p>Live-status från lyftarna, foton, kaffeknapp och snabba mekrapporter.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openModule('board', 'SPEEDSHOP-TAVLAN')">
+          <div class="menu-card-icon">📌</div>
+          <div class="menu-card-content">
+            <h3>SPEEDSHOP-TAVLAN</h3>
+            <p>Planering av gemensamma garagedagar, grillkvällar och träffar.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openModule('market', 'SKROTNISSE-LAGRET')">
+          <div class="menu-card-icon">📦</div>
+          <div class="menu-card-content">
+            <h3>SKROTNISSE-LAGRET</h3>
+            <p>Internt bytes- & köplager: delar, förbrukningsmaterial och efterlysningar.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openModule('guests', 'GÄSTMEK & LOGG')">
+          <div class="menu-card-icon">🎟️</div>
+          <div class="menu-card-content">
+            <h3>GÄSTMEK</h3>
+            <p>Registrering av gäster som lånar lyft/plats och fastställt värdansvar.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openModule('todo', 'ATT FIXA / KÖPA')">
+          <div class="menu-card-icon">📝</div>
+          <div class="menu-card-content">
+            <h3>ATT FIXA / KÖPA</h3>
+            <p>Gemensam checklista: kapskivor, bensin, kaffe och mekmål.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openModule('tips', 'MEK-DATA & KALKYLER')">
+          <div class="menu-card-icon">📐</div>
+          <div class="menu-card-content">
+            <h3>MEK-DATA & KALKYLER</h3>
+            <p>RPM-räknare, CFM, åtdragningsmoment för V8 och tändföljder.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openModule('contacts', 'VIKTIGA KONTAKTER')">
+          <div class="menu-card-icon">📞</div>
+          <div class="menu-card-content">
+            <h3>KONTAKTER</h3>
+            <p>Direktnummer till gänget, fastighetsägarna och verkstäderna.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. FLÖDE & KAFFEKNAPP -->
+    <div id="feed-tab" class="view active">
       <div class="status-beacon">
         <div class="status-indicator-bar">
           <div id="garage-led" class="led-dot"></div>
@@ -479,7 +637,7 @@
       <div id="posts-container">Laddar depåloggen...</div>
     </div>
 
-    <!-- SPEEDSHOP-TAVLAN (EVENT & TRÄFFAR) -->
+    <!-- 2. SPEEDSHOP-TAVLAN -->
     <div id="board-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -501,7 +659,7 @@
       <div id="events-container">Laddar tavlan...</div>
     </div>
 
-    <!-- DEL- OCH MATERIALMARKNAD ("SKROTNISSE-LAGER") -->
+    <!-- 3. SKROTNISSE-LAGRET -->
     <div id="market-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -513,7 +671,7 @@
             <option value="SÄLJES / FINNES">📦 SÄLJES / FINNES PÅ HYLLAN</option>
             <option value="SÖKES / ÖNSKAS">🔍 SÖKES / NÅGON SOM HAR?</option>
           </select>
-          <input type="text" id="part-title" class="garage-input" placeholder="Del / Material (t.ex. Holley 650 DP, 2.5 tum avgasrör)">
+          <input type="text" id="part-title" class="garage-input" placeholder="Del / Material (t.ex. Holley 650 DP, 2.5 tum rör)">
           <input type="text" id="part-price" class="garage-input" placeholder="Pris / Bytes / Skänkes mot fika">
           <textarea id="part-desc" class="garage-input" style="height: 60px; resize: none;" placeholder="Beskrivning, skick eller mått..."></textarea>
           <button class="btn-speed" onclick="addPart()" style="padding: 10px; font-size: 0.95rem;">LÄGG UPP DEL</button>
@@ -523,18 +681,16 @@
       <div id="parts-container">Laddar reservdelslagret...</div>
     </div>
 
-    <!-- GÄSTMEK-POLICY & REGISTRERING -->
+    <!-- 4. GÄSTMEK (RENSAD POLICY) -->
     <div id="guests-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
           <span>GÄSTMEK-POLICY</span>
-          <span class="spec-badge">ORDNING</span>
+          <span class="spec-badge">ANSVAR</span>
         </div>
-        <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.5; color: var(--cream-text);">
-          <li><strong>Värdansvar:</strong> Den medlem som bjuder in gästen ansvarar till 100 % för säkerhet, brandrisk och garageordning.</li>
-          <li><strong>Verktyg:</strong> Alla verktyg ska torkas av och läggas tillbaka på exakt rätt plats samma kväll.</li>
-          <li><strong>Sopor & Spillolja:</strong> Inget skräp, filter eller oljefläckar lämnas kvar på lyften eller golvet. Golvet svabbas efteråt!</li>
-        </ul>
+        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--cream-text);">
+          <strong>Värdansvar:</strong> Den medlem som bjuder in eller lånar ut en plats till en gäst ansvarar fullt ut för gästen, ordningen och att lokalen lämnas i ordnat skick.
+        </p>
       </div>
 
       <div class="spec-card">
@@ -553,24 +709,22 @@
       <div id="guests-container">Laddar gästloggen...</div>
     </div>
 
-    <!-- INKÖP / ATT GÖRA -->
+    <!-- 5. INKÖP / ATT FIXA -->
     <div id="todo-tab" class="view">
       <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-        <input type="text" id="todo-input" placeholder="T.ex. kapskivor, 10L E85, bromsrengöring..." style="flex: 1; padding: 10px; border-radius: 4px; border: 1px solid #45362c; background: #0d0a08; color: var(--cream-text); font-family: 'Chakra Petch', sans-serif;">
+        <input type="text" id="todo-input" placeholder="T.ex. kapskivor, 10L E85, bromsrengöring..." class="garage-input" style="flex: 1;">
         <button class="btn-speed" style="padding: 8px 14px; font-size: 0.95rem;" onclick="addTodo()">LÄGG TILL</button>
       </div>
       <div id="todos-container"></div>
     </div>
 
-    <!-- MEK-DATA OCH VERKSTADSTIPS -->
+    <!-- 6. MEK-DATA OCH VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
           <span>RPM- & FARTKALKYLATOR</span>
           <span class="spec-badge">DRIVLINA</span>
         </div>
-        <p style="font-size: 0.8rem; color: var(--cream-muted);">Räkna ut motorvarv vid marschfart:</p>
-        
         <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
           <div>
             <label style="font-size: 0.75rem; color: var(--cream-muted);">HASTIGHET (KM/H)</label>
@@ -617,7 +771,7 @@
       </div>
     </div>
 
-    <!-- VIKTIGA KONTAKTER -->
+    <!-- 7. VIKTIGA KONTAKTER -->
     <div id="contacts-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -677,6 +831,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -705,9 +860,7 @@
     if (user) {
       document.getElementById('auth-view').style.display = 'none';
       document.getElementById('main-view').style.display = 'flex';
-      document.getElementById('user-display').innerText = `${(user.displayName || user.email.split('@')[0]).toUpperCase()}`;
       
-      // Begär notisbehörighet
       if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
         Notification.requestPermission();
       }
@@ -751,15 +904,21 @@
 
   function logout() { auth.signOut(); }
 
-  function switchTab(tab) {
+  /* NAVIGATION & MENYSTYRNING */
+  function toggleMenu() {
+    const menu = document.getElementById('menu-overlay');
+    menu.classList.toggle('open');
+  }
+
+  function openModule(tabId, title) {
     const tabs = ['feed', 'board', 'market', 'guests', 'todo', 'tips', 'contacts'];
-    document.querySelectorAll('.tab-btn').forEach((b, i) => {
-      b.classList.toggle('active', tabs[i] === tab);
-    });
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
-      if (el) el.classList.toggle('active', t === tab);
+      if (el) el.classList.toggle('active', t === tabId);
     });
+
+    document.getElementById('breadcrumb-title').innerText = title;
+    toggleMenu();
   }
 
   function updateFileName() {
@@ -913,12 +1072,12 @@
     });
   }
 
-  /* 4. GÄSTMEK */
+  /* 4. GÄSTMEK (RENSAD LOGG) */
   async function addGuest() {
     const name = document.getElementById('guest-name').value.trim();
     const car = document.getElementById('guest-car').value.trim();
     const date = document.getElementById('guest-date').value;
-    if (!name || !car) return alert('Ange namn och bil/arbete!');
+    if (!name || !car) return alert('Ange namn och fordon/arbete!');
 
     try {
       await db.collection('guests').add({
@@ -1013,7 +1172,7 @@
     });
   }
 
-  /* ATT GÖRA */
+  /* ATT FIXA */
   async function addTodo() {
     const input = document.getElementById('todo-input');
     const val = input.value.trim();
