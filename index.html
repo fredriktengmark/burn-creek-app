@@ -628,6 +628,21 @@
         </button>
       </div>
 
+      <!-- SNABBMEDDELANDE TILL TAVLAN -->
+      <div class="spec-card" style="margin-bottom: 16px; border-top-color: var(--rust-glow);">
+        <div class="spec-title">
+          <span>📢 ANSLAG TILL TAVLAN</span>
+          <span class="spec-badge" id="board-msg-badge">INGET ANSLAG</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <input type="text" id="board-msg-input" class="garage-input" placeholder="T.ex. Fredrik har köpt fikabröd, eller Grill kl 19...">
+          <div style="display: flex; gap: 8px;">
+            <button class="btn-speed" style="flex: 1; padding: 8px; font-size: 0.85rem;" onclick="sendBoardMessage()">SKICKA TILL TAVLAN</button>
+            <button class="btn-killswitch" style="padding: 8px 12px; font-size: 0.85rem;" onclick="clearBoardMessage()">RENSA</button>
+          </div>
+        </div>
+      </div>
+
       <div class="post-creator">
         <textarea id="post-text" class="garage-input" placeholder="Rapport från garaget, mekstatus eller bytesdelar..."></textarea>
         <div style="display: flex; gap: 8px; align-items: center;">
@@ -1264,11 +1279,11 @@
       loadFeed();
       loadTodos();
       loadGarageStatus();
+      loadCurrentBoardMessage();
       loadEvents();
       loadParts();
       loadGuests();
 
-      // Starta alla kalkylatorer automatiskt
       calcRpm();
       calcCfm();
       calcCR();
@@ -1354,6 +1369,48 @@
         alert('Fel vid radering: ' + err.message);
       }
     }
+  }
+
+  /* SNABBMEDDELANDE TILL TAVLAN */
+  async function sendBoardMessage() {
+    const text = document.getElementById('board-msg-input').value.trim();
+    if (!text) return alert('Skriv ett meddelande först!');
+    const user = auth.currentUser;
+    const authorName = user ? (user.displayName || user.email.split('@')[0]) : 'Depå';
+
+    try {
+      await db.collection('announcements').doc('current').set({
+        text: text,
+        author: authorName,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      document.getElementById('board-msg-input').value = '';
+    } catch (err) {
+      alert('Kunde inte skicka meddelande: ' + err.message);
+    }
+  }
+
+  async function clearBoardMessage() {
+    try {
+      await db.collection('announcements').doc('current').delete();
+    } catch (err) {
+      alert('Kunde inte rensa tavlan: ' + err.message);
+    }
+  }
+
+  function loadCurrentBoardMessage() {
+    db.collection('announcements').doc('current').onSnapshot(doc => {
+      const badge = document.getElementById('board-msg-badge');
+      if (badge) {
+        if (doc.exists && doc.data().text) {
+          badge.innerText = 'AKTIVT ANSLAG';
+          badge.style.background = 'var(--led-green)';
+        } else {
+          badge.innerText = 'INGET ANSLAG';
+          badge.style.background = 'var(--rust-primary)';
+        }
+      }
+    });
   }
 
   async function syncUsersFromPosts() {
@@ -1852,7 +1909,8 @@
     const trans = parseFloat(document.getElementById('calc-trans').value) || 1.0;
     const mph = kmh * 0.621371;
     const rpm = Math.round((mph * axle * trans * 336) / tire);
-    document.getElementById('res-rpm').innerText = `${rpm} RPM`;
+    const resEl = document.getElementById('res-rpm');
+    if (resEl) resEl.innerText = `${rpm} RPM`;
   }
 
   function calcCfm() {
@@ -1860,7 +1918,8 @@
     const rpm = parseFloat(document.getElementById('calc-maxrpm').value) || 6000;
     const ve = parseFloat(document.getElementById('calc-ve').value) || 0.85;
     const cfm = Math.round((cid * rpm * ve) / 3456);
-    document.getElementById('res-cfm').innerText = `${cfm} CFM`;
+    const resEl = document.getElementById('res-cfm');
+    if (resEl) resEl.innerText = `${cfm} CFM`;
   }
 
   function calcCR() {
@@ -1888,8 +1947,10 @@
     const effSweepVol = (Math.PI * Math.pow(bore / 2, 2) * effectiveStroke) * 16.387064;
     const dcr = (effSweepVol + clearanceVol) / clearanceVol;
 
-    document.getElementById('res-cr').innerText = `Statisk CR: ${cr.toFixed(2)}:1`;
-    document.getElementById('res-dcr').innerText = `Dynamisk DCR: ${dcr.toFixed(2)}:1 (Effektivt slag: ${effectiveStroke.toFixed(2)}")`;
+    const resCr = document.getElementById('res-cr');
+    const resDcr = document.getElementById('res-dcr');
+    if (resCr) resCr.innerText = `Statisk CR: ${cr.toFixed(2)}:1`;
+    if (resDcr) resDcr.innerText = `Dynamisk DCR: ${dcr.toFixed(2)}:1 (Effektivt slag: ${effectiveStroke.toFixed(2)}")`;
   }
 
   function calcPistonSpeed() {
@@ -1897,7 +1958,8 @@
     const rpm = parseFloat(document.getElementById('ps-rpm').value) || 6000;
     const ftmin = (2 * stroke * rpm) / 12;
     const ms = ftmin * 0.00508;
-    document.getElementById('res-pistonspeed').innerText = `${ms.toFixed(2)} m/s (${Math.round(ftmin)} ft/min)`;
+    const resEl = document.getElementById('res-pistonspeed');
+    if (resEl) resEl.innerText = `${ms.toFixed(2)} m/s (${Math.round(ftmin)} ft/min)`;
   }
 
   function calcTireMetric() {
@@ -1910,7 +1972,8 @@
     const diameterIn = diameterMm / 25.4;
     const circCm = (diameterMm * Math.PI) / 10;
 
-    document.getElementById('res-tire-calc').innerText = `${diameterIn.toFixed(1)}" diameter (${circCm.toFixed(1)} cm omkrets)`;
+    const resEl = document.getElementById('res-tire-calc');
+    if (resEl) resEl.innerText = `${diameterIn.toFixed(1)}" diameter (${circCm.toFixed(1)} cm omkrets)`;
   }
 
   function calcSpeedoError() {
@@ -1920,7 +1983,8 @@
     const actualSpeed = 100 * factor;
     const diffPercent = ((factor - 1) * 100).toFixed(1);
     const sign = diffPercent > 0 ? '+' : '';
-    document.getElementById('res-speedo-error').innerText = `${actualSpeed.toFixed(1)} km/h (${sign}${diffPercent} %)`;
+    const resEl = document.getElementById('res-speedo-error');
+    if (resEl) resEl.innerText = `${actualSpeed.toFixed(1)} km/h (${sign}${diffPercent} %)`;
   }
 
   function calcInjector() {
@@ -1931,7 +1995,8 @@
 
     const lbs = (hp * bsfc) / (count * dutyCycle);
     const cc = lbs * 10.5;
-    document.getElementById('res-injector').innerText = `${lbs.toFixed(1)} lbs/hr (${Math.round(cc)} cc/min)`;
+    const resEl = document.getElementById('res-injector');
+    if (resEl) resEl.innerText = `${lbs.toFixed(1)} lbs/hr (${Math.round(cc)} cc/min)`;
   }
 
   function calcVdrop() {
@@ -1949,7 +2014,8 @@
     if (reqArea > 16.0) stdArea = 25.0;
 
     const actualDrop = (amp * 0.0175 * len) / stdArea;
-    document.getElementById('res-vdrop').innerText = `Minst ${stdArea} mm² (Spänningsfall: ${actualDrop.toFixed(2)} V)`;
+    const resEl = document.getElementById('res-vdrop');
+    if (resEl) resEl.innerText = `Minst ${stdArea} mm² (Spänningsfall: ${actualDrop.toFixed(2)} V)`;
   }
 
   if ('serviceWorker' in navigator) {
