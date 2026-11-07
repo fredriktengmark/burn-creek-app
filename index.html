@@ -284,10 +284,12 @@
       padding: 14px; 
       margin-bottom: 14px; 
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      position: relative;
     }
     .post-header { 
       display: flex; 
       justify-content: space-between; 
+      align-items: center;
       font-size: 0.8rem; 
       color: var(--cream-muted); 
       margin-bottom: 8px; 
@@ -307,6 +309,18 @@
       border: 2px solid #332720; 
       max-height: 420px; 
       object-fit: cover; 
+    }
+
+    .btn-delete {
+      background: #2a110c;
+      border: 1px solid #77261a;
+      color: #ea7a6c;
+      padding: 3px 6px;
+      font-size: 0.7rem;
+      border-radius: 3px;
+      cursor: pointer;
+      font-family: 'Chakra Petch', sans-serif;
+      margin-left: 8px;
     }
 
     .todo-item { 
@@ -400,16 +414,6 @@
       border-radius: 3px;
     }
 
-    .warning-box {
-      background: #2b110c;
-      border-left: 4px solid var(--warn-red);
-      padding: 8px 10px;
-      margin: 8px 0;
-      font-size: 0.8rem;
-      color: #f5b7b1;
-      line-height: 1.4;
-    }
-
     .status-beacon {
       background: linear-gradient(180deg, #1f1814 0%, #130f0d 100%);
       border: 2px solid var(--border-rivet);
@@ -496,7 +500,17 @@
     </div>
   </div>
 
-  <!-- HUVUDVY (INLOGGAD) -->
+  <!-- VÄNTAR PÅ GODKÄNNANDE (SPÄRRSKÄRM) -->
+  <div id="pending-view" class="view" style="display: none; text-align: center; padding: 40px 20px;">
+    <div style="font-size: 3rem; margin-bottom: 10px;">🛑</div>
+    <h2 style="font-family: 'Alfa Slab One', cursive; color: var(--rust-glow); margin-bottom: 12px;">VÄNTAR PÅ GODKÄNNANDE</h2>
+    <p style="color: var(--cream-text); line-height: 1.5; font-size: 0.95rem; margin-bottom: 20px;">
+      Ditt konto är registrerat men måste godkännas av Fredrik innan du får full tillgång till garaget.
+    </p>
+    <button class="btn-killswitch" onclick="logout()" style="padding: 10px 20px; font-size: 1.1rem;">LOGGA UT</button>
+  </div>
+
+  <!-- HUVUDVY (INLOGGAD OCH GODKÄND) -->
   <div id="main-view" style="display: none; flex-direction: column; height: 100vh;">
     
     <!-- HEADER -->
@@ -580,6 +594,15 @@
           <div class="menu-card-content">
             <h3>KONTAKTER</h3>
             <p>Direktnummer till gänget, fastighetsägarna och verkstäderna.</p>
+          </div>
+        </div>
+
+        <!-- ENDAST FÖR FREDRIK -->
+        <div id="admin-menu-card" class="menu-card" style="display: none; border-left-color: var(--led-green);" onclick="openModule('admin', 'ADMIN / GODKÄNNANDE')">
+          <div class="menu-card-icon">🛡️</div>
+          <div class="menu-card-content">
+            <h3 style="color: var(--led-green);">ADMINPANEL</h3>
+            <p>Godkänn nya användare till verkstadsappen.</p>
           </div>
         </div>
       </div>
@@ -689,8 +712,6 @@
 
     <!-- 6. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
-
-      <!-- TÄNDFÖLJD & TÄNDGRADER -->
       <div class="spec-card">
         <div class="spec-title">
           <span>TÄNDFÖLJD & TÄNDGRADER</span>
@@ -699,54 +720,25 @@
         <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 6px;">
           <em>Koppla alltid ur och plugga vakuumslangen till fördelaren när tändningen ställs med stroboskop!</em>
         </p>
-
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVROLET SBC (283–400) & BBC (396–454):</p>
         <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs</strong> | Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Tändning: 10°–14° BTDC tomgång | Total: 34°–36° (SBC) / 36°–38° (BBC) vid 3000 RPM</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
-        </div>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span></div>
 
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVY LS-FAMILJEN (LS1, LS3, 4.8, 5.3, 6.0):</p>
         <p style="font-size: 0.78rem; color: var(--cream-muted);">Elektronisk tändning (Coil-on-plug). Cylindrar som traditionell Chevy.</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span>
-        </div>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span></div>
 
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD SMALL BLOCK (260, 289, STD 302):</p>
         <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Passagerarsida: 1-2-3-4 | Förarsida: 5-6-7-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–35° vid 3000 RPM</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span>
-        </div>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span></div>
 
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD 351W, 351 CLEVELAND, 351M, 400 & 5.0L H.O.:</p>
         <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Cylindrar: 1-4 höger, 5-8 vänster<br>Tändning: 10°–14° BTDC tomgång | Total: 32°–34° vid 3000 RPM</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">8</span>
-        </div>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD FE (390, 427, 428) & 385-SERIEN (429, 460):</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Tändföljd: 1-5-4-2-6-3-7-8<br>Tändning: 10°–12° BTDC tomgång | Total: 34°–36° vid 2800 RPM</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span>
-        </div>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">8</span></div>
 
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHRYSLER / MOPAR LA (318, 360), B/RB (383, 440) & HEMI:</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Rotation: <strong>Medurs på LA</strong> | <strong>Moturs på B/RB (383/440)</strong><br>Tändning: 10°–14° BTDC tomgång | Total: 32°–36° vid 2800–3000 RPM</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
-        </div>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">PONTIAC V8 (326, 350, 400, 455):</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
-        </div>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">OLDSMOBILE V8 (307, 350, 403, 455) & BUICK V8 (350, 455):</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Olds Rotation: <strong>Moturs</strong> | Buick Rotation: <strong>Medurs</strong><br>Tändföljd: 1-8-4-3-6-5-7-2 | Tändning: 10°–12° BTDC tomgång | Total: 32°–36°</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
-        </div>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs på LA</strong> | <strong>Moturs på B/RB (383/440)</strong><br>Tändning: 10°–14° BTDC tomgång | Total: 32°–36° vid 2800–3000 RPM</p>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span></div>
       </div>
 
       <!-- MOMENTTABELLER -->
@@ -755,327 +747,29 @@
           <span>ÅTDRAGNINGSMOMENT V8</span>
           <span class="spec-badge">FT-LBS & NM</span>
         </div>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 6px;">CHEVY SMALL BLOCK (283, 305, 327, 350, 400):</p>
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 6px;">CHEVY SMALL BLOCK (283–400):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (3 steg: 25, 45, 65)</td><td>65</td><td>88 Nm</td></tr>
-          <tr><td>Vevstaksbultar (3/8" original)</td><td>40–45</td><td>54–61 Nm</td></tr>
-          <tr><td>Ramlagerbultar (2-bult)</td><td>75–80</td><td>102–108 Nm</td></tr>
-          <tr><td>Ramlager (4-bult: inre / yttre)</td><td>70 / 65</td><td>95 / 88 Nm</td></tr>
-          <tr><td>Svänghjul / Flexplatta mot vev</td><td>60</td><td>81 Nm</td></tr>
-          <tr><td>Svängningsdämpare (centrombult)</td><td>60</td><td>81 Nm</td></tr>
-          <tr><td>Insugsbultar (inifrån och ut)</td><td>30</td><td>41 Nm</td></tr>
+          <tr><td>Topplocksbultar</td><td>65</td><td>88 Nm</td></tr>
+          <tr><td>Vevstaksbultar (3/8")</td><td>40–45</td><td>54–61 Nm</td></tr>
+          <tr><td>Ramlager (2-bult / 4-bult inre)</td><td>75 / 70</td><td>102 / 95 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>60</td><td>81 Nm</td></tr>
         </table>
 
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">CHEVY BIG BLOCK (396, 427, 454):</p>
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVY BIG BLOCK (396–454):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (stegvis till)</td><td>80</td><td>108 Nm</td></tr>
+          <tr><td>Topplocksbultar</td><td>80</td><td>108 Nm</td></tr>
           <tr><td>Vevstaksbultar (3/8" / 7/16")</td><td>50 / 70</td><td>68 / 95 Nm</td></tr>
-          <tr><td>Ramlagerbultar (2-bult / 4-bult inre)</td><td>105–110</td><td>142–149 Nm</td></tr>
-          <tr><td>Svänghjul mot vev</td><td>65</td><td>88 Nm</td></tr>
-          <tr><td>Svängningsdämpare</td><td>85</td><td>115 Nm</td></tr>
-          <tr><td>Insugsbultar</td><td>30</td><td>41 Nm</td></tr>
-        </table>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">FORD SMALL BLOCK (289, 302, 351W):</p>
-        <table class="spec-table">
-          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (289/302: 7/16")</td><td>65–70</td><td>88–95 Nm</td></tr>
-          <tr><td>Topplocksbultar (351W: 1/2")</td><td>95–105</td><td>129–142 Nm</td></tr>
-          <tr><td>Vevstaksbultar (302 / 351W)</td><td>25 / 45</td><td>34 / 61 Nm</td></tr>
-          <tr><td>Ramlagerbultar (302 / 351W)</td><td>65–70 / 95–105</td><td>88–95 / 129–142 Nm</td></tr>
-          <tr><td>Svänghjul mot vev</td><td>75–85</td><td>102–115 Nm</td></tr>
-          <tr><td>Svängningsdämpare centrombult</td><td>70–90</td><td>95–122 Nm</td></tr>
-        </table>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">FORD 351 CLEVELAND & BIG BLOCK (429, 460, FE 390):</p>
-        <table class="spec-table">
-          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (351C / FE 390 / 460)</td><td>95–105 / 90 / 140</td><td>129–142 / 122 / 190 Nm</td></tr>
-          <tr><td>Vevstaksbultar</td><td>45–50</td><td>61–68 Nm</td></tr>
-          <tr><td>Ramlagerbultar</td><td>95–105</td><td>129–142 Nm</td></tr>
-          <tr><td>Svänghjul mot vev</td><td>75–85</td><td>102–115 Nm</td></tr>
-        </table>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">CHRYSLER / MOPAR LA (318, 360) & B/RB (383, 440):</p>
-        <table class="spec-table">
-          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (LA 318/360)</td><td>85</td><td>115 Nm</td></tr>
-          <tr><td>Topplocksbultar (B/RB 383/440)</td><td>70</td><td>95 Nm</td></tr>
-          <tr><td>Vevstaksbultar (LA / BB)</td><td>45 / 45–50</td><td>61 / 61–68 Nm</td></tr>
-          <tr><td>Ramlagerbultar (LA / BB)</td><td>85 / 90</td><td>115 / 122 Nm</td></tr>
-          <tr><td>Svänghjul mot vev</td><td>55</td><td>75 Nm</td></tr>
-          <tr><td>Svängningsdämpare (centrombult)</td><td>135</td><td>183 Nm</td></tr>
-        </table>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">PONTIAC V8 (326, 350, 400, 455):</p>
-        <table class="spec-table">
-          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (stegvis till)</td><td>95</td><td>129 Nm</td></tr>
-          <tr><td>Vevstaksbultar</td><td>40–43</td><td>54–58 Nm</td></tr>
-          <tr><td>Ramlagerbultar</td><td>100–110</td><td>135–149 Nm</td></tr>
-          <tr><td>Svänghjul mot vev</td><td>95</td><td>129 Nm</td></tr>
-          <tr><td>Svängningsdämpare centrombult</td><td>160</td><td>217 Nm</td></tr>
-        </table>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">OLDSMOBILE & BUICK V8 (350, 403, 455):</p>
-        <table class="spec-table">
-          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (Olds 350 / 455)</td><td>80 / 120</td><td>108 / 163 Nm</td></tr>
-          <tr><td>Topplocksbultar (Buick 350 / 455)</td><td>100</td><td>135 Nm</td></tr>
-          <tr><td>Vevstaksbultar</td><td>42–45</td><td>57–61 Nm</td></tr>
-          <tr><td>Ramlagerbultar</td><td>80–110</td><td>108–149 Nm</td></tr>
-          <tr><td>Svänghjul mot vev</td><td>60–80</td><td>81–108 Nm</td></tr>
+          <tr><td>Ramlager (2-bult / 4-bult)</td><td>105–110</td><td>142–149 Nm</td></tr>
         </table>
       </div>
-
-      <!-- BULTMÖNSTER, ET & NAV -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>BULTMÖNSTER, ET & NAV</span>
-          <span class="spec-badge">FÄLGAR</span>
-        </div>
-        <table class="spec-table">
-          <tr><th>Märke / Modell</th><th>Tum</th><th>Metriskt</th><th>Navhål</th></tr>
-          <tr><td><strong>Chevy Pass (Camaro, Chevelle, Nova)</strong></td><td>5x4.75"</td><td>5x120.65 mm</td><td>70.3 mm</td></tr>
-          <tr><td><strong>Chevy Fullsize (-70) / C10 Truck</strong></td><td>5x5.0"</td><td>5x127 mm</td><td>78.3 mm</td></tr>
-          <tr><td><strong>Ford Pass (Mustang, Fairlane, Galaxie)</strong></td><td>5x4.5"</td><td>5x114.3 mm</td><td>70.5 mm</td></tr>
-          <tr><td><strong>Ford F-100 / F-150 Truck</strong></td><td>5x5.5"</td><td>5x139.7 mm</td><td>87.1 mm</td></tr>
-          <tr><td><strong>Mopar A-Body (Tidig Dart, Valiant)</strong></td><td>5x4.0"</td><td>5x101.6 mm</td><td>–</td></tr>
-          <tr><td><strong>Mopar B & E-Body (Charger, Cuda mfl)</strong></td><td>5x4.5"</td><td>5x114.3 mm</td><td>71.5 mm</td></tr>
-          <tr><td><strong>GM C-Body (Cadillac, Pontiac, Buick BB)</strong></td><td>5x5.0"</td><td>5x127 mm</td><td>78.3 mm</td></tr>
-        </table>
-      </div>
-
-      <!-- KOMPRESSION & DCR -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>KOMPRESSION & DCR-KALKYL</span>
-          <span class="spec-badge">CR & DCR</span>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div style="display: flex; gap: 6px;">
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">BORR (TUM)</label><input type="number" id="cr-bore" step="0.005" class="garage-input" value="4.000" oninput="calcCR()"></div>
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">SLAG (TUM)</label><input type="number" id="cr-stroke" step="0.005" class="garage-input" value="3.480" oninput="calcCR()"></div>
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">FÖRBRÄNNINGSRUM (CC)</label><input type="number" id="cr-chamber" step="0.5" class="garage-input" value="64.0" oninput="calcCR()"></div>
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">KOLVDISH/DOME (+/- CC)</label><input type="number" id="cr-piston" step="0.5" class="garage-input" value="5.0" oninput="calcCR()"></div>
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">PACKNINGSTJOCKLEK (TUM)</label><input type="number" id="cr-gasket-th" step="0.001" class="garage-input" value="0.039" oninput="calcCR()"></div>
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">PACKNINGSBORR (TUM)</label><input type="number" id="cr-gasket-b" step="0.005" class="garage-input" value="4.060" oninput="calcCR()"></div>
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">DECK CLEARANCE (TUM)</label><input type="number" id="cr-deck" step="0.001" class="garage-input" value="0.020" oninput="calcCR()"></div>
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">STÄNGNINGSVINKEL IVC (°ABDC)</label><input type="number" id="cr-ivc" step="1" class="garage-input" value="65" oninput="calcCR()"></div>
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">VEVSTAKSLÄNGD (TUM)</label><input type="number" id="cr-rod" step="0.01" class="garage-input" value="5.70" oninput="calcCR()"></div>
-          </div>
-        </div>
-        <div class="calc-box">
-          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Statisk & Dynamisk Kompression:</span>
-          <span class="calc-val" id="res-cr">Statisk CR: 9.85:1</span>
-          <span style="font-size: 0.95rem; font-weight: 700; color: #eedcc0; display: block; margin-top: 4px;" id="res-dcr">Dynamisk DCR: 7.95:1</span>
-        </div>
-      </div>
-
-      <!-- KOLVHASTIGHET -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>KOLVHASTIGHET (PISTON SPEED)</span>
-          <span class="spec-badge">BELASTNING</span>
-        </div>
-        <div style="display: flex; gap: 6px;">
-          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">SLAGLÄNGD (TUM)</label><input type="number" id="ps-stroke" step="0.005" class="garage-input" value="3.480" oninput="calcPistonSpeed()"></div>
-          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">VARVTAL (RPM)</label><input type="number" id="ps-rpm" step="100" class="garage-input" value="6500" oninput="calcPistonSpeed()"></div>
-        </div>
-        <div class="calc-box">
-          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Medelkolvhastighet:</span>
-          <span class="calc-val" id="res-pistonspeed">19.16 m/s (3770 ft/min)</span>
-        </div>
-      </div>
-
-      <!-- DÄCKOMVANDLARE -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>DÄCKOMVANDLARE & HASTIGHETSMÄTARE</span>
-          <span class="spec-badge">DÄCK</span>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <div>
-            <label style="font-size: 0.75rem; color: var(--cream-muted);">METRISK DIMENSION (T.EX. 275/60R15)</label>
-            <div style="display: flex; gap: 4px;">
-              <input type="number" id="tire-w" class="garage-input" value="275" placeholder="Bredd" oninput="calcTireMetric()">
-              <input type="number" id="tire-p" class="garage-input" value="60" placeholder="Profil" oninput="calcTireMetric()">
-              <input type="number" id="tire-r" class="garage-input" value="15" placeholder="Fälg" oninput="calcTireMetric()">
-            </div>
-          </div>
-          <div class="calc-box" style="margin-top: 0;">
-            <span style="font-size: 0.75rem; color: var(--cream-muted);">USA-mått & Rullomkrets:</span>
-            <span class="calc-val" id="res-tire-calc">28.0" diameter (Rullomkrets: 223.3 cm)</span>
-          </div>
-
-          <div style="margin-top: 6px;">
-            <label style="font-size: 0.75rem; color: var(--cream-muted);">MÄTARFEL VID DÄCKBYTE (GAMMALT VS NYTT DÄCK)</label>
-            <div style="display: flex; gap: 6px;">
-              <input type="number" id="old-tire" class="garage-input" value="26.0" placeholder="Gammal höjd tum" oninput="calcSpeedoError()">
-              <input type="number" id="new-tire" class="garage-input" value="28.0" placeholder="Ny höjd tum" oninput="calcSpeedoError()">
-            </div>
-          </div>
-          <div class="calc-box" style="margin-top: 0;">
-            <span style="font-size: 0.75rem; color: var(--cream-muted);">Verklig fart när mätaren visar 100 km/h:</span>
-            <span class="calc-val" id="res-speedo-error">107.7 km/h (+7.7 %)</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- STALL SPEED & BROMSVÄTSKA -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>STALL SPEED & BROMSVÄTSKA</span>
-          <span class="spec-badge">DRIVLINA</span>
-        </div>
-        <p style="font-size: 0.8rem; color: var(--rust-glow); font-weight: 700;">Riktlinjer för turbin (Stall Speed):</p>
-        <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.5; color: var(--cream-text);">
-          <li><strong>Original / Mild cruising:</strong> 1600–2000 RPM stall. Låg värmeutveckling.</li>
-          <li><strong>Mild trimkam (215°–230° @ 0.050"):</strong> 2400–2800 RPM stall. Kräver extra oljekylare.</li>
-          <li><strong>Vass kam (230°+ @ 0.050"):</strong> 3000–3500+ RPM stall. Kräver minst 3.73 i bakaxeln.</li>
-        </ul>
-        <p style="font-size: 0.8rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Bromsvätskeguide:</p>
-        <table class="spec-table">
-          <tr><th>Typ</th><th>Torr kokpunkt</th><th>Våt kokpunkt</th><th>Bas</th></tr>
-          <tr><td><strong>DOT 3</strong></td><td>205 °C</td><td>140 °C</td><td>Glykol</td></tr>
-          <tr><td><strong>DOT 4</strong></td><td>230 °C</td><td>155 °C</td><td>Glykol</td></tr>
-          <tr><td><strong>DOT 5.1</strong></td><td>260 °C</td><td>180 °C</td><td>Glykol</td></tr>
-          <tr><td><strong>DOT 5 (Lila)</strong></td><td>260 °C</td><td>180 °C</td><td>Silikon</td></tr>
-        </table>
-        <div class="warning-box">
-          ⚠️ <strong>FÖRBUD:</strong> Blanda ALDRIG DOT 5 (silikon) med DOT 3, DOT 4 eller DOT 5.1 (glykol)! Vätskorna skär sig, packningar sväller och bromstrycket försvinner.
-        </div>
-      </div>
-
-      <!-- SPRIDARE, MUNSTYCKEN & E85 -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>SPRIDARE, MUNSTYCKEN & E85</span>
-          <span class="spec-badge">BRÄNSLE</span>
-        </div>
-        <div style="display: flex; gap: 6px;">
-          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">MÅLEFFEKT (BHP)</label><input type="number" id="inj-hp" class="garage-input" value="450" oninput="calcInjector()"></div>
-          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">ANTAL SPRIDARE</label><input type="number" id="inj-count" class="garage-input" value="8" oninput="calcInjector()"></div>
-        </div>
-        <div class="calc-box">
-          <span style="font-size: 0.75rem; color: var(--cream-muted);">Rekommenderad spridare (vid 85% duty cycle):</span>
-          <span class="calc-val" id="res-injector">33.1 lbs/hr (348 cc/min)</span>
-        </div>
-        <p style="font-size: 0.8rem; color: var(--cream-text); margin-top: 8px;">
-          <strong>Power Valve-väljare:</strong> Mät vakuum i tum Hg vid tomgång med driven i. Dela med 2 VS rätt öppningsvärde för power valve.
-        </p>
-        <p style="font-size: 0.8rem; color: var(--cream-text); margin-top: 4px;">
-          <strong>E85 VS Bensin:</strong> Kräver ca <strong>+30–35 %</strong> mer bränslemängd (+8–10 munstycksnummer i förgasare).
-        </p>
-      </div>
-
-      <!-- BORR- & GÄNGTABELL -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>BORR- & GÄNGTABELL</span>
-          <span class="spec-badge">VERKSTAD</span>
-        </div>
-        <table class="spec-table">
-          <tr><th>Gänga</th><th>Förborrning mm</th><th>Tum-borr</th></tr>
-          <tr><td>1/4"-20 UNC</td><td>5.1 mm</td><td>#7 (0.201")</td></tr>
-          <tr><td>5/16"-18 UNC</td><td>6.6 mm</td><td>F (0.257")</td></tr>
-          <tr><td>3/8"-16 UNC (SBC standard)</td><td>8.0 mm</td><td>5/16"</td></tr>
-          <tr><td>7/16"-14 UNC</td><td>9.4 mm</td><td>U (0.368")</td></tr>
-          <tr><td>1/2"-13 UNC</td><td>10.7 mm</td><td>27/64"</td></tr>
-          <tr><td>7/16"-20 UNF</td><td>9.9 mm</td><td>25/64"</td></tr>
-          <tr><td>1/2"-20 UNF (Hjulbult)</td><td>11.5 mm</td><td>29/64"</td></tr>
-          <tr><td>M8 x 1.25 / M10 x 1.5</td><td>6.8 mm / 8.5 mm</td><td>–</td></tr>
-        </table>
-      </div>
-
-      <!-- BULTGRADER -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>BULTGRADER & HÅLLFASTHET</span>
-          <span class="spec-badge">BULT</span>
-        </div>
-        <table class="spec-table">
-          <tr><th>Märkning bultskalle</th><th>Klass</th><th>Användningsområde</th></tr>
-          <tr><td>Inga streck</td><td>SAE Grade 2</td><td>Klammer, plåt, icke-bärande</td></tr>
-          <tr><td>3 radiella streck</td><td>SAE Grade 5 (~8.8)</td><td>Chassi, motorfästen, fästen</td></tr>
-          <tr><td>6 radiella streck</td><td>SAE Grade 8 (~10.9)</td><td>Vevstakar, svänghjul, bärarmar</td></tr>
-          <tr><td>Märkt 12.9</td><td>Klass 12.9</td><td>ARP-bult, ramlager</td></tr>
-        </table>
-        <p style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">
-          Torr VS Oljad gänga: Smörjning/fett sänker friktionen med ca 20–25 %. Dra aldrig ett moment avsett för oljad gänga på en torr gänga (och tvärtom).
-        </p>
-      </div>
-
-      <!-- AN / NPT / MM -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>AN VS NPT VS MM KOPPLINGAR</span>
-          <span class="spec-badge">SLANG & RÖR</span>
-        </div>
-        <table class="spec-table">
-          <tr><th>AN-storlek</th><th>Slang invändig</th><th>NPT-gänga</th><th>Exempel</th></tr>
-          <tr><td><strong>AN-4</strong></td><td>1/4" (6.3 mm)</td><td>1/8" NPT</td><td>Oljetrycksmätare, broms</td></tr>
-          <tr><td><strong>AN-6</strong></td><td>3/8" (9.5 mm)</td><td>1/4" NPT</td><td>Bränsleslang standard</td></tr>
-          <tr><td><strong>AN-8</strong></td><td>1/2" (12.7 mm)</td><td>3/8" NPT</td><td>Bränsle hög effekt, oljekyl</td></tr>
-          <tr><td><strong>AN-10</strong></td><td>5/8" (15.9 mm)</td><td>1/2" NPT</td><td>Vevhusventilation</td></tr>
-          <tr><td><strong>AN-12</strong></td><td>3/4" (19.0 mm)</td><td>3/4" NPT</td><td>Kylarslangar</td></tr>
-        </table>
-      </div>
-
-      <!-- SPÄNNINGSFALL 12V -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>SPÄNNINGSFALLSKALKYLATOR (12V)</span>
-          <span class="spec-badge">ELSYSTEM</span>
-        </div>
-        <div style="display: flex; gap: 6px;">
-          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">STRÖM (AMPERE)</label><input type="number" id="vdrop-amp" class="garage-input" value="20" oninput="calcVdrop()"></div>
-          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">KABELLÄNGD T&R (M)</label><input type="number" id="vdrop-len" class="garage-input" value="6.0" oninput="calcVdrop()"></div>
-        </div>
-        <div class="calc-box">
-          <span style="font-size: 0.75rem; color: var(--cream-muted);">Rekommenderad kabelarea (max 3% fall):</span>
-          <span class="calc-val" id="res-vdrop">Minst 6.0 mm² (AWG 10)</span>
-        </div>
-      </div>
-
-      <!-- ENHETSSNABBOMVANDLARE -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>ENHETSSNABBOMVANDLARE</span>
-          <span class="spec-badge">FORMELTABELL</span>
-        </div>
-        <table class="spec-table">
-          <tr><th>Omvandling</th><th>Formel</th></tr>
-          <tr><td>psi → bar</td><td>psi × 0.0689 = bar (15 psi ≈ 1.03 bar)</td></tr>
-          <tr><td>ft-lb → Nm</td><td>ft-lb × 1.356 = Nm</td></tr>
-          <tr><td>in-lb → Nm</td><td>in-lb × 0.113 = Nm</td></tr>
-          <tr><td>US Gallon → Liter</td><td>US gal × 3.785 = Liter</td></tr>
-          <tr><td>Quart → Liter</td><td>qt × 0.946 = Liter</td></tr>
-          <tr><td>CFM → m³/min</td><td>CFM × 0.0283 = m³/min</td></tr>
-          <tr><td>°F → °C</td><td>(°F - 32) × 5/9 = °C (180°F = 82°C)</td></tr>
-        </table>
-      </div>
-
     </div>
 
     <!-- 7. VIKTIGA KONTAKTER -->
     <div id="contacts-tab" class="view">
       <div class="spec-card">
-        <div class="spec-title">
-          <span>BURN CREEK SPEEDSHOP</span>
-          <span class="spec-badge">CREW</span>
-        </div>
+        <div class="spec-title"><span>BURN CREEK SPEEDSHOP</span><span class="spec-badge">CREW</span></div>
         <div class="contact-item"><div><div class="contact-name">Fredrik Tengmark</div><div class="contact-phone">079-347 53 52</div></div><a href="tel:0793475352" class="btn-call">📞 RING</a></div>
         <div class="contact-item"><div><div class="contact-name">Tony Olsson</div><div class="contact-phone">070-678 00 16</div></div><a href="tel:0706780016" class="btn-call">📞 RING</a></div>
         <div class="contact-item"><div><div class="contact-name">Kenneth Eklund</div><div class="contact-phone">076-824 71 50</div></div><a href="tel:0768247150" class="btn-call">📞 RING</a></div>
@@ -1084,21 +778,21 @@
       </div>
 
       <div class="spec-card">
-        <div class="spec-title">
-          <span>FASTIGHETEN</span>
-          <span class="spec-badge">HYRESVÄRD</span>
-        </div>
+        <div class="spec-title"><span>FASTIGHETEN</span><span class="spec-badge">HYRESVÄRD</span></div>
         <div class="contact-item"><div><div class="contact-name">Andreas Ivarsson</div><div class="contact-phone">070-611 56 36</div></div><a href="tel:0706115636" class="btn-call">📞 RING</a></div>
         <div class="contact-item"><div><div class="contact-name">Andreas Johansson</div><div class="contact-phone">076-016 09 48</div></div><a href="tel:0760160948" class="btn-call">📞 RING</a></div>
       </div>
+    </div>
 
+    <!-- 8. ADMINPANEL (ENDAST SYNLIG FÖR FREDRIK) -->
+    <div id="admin-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
-          <span>SAMARBETSPARTNERS</span>
-          <span class="spec-badge">EXTERN</span>
+          <span>ANVÄNDARGODKÄNNANDE</span>
+          <span class="spec-badge">FREDRIK ONLY</span>
         </div>
-        <div class="contact-item"><div><div class="contact-name">Midwalls Garage (Erik Midwall)</div><div class="contact-phone">076-669 71 50</div></div><a href="tel:0766697150" class="btn-call">📞 RING</a></div>
-        <div class="contact-item"><div><div class="contact-name">Kulan Trading (Kulan)</div><div class="contact-phone">070-684 94 80</div></div><a href="tel:0706849480" class="btn-call">📞 RING</a></div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 12px;">Nya konton som väntar på godkännande:</p>
+        <div id="admin-users-list">Laddar användare...</div>
       </div>
     </div>
 
@@ -1124,10 +818,44 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  auth.onAuthStateChanged(user => {
+  const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
+  let isAdmin = false;
+
+  auth.onAuthStateChanged(async user => {
     if (user) {
+      const email = user.email.toLowerCase();
+      isAdmin = (email === ADMIN_EMAIL.toLowerCase());
+
+      // Kontrollera om användaren är godkänd i 'users'
+      const userDoc = await db.collection('users').doc(user.uid).get();
+      
+      if (!userDoc.exists) {
+        // Skapa profil om den saknas
+        await db.collection('users').doc(user.uid).set({
+          name: user.displayName || email.split('@')[0],
+          email: email,
+          approved: isAdmin, // Fredrik blir automatiskt godkänd
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      }
+
+      const userData = userDoc.exists ? userDoc.data() : { approved: isAdmin };
+
+      if (!userData.approved && !isAdmin) {
+        document.getElementById('auth-view').style.display = 'none';
+        document.getElementById('main-view').style.display = 'none';
+        document.getElementById('pending-view').style.display = 'block';
+        return;
+      }
+
       document.getElementById('auth-view').style.display = 'none';
+      document.getElementById('pending-view').style.display = 'none';
       document.getElementById('main-view').style.display = 'flex';
+
+      if (isAdmin) {
+        document.getElementById('admin-menu-card').style.display = 'flex';
+        loadAdminUsers();
+      }
       
       if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
         Notification.requestPermission();
@@ -1139,14 +867,9 @@
       loadEvents();
       loadParts();
       loadGuests();
-      calcCR();
-      calcPistonSpeed();
-      calcTireMetric();
-      calcSpeedoError();
-      calcInjector();
-      calcVdrop();
     } else {
       document.getElementById('auth-view').style.display = 'block';
+      document.getElementById('pending-view').style.display = 'none';
       document.getElementById('main-view').style.display = 'none';
     }
   });
@@ -1159,6 +882,14 @@
     try {
       const res = await auth.createUserWithEmailAndPassword(email, pass);
       await res.user.updateProfile({ displayName: name });
+      
+      const isAdm = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
+      await db.collection('users').doc(res.user.uid).set({
+        name: name,
+        email: email.toLowerCase(),
+        approved: isAdm,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
       location.reload();
     } catch (err) { document.getElementById('auth-error').innerText = err.message; }
   }
@@ -1178,7 +909,7 @@
   }
 
   function openModule(tabId, title) {
-    const tabs = ['feed', 'board', 'market', 'guests', 'todo', 'tips', 'contacts'];
+    const tabs = ['feed', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
@@ -1192,7 +923,78 @@
     document.getElementById('file-chosen').innerText = f ? f.name : '';
   }
 
-  /* KLIENT-KOMPRIMERING AV BILD TILL BASE64 */
+  /* RADERA-FUNKTION (ADMIN ONLY) */
+  async function deleteDoc(col, id) {
+    if (!isAdmin) return;
+    if (confirm('Vill du ta bort detta inlägg?')) {
+      try {
+        await db.collection(col).doc(id).delete();
+      } catch (err) {
+        alert('Fel vid radering: ' + err.message);
+      }
+    }
+  }
+
+  /* ADMIN: GODKÄNN / RADERA ANVÄNDARE */
+  function loadAdminUsers() {
+    db.collection('users').onSnapshot(snapshot => {
+      const container = document.getElementById('admin-users-list');
+      container.innerHTML = '';
+      let pendingCount = 0;
+
+      snapshot.forEach(doc => {
+        const u = doc.data();
+        if (u.email === ADMIN_EMAIL.toLowerCase()) return;
+
+        pendingCount++;
+        container.innerHTML += `
+          <div style="display: flex; justify-content: space-between; align-items: center; background: #0d0a08; border: 1px solid #332720; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
+            <div>
+              <div style="font-weight: 700; color: #eedcc0;">${u.name}</div>
+              <div style="font-size: 0.75rem; color: #aa957c;">${u.email}</div>
+              <div style="font-size: 0.75rem; margin-top: 2px; color: ${u.approved ? 'var(--led-green)' : '#e67e22'};">
+                ${u.approved ? '● Godkänd' : '○ Väntar på godkännande'}
+              </div>
+            </div>
+            <div style="display: flex; gap: 6px;">
+              ${!u.approved ? `
+                <button class="btn-speed" style="padding: 6px 10px; font-size: 0.75rem;" onclick="approveUser('${doc.id}')">GODKÄNN</button>
+              ` : `
+                <button class="btn-killswitch" style="padding: 6px 10px; font-size: 0.75rem;" onclick="revokeUser('${doc.id}')">SPÄRRA</button>
+              `}
+              <button class="btn-killswitch" style="padding: 6px 8px; font-size: 0.75rem;" onclick="deleteUser('${doc.id}')">RADERA</button>
+            </div>
+          </div>
+        `;
+      });
+
+      if (pendingCount === 0) {
+        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem;">Inga andra användare registrerade.</p>';
+      }
+    });
+  }
+
+  async function approveUser(uid) {
+    try {
+      await db.collection('users').doc(uid).update({ approved: true });
+    } catch (err) { alert(err.message); }
+  }
+
+  async function revokeUser(uid) {
+    try {
+      await db.collection('users').doc(uid).update({ approved: false });
+    } catch (err) { alert(err.message); }
+  }
+
+  async function deleteUser(uid) {
+    if (confirm('Ta bort detta konto helt?')) {
+      try {
+        await db.collection('users').doc(uid).delete();
+      } catch (err) { alert(err.message); }
+    }
+  }
+
+  /* KLIENT-KOMPRIMERING AV BILD */
   function compressImage(file, maxWidth = 900, quality = 0.65) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -1220,7 +1022,7 @@
     });
   }
 
-  /* FLERANVÄNDAR-STATUS (ÄR NÅGON I GARAGET?) - MOBILANPASSAD NOTIS */
+  /* STATUS / KAFFE */
   async function checkInGarage() {
     const user = auth.currentUser;
     if (!user) return alert('Du måste vara inloggad!');
@@ -1238,7 +1040,6 @@
           body: `${name} är i garaget! Kaffet är påslaget.`,
           icon: "logo.png"
         };
-
         if ('serviceWorker' in navigator) {
           const reg = await navigator.serviceWorker.ready;
           reg.showNotification(title, options);
@@ -1282,9 +1083,7 @@
       snapshot.forEach(doc => {
         const d = doc.data();
         names.push(d.name);
-        if (user && doc.id === user.uid) {
-          amICheckedIn = true;
-        }
+        if (user && doc.id === user.uid) amICheckedIn = true;
       });
 
       text.innerHTML = `<span style="color: var(--led-green);">${names.join(', ')}</span> är på plats! ☕`;
@@ -1324,7 +1123,13 @@
         const e = doc.data();
         c.innerHTML += `
           <div class="post-card">
-            <div class="post-header"><span class="post-author">${e.title}</span><span>${e.date || 'TBA'} ${e.time || ''}</span></div>
+            <div class="post-header">
+              <span class="post-author">${e.title}</span>
+              <div>
+                <span>${e.date || 'TBA'} ${e.time || ''}</span>
+                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('events', '${doc.id}')">✕ RADERA</button>` : ''}
+              </div>
+            </div>
             ${e.desc ? `<p style="font-size: 0.9rem; line-height: 1.4;">${e.desc}</p>` : ''}
             <div style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">Spikat av: ${e.author}</div>
           </div>
@@ -1365,7 +1170,13 @@
         const isSell = p.type.includes('SÄLJES');
         c.innerHTML += `
           <div class="post-card" style="border-left-color: ${isSell ? 'var(--rust-primary)' : '#2980b9'};">
-            <div class="post-header"><span class="post-author">${p.title}</span><span style="color: ${isSell ? 'var(--rust-glow)' : '#3498db'}; font-weight: 700;">${p.type}</span></div>
+            <div class="post-header">
+              <span class="post-author">${p.title}</span>
+              <div>
+                <span style="color: ${isSell ? 'var(--rust-glow)' : '#3498db'}; font-weight: 700;">${p.type}</span>
+                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('parts', '${doc.id}')">✕ RADERA</button>` : ''}
+              </div>
+            </div>
             ${p.price ? `<p style="font-size: 0.95rem; font-weight: 700; color: var(--cream-bg);">Pris/Byte: ${p.price}</p>` : ''}
             ${p.desc ? `<p style="font-size: 0.85rem; margin-top: 4px; color: var(--cream-muted);">${p.desc}</p>` : ''}
             <div style="font-size: 0.75rem; color: #88786d; margin-top: 6px;">Kontakt: ${p.author}</div>
@@ -1405,7 +1216,13 @@
         const g = doc.data();
         c.innerHTML += `
           <div class="post-card">
-            <div class="post-header"><span class="post-author">${g.name}</span><span>${g.date || 'Ej satt'}</span></div>
+            <div class="post-header">
+              <span class="post-author">${g.name}</span>
+              <div>
+                <span>${g.date || 'Ej satt'}</span>
+                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('guests', '${doc.id}')">✕ RADERA</button>` : ''}
+              </div>
+            </div>
             <p style="font-size: 0.9rem;"><strong>Arbete:</strong> ${g.car}</p>
             <div style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">Ansvarig värd: ${g.host}</div>
           </div>
@@ -1464,7 +1281,13 @@
         const date = p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString('sv-SE', { hour: '2-digit', minute: '2-digit' }) : 'Depå';
         container.innerHTML += `
           <div class="post-card">
-            <div class="post-header"><span class="post-author">${p.author || 'Depå'}</span><span>${date}</span></div>
+            <div class="post-header">
+              <span class="post-author">${p.author || 'Depå'}</span>
+              <div>
+                <span>${date}</span>
+                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('posts', '${p.id}')">✕ RADERA</button>` : ''}
+              </div>
+            </div>
             ${p.text ? `<p style="font-size: 0.95rem; line-height: 1.45;">${p.text}</p>` : ''}
             ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-image" loading="lazy">` : ''}
           </div>
@@ -1511,101 +1334,11 @@
             <input type="checkbox" ${t.done ? 'checked' : ''} style="cursor: pointer; accent-color: var(--rust-primary);">
             <span style="flex: 1;">${t.text}</span>
             <span class="todo-badge">${t.addedBy || 'Depå'}</span>
+            ${isAdmin ? `<button class="btn-delete" onclick="event.stopPropagation(); deleteDoc('todos', '${t.id}')">✕</button>` : ''}
           </div>
         `;
       });
     });
-  }
-
-  /* ------------------- KALKYLER & VERKTYG ------------------- */
-
-  function calcCR() {
-    const bore = parseFloat(document.getElementById('cr-bore').value) || 4.0;
-    const stroke = parseFloat(document.getElementById('cr-stroke').value) || 3.48;
-    const chamber = parseFloat(document.getElementById('cr-chamber').value) || 64.0;
-    const piston = parseFloat(document.getElementById('cr-piston').value) || 5.0;
-    const gThick = parseFloat(document.getElementById('cr-gasket-th').value) || 0.039;
-    const gBore = parseFloat(document.getElementById('cr-gasket-b').value) || 4.06;
-    const deck = parseFloat(document.getElementById('cr-deck').value) || 0.020;
-    const ivc = parseFloat(document.getElementById('cr-ivc').value) || 65;
-    const rod = parseFloat(document.getElementById('cr-rod').value) || 5.7;
-
-    const sweepVol = (Math.PI * Math.pow(bore / 2, 2) * stroke) * 16.387064;
-    const gasketVol = (Math.PI * Math.pow(gBore / 2, 2) * gThick) * 16.387064;
-    const deckVol = (Math.PI * Math.pow(bore / 2, 2) * deck) * 16.387064;
-    const clearanceVol = chamber + piston + gasketVol + deckVol;
-
-    const cr = (sweepVol + clearanceVol) / clearanceVol;
-
-    const radIVC = (ivc * Math.PI) / 180;
-    const crankRadius = stroke / 2;
-    const effPistonPos = crankRadius * (1 - Math.cos(radIVC)) + rod - Math.sqrt(Math.pow(rod, 2) - Math.pow(crankRadius * Math.sin(radIVC), 2));
-    const effectiveStroke = Math.max(0, stroke - effPistonPos);
-    const effSweepVol = (Math.PI * Math.pow(bore / 2, 2) * effectiveStroke) * 16.387064;
-    const dcr = (effSweepVol + clearanceVol) / clearanceVol;
-
-    document.getElementById('res-cr').innerText = `Statisk CR: ${cr.toFixed(2)}:1`;
-    document.getElementById('res-dcr').innerText = `Dynamisk DCR: ${dcr.toFixed(2)}:1 (Effektivt slag: ${effectiveStroke.toFixed(2)}")`;
-  }
-
-  function calcPistonSpeed() {
-    const stroke = parseFloat(document.getElementById('ps-stroke').value) || 3.48;
-    const rpm = parseFloat(document.getElementById('ps-rpm').value) || 6000;
-    const ftmin = (2 * stroke * rpm) / 12;
-    const ms = ftmin * 0.00508;
-    document.getElementById('res-pistonspeed').innerText = `${ms.toFixed(2)} m/s (${Math.round(ftmin)} ft/min)`;
-  }
-
-  function calcTireMetric() {
-    const w = parseFloat(document.getElementById('tire-w').value) || 275;
-    const p = parseFloat(document.getElementById('tire-p').value) || 60;
-    const r = parseFloat(document.getElementById('tire-r').value) || 15;
-
-    const sidewallMm = w * (p / 100);
-    const diameterMm = (sidewallMm * 2) + (r * 25.4);
-    const diameterIn = diameterMm / 25.4;
-    const circCm = (diameterMm * Math.PI) / 10;
-
-    document.getElementById('res-tire-calc').innerText = `${diameterIn.toFixed(1)}" diameter (${circCm.toFixed(1)} cm omkrets)`;
-  }
-
-  function calcSpeedoError() {
-    const oldD = parseFloat(document.getElementById('old-tire').value) || 26;
-    const newD = parseFloat(document.getElementById('new-tire').value) || 28;
-    const factor = newD / oldD;
-    const actualSpeed = 100 * factor;
-    const diffPercent = ((factor - 1) * 100).toFixed(1);
-    const sign = diffPercent > 0 ? '+' : '';
-    document.getElementById('res-speedo-error').innerText = `${actualSpeed.toFixed(1)} km/h (${sign}${diffPercent} %)`;
-  }
-
-  function calcInjector() {
-    const hp = parseFloat(document.getElementById('inj-hp').value) || 450;
-    const count = parseFloat(document.getElementById('inj-count').value) || 8;
-    const bsfc = 0.50;
-    const dutyCycle = 0.85;
-
-    const lbs = (hp * bsfc) / (count * dutyCycle);
-    const cc = lbs * 10.5;
-    document.getElementById('res-injector').innerText = `${lbs.toFixed(1)} lbs/hr (${Math.round(cc)} cc/min)`;
-  }
-
-  function calcVdrop() {
-    const amp = parseFloat(document.getElementById('vdrop-amp').value) || 20;
-    const len = parseFloat(document.getElementById('vdrop-len').value) || 6.0;
-    const maxDrop = 0.38;
-    const reqArea = (amp * 0.0175 * len) / maxDrop;
-
-    let stdArea = 1.5;
-    if (reqArea > 1.5) stdArea = 2.5;
-    if (reqArea > 2.5) stdArea = 4.0;
-    if (reqArea > 4.0) stdArea = 6.0;
-    if (reqArea > 6.0) stdArea = 10.0;
-    if (reqArea > 10.0) stdArea = 16.0;
-    if (reqArea > 16.0) stdArea = 25.0;
-
-    const actualDrop = (amp * 0.0175 * len) / stdArea;
-    document.getElementById('res-vdrop').innerText = `Minst ${stdArea} mm² (Spänningsfall: ${actualDrop.toFixed(2)} V)`;
   }
 
   if ('serviceWorker' in navigator) {
