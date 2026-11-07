@@ -72,7 +72,7 @@
 
     header { 
       background: linear-gradient(180deg, #2a1f1a 0%, #17120e 100%); 
-      padding: 10px 14px; 
+      padding: 10px 12px; 
       display: flex; 
       justify-content: space-between; 
       align-items: center; 
@@ -81,11 +81,12 @@
     
     .brand-title { 
       font-family: 'Alfa Slab One', cursive;
-      font-size: 1.15rem; 
+      font-size: 0.95rem; 
       color: var(--cream-text); 
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
       text-shadow: 2px 2px 0px #000, 0 0 8px rgba(179, 75, 30, 0.4);
+      line-height: 1.1;
     }
     .brand-title span { color: var(--rust-glow); }
 
@@ -100,17 +101,19 @@
 
     .header-actions { display: flex; align-items: center; gap: 6px; }
 
+    /* Mindre och smalare knapp */
     .btn-nav-trigger {
       background: linear-gradient(180deg, var(--rust-glow) 0%, var(--rust-deep) 100%);
       color: var(--cream-bg);
       border: 1px solid #732a0c;
-      padding: 6px 12px;
+      padding: 5px 8px;
       font-family: 'Alfa Slab One', cursive;
-      font-size: 0.8rem;
-      letter-spacing: 1px;
+      font-size: 0.72rem;
+      letter-spacing: 0.5px;
       cursor: pointer;
       border-radius: 4px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+      white-space: nowrap;
     }
 
     .btn-killswitch {
@@ -329,7 +332,6 @@
       border-radius: 3px;
     }
 
-    /* SPEC & SUBSECTION KORT */
     .spec-card {
       background: var(--card-bg);
       border: 1px solid #332720;
@@ -503,12 +505,11 @@
       <div style="display: flex; align-items: center; gap: 8px;">
         <img src="logo.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
         <div>
-          <span class="brand-title">SPEED<span>SHOP</span></span>
-          <div style="font-size: 0.65rem; color: var(--rust-glow); font-family: 'Rye', cursive; letter-spacing: 1px;">BRÄNNEHYLTE</div>
+          <span class="brand-title">BURN CREEK <span>SPEEDSHOP</span></span>
         </div>
       </div>
       <div class="header-actions">
-        <button class="btn-nav-trigger" onclick="toggleMenu()">☰ VERKTYGSLÅDA</button>
+        <button class="btn-nav-trigger" onclick="toggleMenu()">☰ VERKTYG</button>
         <button class="btn-killswitch" onclick="logout()">KILL</button>
       </div>
     </header>
@@ -785,7 +786,7 @@
           </div>
 
           <div style="margin-top: 6px;">
-            <label style="font-size: 0.75rem; color: var(--cream-muted);">MÄTARFEL VID DÄCKBYTE (GAMMALT $\rightarrow$ NYTT DÄCK)</label>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">MÄTARFEL VID DÄCKBYTE (GAMMALT VS NYTT DÄCK)</label>
             <div style="display: flex; gap: 6px;">
               <input type="number" id="old-tire" class="garage-input" value="26.0" placeholder="Gammal höjd tum" oninput="calcSpeedoError()">
               <input type="number" id="new-tire" class="garage-input" value="28.0" placeholder="Ny höjd tum" oninput="calcSpeedoError()">
@@ -841,7 +842,7 @@
           <span class="calc-val" id="res-injector">33.1 lbs/hr (348 cc/min)</span>
         </div>
 
-        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Holley Munstycken (Flödesindex $\rightarrow$ Hålstorlek):</p>
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Holley Munstycken (Flödesindex VS Hålstorlek):</p>
         <table class="spec-table">
           <tr><th>Holley Jet #</th><th>Håldiameter (tum)</th><th>Håldiameter (mm)</th></tr>
           <tr><td>#66 – #68</td><td>0.066" – 0.069"</td><td>1.68 – 1.75 mm</td></tr>
@@ -851,10 +852,10 @@
         </table>
 
         <p style="font-size: 0.8rem; color: var(--cream-text); margin-top: 8px;">
-          <strong>Power Valve-väljare:</strong> Mät vakuum i tum Hg vid tomgång med driven i (t.ex. 13" Hg). Dela med 2 $\rightarrow$ 6.5 Power Valve.
+          <strong>Power Valve-väljare:</strong> Mät vakuum i tum Hg vid tomgång med driven i (t.ex. 13" Hg). Dela med 2 VS 6.5 Power Valve.
         </p>
         <p style="font-size: 0.8rem; color: var(--cream-text); margin-top: 4px;">
-          <strong>E85-bränslekompensation:</strong> Kräver ca <strong>+30–35 %</strong> mer bränslemängd. Vid förgasare motsvarar detta en ökning med 8–10 munstycksnummer (t.ex. från #70 till #78–#80) samt större acc-pumpsmunstycke.
+          <strong>E85 VS Bensin:</strong> Kräver ca <strong>+30–35 %</strong> mer bränslemängd. Vid förgasare motsvarar detta en ökning med 8–10 munstycksnummer (t.ex. från #70 till #78–#80) samt större acc-pumpsmunstycke.
         </p>
       </div>
 
@@ -893,14 +894,14 @@
           <tr><td>Märkt 12.9</td><td>Klass 12.9</td><td>ARP-topplocksbult, ramlager</td></tr>
         </table>
         <p style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">
-          Torr vs Oljad gänga: Smörjning eller ARP-fett sänker friktionen med ca 20–25 %. Dra aldrig ett moment specificerat för oljad gänga på en torr gänga (och tvärtom) – då riskerar bulten att sträckas sönder!
+          Torr VS Oljad gänga: Smörjning eller ARP-fett sänker friktionen med ca 20–25 %. Dra aldrig ett moment specificerat för oljad gänga på en torr gänga (och tvärtom) – då riskerar bulten att sträckas sönder!
         </p>
       </div>
 
       <!-- I. RÖR & KOPPLINGAR (AN / NPT / MM) -->
       <div class="spec-card">
         <div class="spec-title">
-          <span>AN $\leftrightarrow$ NPT $\leftrightarrow$ MM KOPPLINGAR</span>
+          <span>AN VS NPT VS MM KOPPLINGAR</span>
           <span class="spec-badge">SLANG & RÖR</span>
         </div>
         <table class="spec-table">
@@ -976,13 +977,13 @@
         </div>
         <table class="spec-table">
           <tr><th>Omvandling</th><th>Formel</th></tr>
-          <tr><td>psi $\rightarrow$ bar</td><td>psi × 0.0689 = bar (15 psi ≈ 1.03 bar)</td></tr>
-          <tr><td>ft-lb $\rightarrow$ Nm</td><td>ft-lb × 1.356 = Nm</td></tr>
-          <tr><td>in-lb $\rightarrow$ Nm</td><td>in-lb × 0.113 = Nm</td></tr>
-          <tr><td>US Gallon $\rightarrow$ Liter</td><td>US gal × 3.785 = Liter</td></tr>
-          <tr><td>Quart $\rightarrow$ Liter</td><td>qt × 0.946 = Liter</td></tr>
-          <tr><td>CFM $\rightarrow$ m³/min</td><td>CFM × 0.0283 = m³/min</td></tr>
-          <tr><td>°F $\rightarrow$ °C</td><td>(°F - 32) × 5/9 = °C (180°F = 82°C)</td></tr>
+          <tr><td>psi → bar</td><td>psi × 0.0689 = bar (15 psi ≈ 1.03 bar)</td></tr>
+          <tr><td>ft-lb → Nm</td><td>ft-lb × 1.356 = Nm</td></tr>
+          <tr><td>in-lb → Nm</td><td>in-lb × 0.113 = Nm</td></tr>
+          <tr><td>US Gallon → Liter</td><td>US gal × 3.785 = Liter</td></tr>
+          <tr><td>Quart → Liter</td><td>qt × 0.946 = Liter</td></tr>
+          <tr><td>CFM → m³/min</td><td>CFM × 0.0283 = m³/min</td></tr>
+          <tr><td>°F → °C</td><td>(°F - 32) × 5/9 = °C (180°F = 82°C)</td></tr>
         </table>
       </div>
 
@@ -1415,14 +1416,13 @@
     const bore = parseFloat(document.getElementById('cr-bore').value) || 4.0;
     const stroke = parseFloat(document.getElementById('cr-stroke').value) || 3.48;
     const chamber = parseFloat(document.getElementById('cr-chamber').value) || 64.0;
-    const piston = parseFloat(document.getElementById('cr-piston').value) || 5.0; // dish positiv, dome negativ
+    const piston = parseFloat(document.getElementById('cr-piston').value) || 5.0;
     const gThick = parseFloat(document.getElementById('cr-gasket-th').value) || 0.039;
     const gBore = parseFloat(document.getElementById('cr-gasket-b').value) || 4.06;
     const deck = parseFloat(document.getElementById('cr-deck').value) || 0.020;
     const ivc = parseFloat(document.getElementById('cr-ivc').value) || 65;
     const rod = parseFloat(document.getElementById('cr-rod').value) || 5.7;
 
-    // Volymer i CC (1 ci = 16.387064 cc)
     const sweepVol = (Math.PI * Math.pow(bore / 2, 2) * stroke) * 16.387064;
     const gasketVol = (Math.PI * Math.pow(gBore / 2, 2) * gThick) * 16.387064;
     const deckVol = (Math.PI * Math.pow(bore / 2, 2) * deck) * 16.387064;
@@ -1430,10 +1430,8 @@
 
     const cr = (sweepVol + clearanceVol) / clearanceVol;
 
-    // DCR Beräkning: Effektiv slaglängd baserad på IVC och vevstake/vevradie
     const radIVC = (ivc * Math.PI) / 180;
     const crankRadius = stroke / 2;
-    // Kolvposition från BDC: s = r*(1 - cos(a)) + L*(1 - sqrt(1 - (r/L*sin(a))^2))
     const effPistonPos = crankRadius * (1 - Math.cos(radIVC)) + rod - Math.sqrt(Math.pow(rod, 2) - Math.pow(crankRadius * Math.sin(radIVC), 2));
     const effectiveStroke = Math.max(0, stroke - effPistonPos);
     const effSweepVol = (Math.PI * Math.pow(bore / 2, 2) * effectiveStroke) * 16.387064;
@@ -1447,9 +1445,7 @@
   function calcPistonSpeed() {
     const stroke = parseFloat(document.getElementById('ps-stroke').value) || 3.48;
     const rpm = parseFloat(document.getElementById('ps-rpm').value) || 6000;
-    // Mean piston speed ft/min = 2 * Stroke (tum) * RPM / 12
     const ftmin = (2 * stroke * rpm) / 12;
-    // m/s = ftmin * 0.00508
     const ms = ftmin * 0.00508;
     document.getElementById('res-pistonspeed').innerText = `${ms.toFixed(2)} m/s (${Math.round(ftmin)} ft/min)`;
   }
@@ -1483,22 +1479,18 @@
   function calcInjector() {
     const hp = parseFloat(document.getElementById('inj-hp').value) || 450;
     const count = parseFloat(document.getElementById('inj-count').value) || 8;
-    const bsfc = 0.50; // Standard sugmotor
+    const bsfc = 0.50;
     const dutyCycle = 0.85;
 
-    // Formel: Lbs/hr = (HP * BSFC) / (Antal spridare * DutyCycle)
     const lbs = (hp * bsfc) / (count * dutyCycle);
-    const cc = lbs * 10.5; // 1 lb/hr ≈ 10.5 cc/min
+    const cc = lbs * 10.5;
     document.getElementById('res-injector').innerText = `${lbs.toFixed(1)} lbs/hr (${Math.round(cc)} cc/min)`;
   }
 
   // 6. Spänningsfall 12V
   function calcVdrop() {
     const amp = parseFloat(document.getElementById('vdrop-amp').value) || 20;
-    const len = parseFloat(document.getElementById('vdrop-len').value) || 6.0; // t.ex. 3m fram + 3m jord = 6m
-    // Resistivitet koppar: 0.0175 ohm*mm^2 / m
-    // Vdrop = I * (0.0175 * L / Area)
-    // För max 3% drop vid 12.6V = 0.378V
+    const len = parseFloat(document.getElementById('vdrop-len').value) || 6.0;
     const maxDrop = 0.38;
     const reqArea = (amp * 0.0175 * len) / maxDrop;
 
