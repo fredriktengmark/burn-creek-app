@@ -129,7 +129,6 @@
       border-radius: 3px;
     }
 
-    /* SUB-BAR VISANDE AKTUELL MODUL & SNABBÅTERGÅNG */
     .module-breadcrumb {
       display: flex;
       justify-content: space-between;
@@ -155,7 +154,6 @@
       text-decoration: underline;
     }
 
-    /* HELSKÄRMS NAV-MODAL / VERKTYGSLÅDAN */
     #menu-overlay {
       display: none;
       position: absolute;
@@ -408,6 +406,36 @@
       font-family: 'Chakra Petch', sans-serif;
       white-space: nowrap;
     }
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-top: 6px;
+    }
+    .spec-table th, .spec-table td {
+      padding: 5px 4px;
+      text-align: left;
+      border-bottom: 1px solid #29201a;
+    }
+    .spec-table th {
+      color: var(--rust-glow);
+      font-weight: 700;
+    }
+    .firing-seq {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 6px 0;
+    }
+    .cylinder-chip {
+      background: #0d0a08;
+      border: 1px solid var(--rust-primary);
+      color: var(--cream-bg);
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 0.85rem;
+      padding: 3px 7px;
+      border-radius: 3px;
+    }
 
     .status-beacon {
       background: linear-gradient(180deg, #1f1814 0%, #130f0d 100%);
@@ -540,13 +568,13 @@
       </div>
     </header>
 
-    <!-- BREADCRUMB / MODULSTATUS -->
+    <!-- BREADCRUMB -->
     <div class="module-breadcrumb">
       <span id="breadcrumb-title" class="current-module-title">DEPÅLOGG & BILDER</span>
       <button class="btn-quick-menu" onclick="toggleMenu()">Växla modul ⚙️</button>
     </div>
 
-    <!-- HELSKÄRMS NAVIGERINGSMENY / DASHBOARD -->
+    <!-- HELSKÄRMSMENY / DASHBOARD -->
     <div id="menu-overlay">
       <div class="menu-header">
         <h2>VERKTYGSLÅDAN</h2>
@@ -558,7 +586,7 @@
           <div class="menu-card-icon">🏁</div>
           <div class="menu-card-content">
             <h3>DEPÅLOGGEN</h3>
-            <p>Live-status från lyftarna, foton, kaffeknapp och snabba mekrapporter.</p>
+            <p>Live-status, kaffeknapp, foton från lyftarna och rapporter.</p>
           </div>
         </div>
 
@@ -574,7 +602,7 @@
           <div class="menu-card-icon">📦</div>
           <div class="menu-card-content">
             <h3>SKROTNISSE-LAGRET</h3>
-            <p>Internt bytes- & köplager: delar, förbrukningsmaterial och efterlysningar.</p>
+            <p>Internt byteslager: delar, förbrukningsmaterial och efterlysningar.</p>
           </div>
         </div>
 
@@ -598,7 +626,7 @@
           <div class="menu-card-icon">📐</div>
           <div class="menu-card-content">
             <h3>MEK-DATA & KALKYLER</h3>
-            <p>RPM-räknare, CFM, åtdragningsmoment för V8 och tändföljder.</p>
+            <p>RPM, CFM, tändföljder, tändgrader, moment & elguider.</p>
           </div>
         </div>
 
@@ -646,7 +674,7 @@
         </div>
         <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 8px;">Garagedagar, städlördagar, grillkvällar eller roadtrips till träffar:</p>
         <div style="display: flex; flex-direction: column; gap: 8px;">
-          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Städlördag & Grovsopor, Grillkväll)">
+          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Städlördag, Grillkväll)">
           <div style="display: flex; gap: 8px;">
             <input type="date" id="event-date" class="garage-input" style="flex: 1;">
             <input type="text" id="event-time" class="garage-input" placeholder="Tid (t.ex. 10:00)" style="flex: 1;">
@@ -681,7 +709,7 @@
       <div id="parts-container">Laddar reservdelslagret...</div>
     </div>
 
-    <!-- 4. GÄSTMEK (RENSAD POLICY) -->
+    <!-- 4. GÄSTMEK -->
     <div id="guests-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -709,7 +737,7 @@
       <div id="guests-container">Laddar gästloggen...</div>
     </div>
 
-    <!-- 5. INKÖP / ATT FIXA -->
+    <!-- 5. ATT FIXA -->
     <div id="todo-tab" class="view">
       <div style="display: flex; gap: 8px; margin-bottom: 16px;">
         <input type="text" id="todo-input" placeholder="T.ex. kapskivor, 10L E85, bromsrengöring..." class="garage-input" style="flex: 1;">
@@ -718,8 +746,10 @@
       <div id="todos-container"></div>
     </div>
 
-    <!-- 6. MEK-DATA OCH VERKSTADSTIPS -->
+    <!-- 6. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
+      
+      <!-- KALKYLATOR: RPM & FART -->
       <div class="spec-card">
         <div class="spec-title">
           <span>RPM- & FARTKALKYLATOR</span>
@@ -741,8 +771,8 @@
           <div>
             <label style="font-size: 0.75rem; color: var(--cream-muted);">VÄXELLÅDA (UTVÄXLING)</label>
             <select id="calc-trans" class="garage-input" onchange="calcRpm()">
-              <option value="1.00">1.00 (TH350 / TH400 / PG / 4-vxl)</option>
-              <option value="0.70">0.70 (TH700R4 / 4L60E OD)</option>
+              <option value="1.00">1.00 (TH350 / TH400 / PG / 4-vxl direktväxel)</option>
+              <option value="0.70">0.70 (TH700R4 / 4L60E Overdrive)</option>
               <option value="0.75">0.75 (4L80E Overdrive)</option>
               <option value="0.67">0.67 (Ford AOD)</option>
               <option value="0.64">0.64 (T56 6:e växel)</option>
@@ -756,19 +786,299 @@
         </div>
       </div>
 
+      <!-- KALKYLATOR: FÖRGASARSTORLEK (CFM) -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>FÖRGASARSTORLEK (CFM)</span>
+          <span class="spec-badge">BRÄNSLE</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted);">Optimal CFM för motorvolym & maxvarv:</p>
+
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">MOTORVOLYM (CID)</label>
+            <input type="number" id="calc-cid" class="garage-input" value="350" oninput="calcCfm()">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">MAXVARV (RPM)</label>
+            <input type="number" id="calc-maxrpm" class="garage-input" value="6000" oninput="calcCfm()">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">MOTORTYP (VERKNINGSGRAD VE)</label>
+            <select id="calc-ve" class="garage-input" onchange="calcCfm()">
+              <option value="0.80">Original / Standard gata (80 % VE)</option>
+              <option value="0.85" selected>Mild trimmad / kam & headers (85 % VE)</option>
+              <option value="0.95">Vass gata / portade toppar (95 % VE)</option>
+              <option value="1.05">Race / Högvarvig strippenmaskin (105 % VE)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top: 10px; background: #140f0c; border: 1px dashed var(--rust-primary); border-radius: 4px; padding: 10px; text-align: center;">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Rekommenderad förgasare:</span>
+          <span style="font-family: 'Alfa Slab One', cursive; font-size: 1.35rem; color: var(--rust-glow); display: block; margin-top: 2px;" id="res-cfm">516 CFM</span>
+          <span style="font-size: 0.75rem; color: var(--cream-muted); display: block; margin-top: 3px;">(Närmaste standard: 500–600 CFM)</span>
+        </div>
+      </div>
+
+      <!-- KALKYLATOR: MOTORVOLYM -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>MOTORVOLYM (CID / LITER)</span>
+          <span class="spec-badge">SLAGVOLYM</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">CYLINDRAR</label>
+            <select id="calc-cyls" class="garage-input" onchange="calcDisplacement()">
+              <option value="8" selected>V8 (8 cylindrar)</option>
+              <option value="6">Rak 6:a / V6 (6 cylindrar)</option>
+              <option value="4">4 cylindrar</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">BORRNING (BORE I TUM)</label>
+            <input type="number" id="calc-bore" step="0.005" class="garage-input" value="4.000" oninput="calcDisplacement()">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">SLAGLÄNGD (STROKE I TUM)</label>
+            <input type="number" id="calc-stroke" step="0.005" class="garage-input" value="3.480" oninput="calcDisplacement()">
+          </div>
+        </div>
+
+        <div style="margin-top: 10px; background: #140f0c; border: 1px dashed var(--rust-primary); border-radius: 4px; padding: 10px; text-align: center;">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Total volym:</span>
+          <span style="font-family: 'Alfa Slab One', cursive; font-size: 1.35rem; color: var(--rust-glow); display: block; margin-top: 2px;" id="res-disp">349.8 CID (5.73 L)</span>
+        </div>
+      </div>
+
+      <!-- ELTIPS: RELÄPLINTAR & KABELAREOR -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>BOSCH RELÄ & KABELAREOR</span>
+          <span class="spec-badge">12V VERKSTADSEL</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 6px;">Koppling av standard 4- och 5-stiftsrelä:</p>
+        <table class="spec-table">
+          <tr><th>Stift</th><th>Funktion</th></tr>
+          <tr><td><strong>30</strong></td><td>Huvudmatning (+) från batteri via hängsäkring</td></tr>
+          <tr><td><strong>85</strong></td><td>Styrkrets jord (-) eller via jordande brytare</td></tr>
+          <tr><td><strong>86</strong></td><td>Styrkrets tändningsplus (+) från knapp / tändningslås</td></tr>
+          <tr><td><strong>87</strong></td><td>Utgång till förbrukare (kylfläkt, bränslepump, lyktor)</td></tr>
+          <tr><td><strong>87a</strong></td><td>Normalt sluten (spänning när reläet är AV / opåverkat)</td></tr>
+        </table>
+        
+        <p style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 12px; font-weight: 700;">Minsta kabelarea per säkringsstorlek (12V fordon):</p>
+        <table class="spec-table">
+          <tr><th>Säkring</th><th>Minsta kabelarea</th><th>Typisk förbrukare</th></tr>
+          <tr><td>5–10 A</td><td>1.0 mm²</td><td>Mätare, relästyrning, instrument, LED</td></tr>
+          <tr><td>15 A</td><td>1.5 mm²</td><td>Lågtryckspump, extraljus, spolning</td></tr>
+          <tr><td>20–25 A</td><td>2.5 mm²</td><td>Högtryckspump (EFI), tändbox (MSD), elhissar</td></tr>
+          <tr><td>30–40 A</td><td>4.0–6.0 mm²</td><td>Högprestanda elfläkt, elvattenpump, slutsteg</td></tr>
+        </table>
+      </div>
+
+      <!-- TÄNDGRADER PÅ VANLIGA V8-MOTORER -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TÄNDGRADER FÖR V8-MOTORER</span>
+          <span class="spec-badge">BTDC & TOTAL</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 6px;">
+          <em>Obs: Koppla alltid ur och plugga vakuumklockan till fördelaren vid grundinställning!</em>
+        </p>
+        <table class="spec-table">
+          <tr><th>Motor</th><th>Initial (Tomgång)</th><th>Total tändning</th></tr>
+          <tr><td><strong>Chevy Small Block (SBC)</strong></td><td>10°–14° BTDC</td><td>34°–36° vid 3000 RPM</td></tr>
+          <tr><td><strong>Chevy Big Block (BBC)</strong></td><td>10°–14° BTDC</td><td>36°–38° vid 3000 RPM</td></tr>
+          <tr><td><strong>Ford Small Block (289/302/351W)</strong></td><td>10°–12° BTDC</td><td>32°–35° vid 3000 RPM</td></tr>
+          <tr><td><strong>Ford 351 Cleveland</strong></td><td>12°–16° BTDC</td><td>32°–34° vid 3000 RPM</td></tr>
+          <tr><td><strong>Ford 429 / 460 Big Block</strong></td><td>10°–12° BTDC</td><td>34°–36° vid 2800 RPM</td></tr>
+          <tr><td><strong>Chrysler / Mopar LA (318/360)</strong></td><td>10°–12° BTDC</td><td>32°–35° vid 3000 RPM</td></tr>
+          <tr><td><strong>Chrysler Big Block (383/440)</strong></td><td>10°–14° BTDC</td><td>36°–38° vid 2800 RPM</td></tr>
+          <tr><td><strong>Pontiac V8 (350/400/455)</strong></td><td>10°–12° BTDC</td><td>32°–34° vid 2800 RPM</td></tr>
+        </table>
+        <p style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 8px;">
+          💡 <em>Kör du E85 kan du oftast backa på 2°–4° extra förtändning jämfört med 98-oktan utan spikningar.</em>
+        </p>
+      </div>
+
+      <!-- TÄNDFÖLJD: CHEVROLET -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TÄNDFÖLJD: CHEVROLET V8</span>
+          <span class="spec-badge">MEDURS</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted);">Klassisk SBC (283–400) & BBC (396–454):</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span>
+          <span class="cylinder-chip">8</span>
+          <span class="cylinder-chip">4</span>
+          <span class="cylinder-chip">3</span>
+          <span class="cylinder-chip">6</span>
+          <span class="cylinder-chip">5</span>
+          <span class="cylinder-chip">7</span>
+          <span class="cylinder-chip">2</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-top: 6px;">Chevy LS-serie (LS1, LS3, 5.3L, 6.0L):</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span>
+          <span class="cylinder-chip">8</span>
+          <span class="cylinder-chip">7</span>
+          <span class="cylinder-chip">2</span>
+          <span class="cylinder-chip">6</span>
+          <span class="cylinder-chip">5</span>
+          <span class="cylinder-chip">4</span>
+          <span class="cylinder-chip">3</span>
+        </div>
+        <p style="font-size: 0.75rem; color: #88786d; margin-top: 4px;">Cylindrar: Vänster bank (förarsida) = 1-3-5-7 | Höger bank = 2-4-6-8</p>
+      </div>
+
+      <!-- TÄNDFÖLJD: FORD -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TÄNDFÖLJD: FORD V8</span>
+          <span class="spec-badge">MOTURS</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted);">FE & standard Small Block (260, 289, standard 302):</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span>
+          <span class="cylinder-chip">5</span>
+          <span class="cylinder-chip">4</span>
+          <span class="cylinder-chip">2</span>
+          <span class="cylinder-chip">6</span>
+          <span class="cylinder-chip">3</span>
+          <span class="cylinder-chip">7</span>
+          <span class="cylinder-chip">8</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-top: 6px;">Ford 351W, 351C, 351M, 400 & 5.0L H.O. (1982+):</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span>
+          <span class="cylinder-chip">3</span>
+          <span class="cylinder-chip">7</span>
+          <span class="cylinder-chip">2</span>
+          <span class="cylinder-chip">6</span>
+          <span class="cylinder-chip">5</span>
+          <span class="cylinder-chip">4</span>
+          <span class="cylinder-chip">8</span>
+        </div>
+        <p style="font-size: 0.75rem; color: #88786d; margin-top: 4px;">Cylindrar: Höger (passagerarsida) = 1-2-3-4 | Vänster (förarsida) = 5-6-7-8</p>
+      </div>
+
+      <!-- TÄNDFÖLJD: MOPAR & PONTIAC -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TÄNDFÖLJD: MOPAR & PONTIAC</span>
+          <span class="spec-badge">V8</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted);">Mopar (LA, B, RB, Hemi) & Pontiac (326, 350, 400, 455):</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span>
+          <span class="cylinder-chip">8</span>
+          <span class="cylinder-chip">4</span>
+          <span class="cylinder-chip">3</span>
+          <span class="cylinder-chip">6</span>
+          <span class="cylinder-chip">5</span>
+          <span class="cylinder-chip">7</span>
+          <span class="cylinder-chip">2</span>
+        </div>
+        <p style="font-size: 0.75rem; color: #88786d; margin-top: 4px;">Rotation: Mopar LA = Medurs | Mopar B/RB & Pontiac = <strong>MOTURS</strong></p>
+      </div>
+
+      <!-- MOMENT: CHEVROLET V8 -->
       <div class="spec-card">
         <div class="spec-title">
           <span>MOMENT: CHEVROLET V8</span>
           <span class="spec-badge">SBC & BBC</span>
         </div>
-        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700;">Chevy Small Block (283–400):</p>
-        <p style="font-size: 0.85rem; line-height: 1.6;">
-          • Topplocksbultar: 65 ft-lb (88 Nm)<br>
-          • Vevstakar (3/8"): 40 ft-lb (54 Nm)<br>
-          • Ramlager (2-bult): 75 ft-lb (102 Nm)<br>
-          • Svänghjul / Flexplatta: 60 ft-lb (81 Nm)
-        </p>
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-bottom: 2px;">Chevy Small Block (283, 305, 327, 350, 400):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (3 steg: 25, 45, 65)</td><td>65</td><td>88 Nm</td></tr>
+          <tr><td>Vevstaksbultar (3/8" original)</td><td>35–45</td><td>47–61 Nm</td></tr>
+          <tr><td>Ramlagerbultar (2-bultat)</td><td>70–80</td><td>95–108 Nm</td></tr>
+          <tr><td>Ramlager (4-bultat: inre / yttre)</td><td>70 / 65</td><td>95 / 88 Nm</td></tr>
+          <tr><td>Svänghjul / Flexplatta mot vev</td><td>60</td><td>81 Nm</td></tr>
+          <tr><td>Svängningsdämpare (centrombult)</td><td>60</td><td>81 Nm</td></tr>
+          <tr><td>Insugsbultar (inifrån och ut)</td><td>30</td><td>41 Nm</td></tr>
+        </table>
+
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin: 10px 0 2px 0;">Chevy Big Block (396, 427, 454):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar</td><td>80</td><td>108 Nm</td></tr>
+          <tr><td>Vevstaksbultar (3/8" / 7/16")</td><td>50 / 70</td><td>68 / 95 Nm</td></tr>
+          <tr><td>Ramlagerbultar (2-bult / 4-bult inre)</td><td>100–110</td><td>135–149 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>65</td><td>88 Nm</td></tr>
+          <tr><td>Svängningsdämpare</td><td>85</td><td>115 Nm</td></tr>
+        </table>
       </div>
+
+      <!-- MOMENT: FORD V8 -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>MOMENT: FORD V8</span>
+          <span class="spec-badge">WINDSOR & FE</span>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-bottom: 2px;">Ford Small Block (289, 302, 5.0L):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (7/16")</td><td>65–70</td><td>88–95 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>25–30</td><td>34–41 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>60–70</td><td>81–95 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>75–85</td><td>102–115 Nm</td></tr>
+        </table>
+
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin: 10px 0 2px 0;">Ford 351W / 351 Cleveland:</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (1/2")</td><td>95–105</td><td>129–142 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>40–45</td><td>54–61 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>95–105</td><td>129–142 Nm</td></tr>
+        </table>
+      </div>
+
+      <!-- MOMENT: MOPAR & PONTIAC -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>MOMENT: MOPAR & PONTIAC</span>
+          <span class="spec-badge">LA & B/RB</span>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-bottom: 2px;">Chrysler Small Block LA (318, 340, 360):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar</td><td>85</td><td>115 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>45</td><td>61 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>85</td><td>115 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>55</td><td>75 Nm</td></tr>
+        </table>
+
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin: 10px 0 2px 0;">Pontiac V8 (350, 400, 455):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar</td><td>95</td><td>129 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>40–43</td><td>54–58 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>100–110</td><td>135–149 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>95</td><td>129 Nm</td></tr>
+        </table>
+      </div>
+
+      <!-- TUM TILL MM NYCKLAR -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TUM TILL MM NYCKLAR</span>
+          <span class="spec-badge">SNABBLISTA</span>
+        </div>
+        <table class="spec-table">
+          <tr><th>Tum</th><th>Millimeter</th></tr>
+          <tr><td>1/4" = 6.35 mm</td><td>5/16" = 7.94 mm (~8 mm)</td></tr>
+          <tr><td>3/8" = 9.53 mm (~10 mm)</td><td>7/16" = 11.11 mm (~11 mm)</td></tr>
+          <tr><td>1/2" = 12.7 mm (~13 mm)</td><td>9/16" = 14.29 mm (~14 mm)</td></tr>
+          <tr><td>5/8" = 15.88 mm (~16 mm)</td><td>11/16" = 17.46 mm</td></tr>
+          <tr><td>3/4" = 19.05 mm (~19 mm)</td><td>13/16" (stift) = 20.64 mm (~21 mm)</td></tr>
+        </table>
+      </div>
+
     </div>
 
     <!-- 7. VIKTIGA KONTAKTER -->
@@ -872,6 +1182,8 @@
       loadParts();
       loadGuests();
       calcRpm();
+      calcCfm();
+      calcDisplacement();
     } else {
       document.getElementById('auth-view').style.display = 'block';
       document.getElementById('main-view').style.display = 'none';
@@ -1072,7 +1384,7 @@
     });
   }
 
-  /* 4. GÄSTMEK (RENSAD LOGG) */
+  /* 4. GÄSTMEK */
   async function addGuest() {
     const name = document.getElementById('guest-name').value.trim();
     const car = document.getElementById('guest-car').value.trim();
@@ -1115,7 +1427,7 @@
     });
   }
 
-  /* FLÖDE & BILDUPPLADDNING */
+  /* 5. PUBLICERING TILL DEPÅLOGG */
   async function publishPost() {
     const text = document.getElementById('post-text').value.trim();
     const file = document.getElementById('post-file').files[0];
@@ -1217,7 +1529,7 @@
     });
   }
 
-  /* KALKYLATOR */
+  /* KALKYLATORER */
   function calcRpm() {
     const kmh = parseFloat(document.getElementById('calc-speed').value) || 0;
     const tire = parseFloat(document.getElementById('calc-tire').value) || 28;
@@ -1226,6 +1538,29 @@
     const mph = kmh * 0.621371;
     const rpm = Math.round((mph * axle * trans * 336) / tire);
     document.getElementById('res-rpm').innerText = `${rpm} RPM`;
+  }
+
+  function calcCfm() {
+    const cid = parseFloat(document.getElementById('calc-cid').value) || 0;
+    const rpm = parseFloat(document.getElementById('calc-maxrpm').value) || 0;
+    const ve = parseFloat(document.getElementById('calc-ve').value) || 0.85;
+
+    // Formel: CFM = (CID * RPM * VE) / 3456
+    const cfm = Math.round((cid * rpm * ve) / 3456);
+    document.getElementById('res-cfm').innerText = `${cfm} CFM`;
+  }
+
+  function calcDisplacement() {
+    const cyls = parseInt(document.getElementById('calc-cyls').value) || 8;
+    const bore = parseFloat(document.getElementById('calc-bore').value) || 0;
+    const stroke = parseFloat(document.getElementById('calc-stroke').value) || 0;
+
+    // Formel: CID = (Bore / 2)^2 * PI * Stroke * Cylinders
+    const radius = bore / 2;
+    const cid = Math.PI * Math.pow(radius, 2) * stroke * cyls;
+    const liters = cid * 0.0163871;
+
+    document.getElementById('res-disp').innerText = `${cid.toFixed(1)} CID (${liters.toFixed(2)} L)`;
   }
 
   if ('serviceWorker' in navigator) {
