@@ -296,7 +296,7 @@
     }
     .post-author { 
       font-family: 'Alfa Slab One', cursive;
-      font-size: 0.95rem;
+      font-size: 0.95rem; 
       color: var(--cream-bg); 
       text-transform: uppercase;
     }
@@ -1105,7 +1105,7 @@
   </div>
 </div>
 
-<!-- Firebase SDKs (Endast App, Auth och Firestore behövs) -->
+<!-- Firebase SDKs -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -1220,48 +1220,67 @@
     });
   }
 
-  /* STATUS / KAFFE */
+  /* FLERANVÄNDAR-STATUS (ÄR NÅGON I GARAGET?) */
   async function checkInGarage() {
     const user = auth.currentUser;
-    const name = user ? (user.displayName || user.email.split('@')[0]) : 'Någon';
+    if (!user) return alert('Du måste vara inloggad!');
+    const name = user.displayName || user.email.split('@')[0];
+
     try {
-      await db.collection('status').doc('current').set({
-        isOpen: true,
-        checkedInBy: name,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      await db.collection('active_members').doc(user.uid).set({
+        name: name,
+        checkedInAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+
       if ("Notification" in window && Notification.permission === "granted") {
-        new Notification("☕ Burn Creek Speedshop", { body: `${name} är i garaget! Kaffet är påslaget.`, icon: "logo.png" });
+        new Notification("☕ Burn Creek Speedshop", { 
+          body: `${name} är i garaget! Kaffet är påslaget.`, 
+          icon: "logo.png" 
+        });
       }
-    } catch (err) { alert(err.message); }
+    } catch (err) { 
+      alert('Kunde inte checka in: ' + err.message); 
+    }
   }
 
   async function leaveGarage() {
+    const user = auth.currentUser;
+    if (!user) return;
     try {
-      await db.collection('status').doc('current').set({
-        isOpen: false,
-        checkedInBy: '',
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-    } catch (err) { alert(err.message); }
+      await db.collection('active_members').doc(user.uid).delete();
+    } catch (err) { 
+      alert('Kunde inte checka ut: ' + err.message); 
+    }
   }
 
   function loadGarageStatus() {
-    db.collection('status').doc('current').onSnapshot(doc => {
+    const user = auth.currentUser;
+    db.collection('active_members').onSnapshot(snapshot => {
       const led = document.getElementById('garage-led');
       const text = document.getElementById('garage-status-text');
       const leaveBtn = document.getElementById('garage-leave-btn');
-      if (doc.exists && doc.data().isOpen) {
-        const d = doc.data();
-        const time = d.updatedAt ? new Date(d.updatedAt.toDate()).toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' }) : 'Nyss';
-        led.classList.add('online');
-        text.innerHTML = `<span style="color: var(--led-green);">${d.checkedInBy}</span> är på plats! Kaffet är varmt (${time})`;
-        leaveBtn.style.display = 'block';
-      } else {
+      
+      if (snapshot.empty) {
         led.classList.remove('online');
         text.innerText = 'Garaget är tomt just nu.';
-        leaveBtn.style.display = 'none';
+        if (leaveBtn) leaveBtn.style.display = 'none';
+        return;
       }
+
+      led.classList.add('online');
+      const names = [];
+      let amICheckedIn = false;
+
+      snapshot.forEach(doc => {
+        const d = doc.data();
+        names.push(d.name);
+        if (user && doc.id === user.uid) {
+          amICheckedIn = true;
+        }
+      });
+
+      text.innerHTML = `<span style="color: var(--led-green);">${names.join(', ')}</span> är på plats! ☕`;
+      if (leaveBtn) leaveBtn.style.display = amICheckedIn ? 'block' : 'none';
     });
   }
 
