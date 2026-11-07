@@ -101,7 +101,6 @@
 
     .header-actions { display: flex; align-items: center; gap: 6px; }
 
-    /* Mindre och smalare knapp */
     .btn-nav-trigger {
       background: linear-gradient(180deg, var(--rust-glow) 0%, var(--rust-deep) 100%);
       color: var(--cream-bg);
@@ -532,7 +531,7 @@
           <div class="menu-card-icon">🏁</div>
           <div class="menu-card-content">
             <h3>DEPÅLOGGEN</h3>
-            <p>Live-status, kaffeknapp, foton från lyftarna och mekrapporter.</p>
+            <p>Live-status, kaffeknapp, depåfoton och mekrapporter.</p>
           </div>
         </div>
 
@@ -540,7 +539,7 @@
           <div class="menu-card-icon">📐</div>
           <div class="menu-card-content">
             <h3>MEK-DATA & KALKYLER</h3>
-            <p>Bultmönster, kompression, DCR, spridare, gängor, el, moment & tändning.</p>
+            <p>Tändföljder, tändgrader, moment, bultmönster, kompression & elguider.</p>
           </div>
         </div>
 
@@ -564,7 +563,7 @@
           <div class="menu-card-icon">🎟️</div>
           <div class="menu-card-content">
             <h3>GÄSTMEK</h3>
-            <p>Registrering av gäster som lånar lyft/plats och gästpolicy.</p>
+            <p>Registrering av gäster som lånar garageplats och gästpolicy.</p>
           </div>
         </div>
 
@@ -600,7 +599,7 @@
       </div>
 
       <div class="post-creator">
-        <textarea id="post-text" class="garage-input" placeholder="Rapport från lyften, mekstatus eller bytesdelar..."></textarea>
+        <textarea id="post-text" class="garage-input" placeholder="Rapport från garaget, mekstatus eller bytesdelar..."></textarea>
         <div style="display: flex; gap: 8px; align-items: center;">
           <input type="file" id="post-file" accept="image/*" style="display: none;" onchange="updateFileName()">
           <button class="btn-speed btn-wrench" onclick="document.getElementById('post-file').click()" style="padding: 6px 14px; font-size: 0.9rem;">📷 BILD</button>
@@ -691,7 +690,174 @@
     <!-- 6. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
 
-      <!-- A. BULTMÖNSTER, ET & NAV PÅ VETERANBILAR -->
+      <!-- TÄNDFÖLJD & TÄNDGRADER FÖR ALLA V8 -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TÄNDFÖLJD & TÄNDGRADER</span>
+          <span class="spec-badge">KOMPLETT V8</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 6px;">
+          <em>Koppla alltid ur och plugga vakuumslangen till fördelaren när tändningen ställs med stroboskop!</em>
+        </p>
+
+        <!-- CHEVY -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVROLET SBC (283–400) & BBC (396–454):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs</strong> | Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Tändning: 10°–14° BTDC tomgång | Total: 34°–36° (SBC) / 36°–38° (BBC) vid 3000 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
+        </div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVY LS-FAMILJEN (LS1, LS3, 4.8, 5.3, 6.0):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Elektronisk tändning (Coil-on-plug). Cylindrar som traditionell Chevy.</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span>
+        </div>
+
+        <!-- FORD -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD SMALL BLOCK (260, 289, STD 302):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Passagerarsida: 1-2-3-4 | Förarsida: 5-6-7-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–35° vid 3000 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span>
+        </div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD 351W, 351 CLEVELAND, 351M, 400 & 5.0L H.O.:</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Cylindrar: 1-4 höger, 5-8 vänster<br>Tändning: 10°–14° BTDC tomgång | Total: 32°–34° vid 3000 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">8</span>
+        </div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD FE (390, 427, 428) & 385-SERIEN (429, 460):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Samma tändföljd som tidig SBF (1-5-4-2-6-3-7-8)<br>Tändning: 10°–12° BTDC tomgång | Total: 34°–36° vid 2800 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span>
+        </div>
+
+        <!-- MOPAR -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHRYSLER / MOPAR LA (318, 340, 360), B/RB (383, 440) & 426 HEMI:</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Rotation: <strong>Medurs på LA</strong> | <strong>Moturs på B/RB (383/440)</strong><br>Tändning: 10°–14° BTDC tomgång | Total: 32°–36° vid 2800–3000 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
+        </div>
+
+        <!-- PONTIAC -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">PONTIAC V8 (326, 350, 389, 400, 421, 455):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> (fördelare bak) | Förarsida: 1-3-5-7 | Höger: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
+        </div>
+
+        <!-- OLDSMOBILE -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">OLDSMOBILE ROCKET V8 (307, 330, 350, 403, 455):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Förarsida: 1-3-5-7 | Höger: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 34°–36° vid 3000 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
+        </div>
+
+        <!-- BUICK -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">BUICK V8 (350, 400, 430, 455):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs</strong> (fördelare fram) | Förarsida: 1-3-5-7 | Höger: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
+        </div>
+
+        <!-- CADILLAC -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CADILLAC BIG BLOCK (472, 500):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs</strong> (fördelare fram) | Förarsida: 1-3-5-7 | Höger: 2-4-6-8<br>Tändning: 8°–10° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
+        <div class="firing-seq">
+          <span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span>
+        </div>
+      </div>
+
+      <!-- MOMENTTABELLER FÖR AMERIKANSKA V8 -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>ÅTDRAGNINGSMOMENT V8</span>
+          <span class="spec-badge">FT-LBS & NM</span>
+        </div>
+
+        <!-- CHEVY SBC -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 6px;">CHEVY SMALL BLOCK (283, 305, 327, 350, 400):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (3 steg: 25, 45, 65)</td><td>65</td><td>88 Nm</td></tr>
+          <tr><td>Vevstaksbultar (3/8" original)</td><td>40–45</td><td>54–61 Nm</td></tr>
+          <tr><td>Ramlagerbultar (2-bult)</td><td>75–80</td><td>102–108 Nm</td></tr>
+          <tr><td>Ramlager (4-bult: inre / yttre)</td><td>70 / 65</td><td>95 / 88 Nm</td></tr>
+          <tr><td>Svänghjul / Flexplatta mot vev</td><td>60</td><td>81 Nm</td></tr>
+          <tr><td>Svängningsdämpare (centrombult)</td><td>60</td><td>81 Nm</td></tr>
+          <tr><td>Insugsbultar (inifrån och ut)</td><td>30</td><td>41 Nm</td></tr>
+        </table>
+
+        <!-- CHEVY BBC -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">CHEVY BIG BLOCK (396, 427, 454):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (stegvis till)</td><td>80</td><td>108 Nm</td></tr>
+          <tr><td>Vevstaksbultar (3/8" / 7/16")</td><td>50 / 70</td><td>68 / 95 Nm</td></tr>
+          <tr><td>Ramlagerbultar (2-bult / 4-bult inre)</td><td>105–110</td><td>142–149 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>65</td><td>88 Nm</td></tr>
+          <tr><td>Svängningsdämpare</td><td>85</td><td>115 Nm</td></tr>
+          <tr><td>Insugsbultar</td><td>30</td><td>41 Nm</td></tr>
+        </table>
+
+        <!-- FORD WINDSOR & 302 -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">FORD SMALL BLOCK (289, 302, 351W):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (289/302: 7/16")</td><td>65–70</td><td>88–95 Nm</td></tr>
+          <tr><td>Topplocksbultar (351W: 1/2")</td><td>95–105</td><td>129–142 Nm</td></tr>
+          <tr><td>Vevstaksbultar (302 / 351W)</td><td>25 / 45</td><td>34 / 61 Nm</td></tr>
+          <tr><td>Ramlagerbultar (302 / 351W)</td><td>65–70 / 95–105</td><td>88–95 / 129–142 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>75–85</td><td>102–115 Nm</td></tr>
+          <tr><td>Svängningsdämpare centrombult</td><td>70–90</td><td>95–122 Nm</td></tr>
+        </table>
+
+        <!-- FORD 351C & 429/460 -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">FORD 351 CLEVELAND & BIG BLOCK (429, 460, FE 390):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (351C / FE 390 / 460)</td><td>95–105 / 90 / 140</td><td>129–142 / 122 / 190 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>45–50</td><td>61–68 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>95–105</td><td>129–142 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>75–85</td><td>102–115 Nm</td></tr>
+        </table>
+
+        <!-- MOPAR LA & BB -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">CHRYSLER / MOPAR LA (318, 360) & B/RB (383, 440):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (LA 318/360)</td><td>85</td><td>115 Nm</td></tr>
+          <tr><td>Topplocksbultar (B/RB 383/440)</td><td>70</td><td>95 Nm</td></tr>
+          <tr><td>Vevstaksbultar (LA / BB)</td><td>45 / 45–50</td><td>61 / 61–68 Nm</td></tr>
+          <tr><td>Ramlagerbultar (LA / BB)</td><td>85 / 90</td><td>115 / 122 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>55</td><td>75 Nm</td></tr>
+          <tr><td>Svängningsdämpare (centrombult)</td><td>135</td><td>183 Nm</td></tr>
+        </table>
+
+        <!-- PONTIAC -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">PONTIAC V8 (326, 350, 400, 455):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (stegvis till)</td><td>95</td><td>129 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>40–43</td><td>54–58 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>100–110</td><td>135–149 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>95</td><td>129 Nm</td></tr>
+          <tr><td>Svängningsdämpare centrombult</td><td>160</td><td>217 Nm</td></tr>
+        </table>
+
+        <!-- OLDS & BUICK -->
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">OLDSMOBILE & BUICK V8 (350, 403, 455):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (Olds 350 / 455)</td><td>80 / 120</td><td>108 / 163 Nm</td></tr>
+          <tr><td>Topplocksbultar (Buick 350 / 455)</td><td>100</td><td>135 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>42–45</td><td>57–61 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>80–110</td><td>108–149 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>60–80</td><td>81–108 Nm</td></tr>
+        </table>
+      </div>
+
+      <!-- BULTMÖNSTER, ET & NAV -->
       <div class="spec-card">
         <div class="spec-title">
           <span>BULTMÖNSTER, ET & NAV</span>
@@ -707,12 +873,9 @@
           <tr><td><strong>Mopar B & E-Body (Charger, Cuda mfl)</strong></td><td>5x4.5"</td><td>5x114.3 mm</td><td>71.5 mm</td></tr>
           <tr><td><strong>GM C-Body (Cadillac, Pontiac, Buick BB)</strong></td><td>5x5.0"</td><td>5x127 mm</td><td>78.3 mm</td></tr>
         </table>
-        <p style="font-size: 0.75rem; color: var(--cream-muted); margin-top: 6px;">
-          ET (Inpressning): Klassiska RWD-jänkare kör oftast neutral till låg/negativ ET (ET 0 till ET -12) eller backspacing runt 3.75"–4.5" på en 8"-fälg.
-        </p>
       </div>
 
-      <!-- B. MOTOR & KOMPRESSION (KALKYLER) -->
+      <!-- KOMPRESSION & DCR -->
       <div class="spec-card">
         <div class="spec-title">
           <span>KOMPRESSION & DCR-KALKYL</span>
@@ -739,16 +902,14 @@
             <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">VEVSTAKSLÄNGD (TUM)</label><input type="number" id="cr-rod" step="0.01" class="garage-input" value="5.70" oninput="calcCR()"></div>
           </div>
         </div>
-
         <div class="calc-box">
           <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Statisk & Dynamisk Kompression:</span>
           <span class="calc-val" id="res-cr">Statisk CR: 9.85:1</span>
           <span style="font-size: 0.95rem; font-weight: 700; color: #eedcc0; display: block; margin-top: 4px;" id="res-dcr">Dynamisk DCR: 7.95:1</span>
-          <span style="font-size: 0.75rem; color: var(--cream-muted); display: block; margin-top: 2px;">(Sikte för 98-oktan: ca 8.0:1 – 8.5:1 DCR)</span>
         </div>
       </div>
 
-      <!-- C. KOLVHASTIGHET -->
+      <!-- KOLVHASTIGHET -->
       <div class="spec-card">
         <div class="spec-title">
           <span>KOLVHASTIGHET (PISTON SPEED)</span>
@@ -761,11 +922,10 @@
         <div class="calc-box">
           <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Medelkolvhastighet:</span>
           <span class="calc-val" id="res-pistonspeed">19.16 m/s (3770 ft/min)</span>
-          <span style="font-size: 0.75rem; color: var(--cream-muted); display: block; margin-top: 2px;">(Gatmotor: &lt;20 m/s | Race smidda stakar: 23–25 m/s)</span>
         </div>
       </div>
 
-      <!-- D. DÄCKDIMENSIONS-OMVANDLARE & HASTIGHETSMÄTARE -->
+      <!-- DÄCKOMVANDLARE -->
       <div class="spec-card">
         <div class="spec-title">
           <span>DÄCKOMVANDLARE & HASTIGHETSMÄTARE</span>
@@ -799,7 +959,7 @@
         </div>
       </div>
 
-      <!-- E. STALL SPEED, TURBIN & BROMSVÄTSKA -->
+      <!-- STALL SPEED & BROMSVÄTSKA -->
       <div class="spec-card">
         <div class="spec-title">
           <span>STALL SPEED & BROMSVÄTSKA</span>
@@ -807,12 +967,11 @@
         </div>
         <p style="font-size: 0.8rem; color: var(--rust-glow); font-weight: 700;">Riktlinjer för turbin (Stall Speed):</p>
         <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.5; color: var(--cream-text);">
-          <li><strong>Original / Mild cruising:</strong> 1600–2000 RPM stall. Låg värmeutveckling, fungerar bra med hög bakaxelutväxling (2.73–3.23).</li>
-          <li><strong>Mild trimkam (215°–230° @ 0.050"):</strong> 2400–2800 RPM stall. Kräver extra extern oljekylare till automatlådan.</li>
-          <li><strong>Vass kam (230°+ @ 0.050"):</strong> 3000–3500+ RPM stall. Kräver minst 3.73 i bakaxeln för att inte slira bort kraften på landsväg.</li>
+          <li><strong>Original / Mild cruising:</strong> 1600–2000 RPM stall. Låg värmeutveckling.</li>
+          <li><strong>Mild trimkam (215°–230° @ 0.050"):</strong> 2400–2800 RPM stall. Kräver extra oljekylare.</li>
+          <li><strong>Vass kam (230°+ @ 0.050"):</strong> 3000–3500+ RPM stall. Kräver minst 3.73 i bakaxeln.</li>
         </ul>
-
-        <p style="font-size: 0.8rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Bromsvätskeguide & Kokpunkter:</p>
+        <p style="font-size: 0.8rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Bromsvätskeguide:</p>
         <table class="spec-table">
           <tr><th>Typ</th><th>Torr kokpunkt</th><th>Våt kokpunkt</th><th>Bas</th></tr>
           <tr><td><strong>DOT 3</strong></td><td>205 °C</td><td>140 °C</td><td>Glykol</td></tr>
@@ -821,18 +980,16 @@
           <tr><td><strong>DOT 5 (Lila)</strong></td><td>260 °C</td><td>180 °C</td><td>Silikon</td></tr>
         </table>
         <div class="warning-box">
-          ⚠️ <strong>FÖRBUD:</strong> Blanda ALDRIG DOT 5 (silikon) med DOT 3, DOT 4 eller DOT 5.1 (glykol)! Vätskorna skär sig, packningar sväller och bromstrycket kan försvinna helt.
+          ⚠️ <strong>FÖRBUD:</strong> Blanda ALDRIG DOT 5 (silikon) med DOT 3, DOT 4 eller DOT 5.1 (glykol)! Vätskorna skär sig, packningar sväller och bromstrycket försvinner.
         </div>
       </div>
 
-      <!-- F. SPRIDARSTORLEK & FÖRGASARMUNSTYCKEN -->
+      <!-- SPRIDARE, MUNSTYCKEN & E85 -->
       <div class="spec-card">
         <div class="spec-title">
           <span>SPRIDARE, MUNSTYCKEN & E85</span>
           <span class="spec-badge">BRÄNSLE</span>
         </div>
-        
-        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700;">Beräkna spridarstorlek (EFI):</p>
         <div style="display: flex; gap: 6px;">
           <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">MÅLEFFEKT (BHP)</label><input type="number" id="inj-hp" class="garage-input" value="450" oninput="calcInjector()"></div>
           <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">ANTAL SPRIDARE</label><input type="number" id="inj-count" class="garage-input" value="8" oninput="calcInjector()"></div>
@@ -841,64 +998,52 @@
           <span style="font-size: 0.75rem; color: var(--cream-muted);">Rekommenderad spridare (vid 85% duty cycle):</span>
           <span class="calc-val" id="res-injector">33.1 lbs/hr (348 cc/min)</span>
         </div>
-
-        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Holley Munstycken (Flödesindex VS Hålstorlek):</p>
-        <table class="spec-table">
-          <tr><th>Holley Jet #</th><th>Håldiameter (tum)</th><th>Håldiameter (mm)</th></tr>
-          <tr><td>#66 – #68</td><td>0.066" – 0.069"</td><td>1.68 – 1.75 mm</td></tr>
-          <tr><td>#70 – #72</td><td>0.073" – 0.077"</td><td>1.85 – 1.95 mm</td></tr>
-          <tr><td>#74 – #76</td><td>0.081" – 0.084"</td><td>2.06 – 2.13 mm</td></tr>
-          <tr><td>#80 – #82</td><td>0.093" – 0.096"</td><td>2.36 – 2.44 mm</td></tr>
-        </table>
-
         <p style="font-size: 0.8rem; color: var(--cream-text); margin-top: 8px;">
-          <strong>Power Valve-väljare:</strong> Mät vakuum i tum Hg vid tomgång med driven i (t.ex. 13" Hg). Dela med 2 VS 6.5 Power Valve.
+          <strong>Power Valve-väljare:</strong> Mät vakuum i tum Hg vid tomgång med driven i. Dela med 2 VS rätt öppningsvärde för power valve.
         </p>
         <p style="font-size: 0.8rem; color: var(--cream-text); margin-top: 4px;">
-          <strong>E85 VS Bensin:</strong> Kräver ca <strong>+30–35 %</strong> mer bränslemängd. Vid förgasare motsvarar detta en ökning med 8–10 munstycksnummer (t.ex. från #70 till #78–#80) samt större acc-pumpsmunstycke.
+          <strong>E85 VS Bensin:</strong> Kräver ca <strong>+30–35 %</strong> mer bränslemängd (+8–10 munstycksnummer i förgasare).
         </p>
       </div>
 
-      <!-- G. BORR- & GÄNGTABELL (UNC, UNF, METRISK) -->
+      <!-- BORR- & GÄNGTABELL -->
       <div class="spec-card">
         <div class="spec-title">
           <span>BORR- & GÄNGTABELL</span>
           <span class="spec-badge">VERKSTAD</span>
         </div>
-        <p style="font-size: 0.75rem; color: var(--cream-muted);">Rätt förborrningsdiameter vid gängning i garaget:</p>
         <table class="spec-table">
-          <tr><th>Gänga (UNC / UNF / Metrisk)</th><th>Förborrning mm</th><th>Tum-borr</th></tr>
+          <tr><th>Gänga</th><th>Förborrning mm</th><th>Tum-borr</th></tr>
           <tr><td>1/4"-20 UNC</td><td>5.1 mm</td><td>#7 (0.201")</td></tr>
           <tr><td>5/16"-18 UNC</td><td>6.6 mm</td><td>F (0.257")</td></tr>
-          <tr><td>3/8"-16 UNC (Vanligast SBC)</td><td>8.0 mm</td><td>5/16"</td></tr>
+          <tr><td>3/8"-16 UNC (SBC standard)</td><td>8.0 mm</td><td>5/16"</td></tr>
           <tr><td>7/16"-14 UNC</td><td>9.4 mm</td><td>U (0.368")</td></tr>
           <tr><td>1/2"-13 UNC</td><td>10.7 mm</td><td>27/64"</td></tr>
-          <tr><td>7/16"-20 UNF (Fingänga)</td><td>9.9 mm</td><td>25/64"</td></tr>
-          <tr><td>1/2"-20 UNF (Hjulbultar)</td><td>11.5 mm</td><td>29/64"</td></tr>
-          <tr><td>M6 x 1.0 / M8 x 1.25</td><td>5.0 mm / 6.8 mm</td><td>–</td></tr>
-          <tr><td>M10 x 1.5 / M12 x 1.75</td><td>8.5 mm / 10.2 mm</td><td>–</td></tr>
+          <tr><td>7/16"-20 UNF</td><td>9.9 mm</td><td>25/64"</td></tr>
+          <tr><td>1/2"-20 UNF (Hjulbult)</td><td>11.5 mm</td><td>29/64"</td></tr>
+          <tr><td>M8 x 1.25 / M10 x 1.5</td><td>6.8 mm / 8.5 mm</td><td>–</td></tr>
         </table>
       </div>
 
-      <!-- H. BULTGRADER & HÅLLFASTHET -->
+      <!-- BULTGRADER -->
       <div class="spec-card">
         <div class="spec-title">
-          <span>BULTGRADER & MOMENTGRÄNSER</span>
-          <span class="spec-badge">HÅLLFASTHET</span>
+          <span>BULTGRADER & HÅLLFASTHET</span>
+          <span class="spec-badge">BULT</span>
         </div>
         <table class="spec-table">
           <tr><th>Märkning bultskalle</th><th>Klass</th><th>Användningsområde</th></tr>
           <tr><td>Inga streck</td><td>SAE Grade 2</td><td>Klammer, plåt, icke-bärande</td></tr>
-          <tr><td>3 radiella streck</td><td>SAE Grade 5 (~8.8)</td><td>Fästen, chassi, allmänt</td></tr>
+          <tr><td>3 radiella streck</td><td>SAE Grade 5 (~8.8)</td><td>Chassi, motorfästen, fästen</td></tr>
           <tr><td>6 radiella streck</td><td>SAE Grade 8 (~10.9)</td><td>Vevstakar, svänghjul, bärarmar</td></tr>
-          <tr><td>Märkt 12.9</td><td>Klass 12.9</td><td>ARP-topplocksbult, ramlager</td></tr>
+          <tr><td>Märkt 12.9</td><td>Klass 12.9</td><td>ARP-bult, ramlager</td></tr>
         </table>
         <p style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">
-          Torr VS Oljad gänga: Smörjning eller ARP-fett sänker friktionen med ca 20–25 %. Dra aldrig ett moment specificerat för oljad gänga på en torr gänga (och tvärtom) – då riskerar bulten att sträckas sönder!
+          Torr VS Oljad gänga: Smörjning/fett sänker friktionen med ca 20–25 %. Dra aldrig ett moment avsett för oljad gänga på en torr gänga (och tvärtom).
         </p>
       </div>
 
-      <!-- I. RÖR & KOPPLINGAR (AN / NPT / MM) -->
+      <!-- AN / NPT / MM -->
       <div class="spec-card">
         <div class="spec-title">
           <span>AN VS NPT VS MM KOPPLINGAR</span>
@@ -907,14 +1052,14 @@
         <table class="spec-table">
           <tr><th>AN-storlek</th><th>Slang invändig</th><th>NPT-gänga</th><th>Exempel</th></tr>
           <tr><td><strong>AN-4</strong></td><td>1/4" (6.3 mm)</td><td>1/8" NPT</td><td>Oljetrycksmätare, broms</td></tr>
-          <tr><td><strong>AN-6</strong></td><td>3/8" (9.5 mm)</td><td>1/4" NPT</td><td>Standard bränsleslang</td></tr>
+          <tr><td><strong>AN-6</strong></td><td>3/8" (9.5 mm)</td><td>1/4" NPT</td><td>Bränsleslang standard</td></tr>
           <tr><td><strong>AN-8</strong></td><td>1/2" (12.7 mm)</td><td>3/8" NPT</td><td>Bränsle hög effekt, oljekyl</td></tr>
-          <tr><td><strong>AN-10</strong></td><td>5/8" (15.9 mm)</td><td>1/2" NPT</td><td>Vevhusventilation, torrsump</td></tr>
-          <tr><td><strong>AN-12</strong></td><td>3/4" (19.0 mm)</td><td>3/4" NPT</td><td>Kylarslangar, värmepaket</td></tr>
+          <tr><td><strong>AN-10</strong></td><td>5/8" (15.9 mm)</td><td>1/2" NPT</td><td>Vevhusventilation</td></tr>
+          <tr><td><strong>AN-12</strong></td><td>3/4" (19.0 mm)</td><td>3/4" NPT</td><td>Kylarslangar</td></tr>
         </table>
       </div>
 
-      <!-- J. SPÄNNINGSFALL 12V & KABELVAL -->
+      <!-- SPÄNNINGSFALL 12V -->
       <div class="spec-card">
         <div class="spec-title">
           <span>SPÄNNINGSFALLSKALKYLATOR (12V)</span>
@@ -927,49 +1072,10 @@
         <div class="calc-box">
           <span style="font-size: 0.75rem; color: var(--cream-muted);">Rekommenderad kabelarea (max 3% fall):</span>
           <span class="calc-val" id="res-vdrop">Minst 6.0 mm² (AWG 10)</span>
-          <span style="font-size: 0.75rem; color: var(--cream-muted); display: block; margin-top: 2px;">(Spänningsfall vid 6.0 mm²: ca 0.35 V)</span>
         </div>
       </div>
 
-      <!-- K. TÄNDSTIFT & GENERATORBUDGET -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>TÄNDSTIFT & GENERATOR</span>
-          <span class="spec-badge">DIAGNOSTIK</span>
-        </div>
-        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700;">Tändstiftsfärg & Motordiagnostik:</p>
-        <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.45; color: var(--cream-text);">
-          <li><strong>Ljusbrun / Grå:</strong> Perfekt förbränning och korrekt tändkurva.</li>
-          <li><strong>Svart torr sot:</strong> Fet bränsleblandning, felbestyckad förgasare eller svag gnista.</li>
-          <li><strong>Svart blöt olja:</strong> Otäta ventilstyrningar, trasiga ventiltätningar eller slitna kolvringar.</li>
-          <li><strong>Kritvit med små blåsor:</strong> För mager blandning eller för mycket förtändning (spikningsrisk!).</li>
-        </ul>
-
-        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Generatorbudget (Ampere-förbrukare):</p>
-        <table class="spec-table">
-          <tr><th>Förbrukare</th><th>Normal ström</th><th>Kommentar</th></tr>
-          <tr><td>Dubbla elfläktar</td><td>25–35 A</td><td>Hög startström (upp till 50A)</td></tr>
-          <tr><td>Elektrisk bränslepump</td><td>8–15 A</td><td>Konstant belastning</td></tr>
-          <tr><td>MSD / Tändsystem</td><td>5–10 A</td><td>Ökar vid högre varvtal</td></tr>
-          <tr><td>Halvljus + instrument</td><td>12–15 A</td><td>Standard H4-lyktor</td></tr>
-          <tr><td>Total förbrukning</td><td>50–75 A</td><td>Kräver minst 100A generator!</td></tr>
-        </table>
-      </div>
-
-      <!-- L. VÄTSKOR, OLJA & ZDDP -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>VÄTSKOR, OLJA & ZDDP</span>
-          <span class="spec-badge">SMÖRJNING</span>
-        </div>
-        <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.5; color: var(--cream-text);">
-          <li><strong>Glykol 50/50:</strong> Ger frysskydd ner till ca -38 °C och rostskydd för gjutjärns- och aluminiumblock.</li>
-          <li><strong>Flat Tappet-kamaxlar (Hydraul & Mekanisk):</strong> Kräver motorolja med hög zink/fosforhalt (minst <strong>1000–1400 ppm ZDDP</strong>) t.ex. Valvoline VR1 Racing eller Lucas Hot Rod Oil för att inte nockarna ska torkas ut.</li>
-          <li><strong>Rullkam (Roller):</strong> Inte känslig för ZDDP på samma sätt då rullen rullar istället för att glida.</li>
-        </ul>
-      </div>
-
-      <!-- M. ENHETSSNABBOMVANDLARE -->
+      <!-- ENHETSSNABBOMVANDLARE -->
       <div class="spec-card">
         <div class="spec-title">
           <span>ENHETSSNABBOMVANDLARE</span>
@@ -984,39 +1090,6 @@
           <tr><td>Quart → Liter</td><td>qt × 0.946 = Liter</td></tr>
           <tr><td>CFM → m³/min</td><td>CFM × 0.0283 = m³/min</td></tr>
           <tr><td>°F → °C</td><td>(°F - 32) × 5/9 = °C (180°F = 82°C)</td></tr>
-        </table>
-      </div>
-
-      <!-- N. TÄNDFÖLJD & TÄNDGRADER -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>TÄNDFÖLJD & GRADER (SBC/BBC/FORD/MOPAR)</span>
-          <span class="spec-badge">V8 DATA</span>
-        </div>
-        <p style="font-size: 0.8rem; color: var(--cream-muted);">Chevy SBC & BBC (1-8-4-3-6-5-7-2, medurs): 10°–14° tomgång / 34°–36° totalt.</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
-        </div>
-        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-top: 6px;">Ford 351W / 5.0L H.O. (1-3-7-2-6-5-4-8, moturs): 10°–12° tomgång / 32°–35° totalt.</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">8</span>
-        </div>
-      </div>
-
-      <!-- O. MOMENTTABELL SBC -->
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>MOMENT: CHEVY SMALL BLOCK</span>
-          <span class="spec-badge">SBC 350</span>
-        </div>
-        <table class="spec-table">
-          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (3 steg: 25, 45, 65)</td><td>65</td><td>88 Nm</td></tr>
-          <tr><td>Vevstaksbultar (3/8" original)</td><td>40</td><td>54 Nm</td></tr>
-          <tr><td>Ramlager (2-bult / 4-bult)</td><td>75 / 70</td><td>102 / 95 Nm</td></tr>
-          <tr><td>Svänghjul / Flexplatta mot vev</td><td>60</td><td>81 Nm</td></tr>
-          <tr><td>Svängningsdämpare (centrombult)</td><td>60</td><td>81 Nm</td></tr>
-          <tr><td>Insugsbultar (inifrån och ut)</td><td>30</td><td>41 Nm</td></tr>
         </table>
       </div>
 
