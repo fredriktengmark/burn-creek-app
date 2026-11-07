@@ -604,7 +604,7 @@
           <input type="file" id="post-file" accept="image/*" style="display: none;" onchange="updateFileName()">
           <button class="btn-speed btn-wrench" onclick="document.getElementById('post-file').click()" style="padding: 6px 14px; font-size: 0.9rem;">📷 BILD</button>
           <span id="file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;"></span>
-          <button class="btn-speed" style="margin-left: auto; padding: 6px 18px; font-size: 0.95rem;" onclick="publishPost()">BRÄNN AV</button>
+          <button id="btn-publish" class="btn-speed" style="margin-left: auto; padding: 6px 18px; font-size: 0.95rem;" onclick="publishPost()">BRÄNN AV</button>
         </div>
       </div>
       <div id="posts-container">Laddar depåloggen...</div>
@@ -690,7 +690,7 @@
     <!-- 6. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
 
-      <!-- TÄNDFÖLJD & TÄNDGRADER FÖR ALLA V8 -->
+      <!-- TÄNDFÖLJD & TÄNDGRADER -->
       <div class="spec-card">
         <div class="spec-title">
           <span>TÄNDFÖLJD & TÄNDGRADER</span>
@@ -700,7 +700,6 @@
           <em>Koppla alltid ur och plugga vakuumslangen till fördelaren när tändningen ställs med stroboskop!</em>
         </p>
 
-        <!-- CHEVY -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVROLET SBC (283–400) & BBC (396–454):</p>
         <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs</strong> | Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Tändning: 10°–14° BTDC tomgång | Total: 34°–36° (SBC) / 36°–38° (BBC) vid 3000 RPM</p>
         <div class="firing-seq">
@@ -713,7 +712,6 @@
           <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span>
         </div>
 
-        <!-- FORD -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD SMALL BLOCK (260, 289, STD 302):</p>
         <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Passagerarsida: 1-2-3-4 | Förarsida: 5-6-7-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–35° vid 3000 RPM</p>
         <div class="firing-seq">
@@ -727,55 +725,37 @@
         </div>
 
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD FE (390, 427, 428) & 385-SERIEN (429, 460):</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Samma tändföljd som tidig SBF (1-5-4-2-6-3-7-8)<br>Tändning: 10°–12° BTDC tomgång | Total: 34°–36° vid 2800 RPM</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Tändföljd: 1-5-4-2-6-3-7-8<br>Tändning: 10°–12° BTDC tomgång | Total: 34°–36° vid 2800 RPM</p>
         <div class="firing-seq">
           <span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span>
         </div>
 
-        <!-- MOPAR -->
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHRYSLER / MOPAR LA (318, 340, 360), B/RB (383, 440) & 426 HEMI:</p>
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHRYSLER / MOPAR LA (318, 360), B/RB (383, 440) & HEMI:</p>
         <p style="font-size: 0.78rem; color: var(--cream-muted);">Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Rotation: <strong>Medurs på LA</strong> | <strong>Moturs på B/RB (383/440)</strong><br>Tändning: 10°–14° BTDC tomgång | Total: 32°–36° vid 2800–3000 RPM</p>
         <div class="firing-seq">
           <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
         </div>
 
-        <!-- PONTIAC -->
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">PONTIAC V8 (326, 350, 389, 400, 421, 455):</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> (fördelare bak) | Förarsida: 1-3-5-7 | Höger: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">PONTIAC V8 (326, 350, 400, 455):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
         <div class="firing-seq">
           <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
         </div>
 
-        <!-- OLDSMOBILE -->
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">OLDSMOBILE ROCKET V8 (307, 330, 350, 403, 455):</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Förarsida: 1-3-5-7 | Höger: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 34°–36° vid 3000 RPM</p>
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">OLDSMOBILE V8 (307, 350, 403, 455) & BUICK V8 (350, 455):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Olds Rotation: <strong>Moturs</strong> | Buick Rotation: <strong>Medurs</strong><br>Tändföljd: 1-8-4-3-6-5-7-2 | Tändning: 10°–12° BTDC tomgång | Total: 32°–36°</p>
         <div class="firing-seq">
           <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
-        </div>
-
-        <!-- BUICK -->
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">BUICK V8 (350, 400, 430, 455):</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs</strong> (fördelare fram) | Förarsida: 1-3-5-7 | Höger: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span>
-        </div>
-
-        <!-- CADILLAC -->
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CADILLAC BIG BLOCK (472, 500):</p>
-        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs</strong> (fördelare fram) | Förarsida: 1-3-5-7 | Höger: 2-4-6-8<br>Tändning: 8°–10° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
-        <div class="firing-seq">
-          <span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span>
         </div>
       </div>
 
-      <!-- MOMENTTABELLER FÖR AMERIKANSKA V8 -->
+      <!-- MOMENTTABELLER -->
       <div class="spec-card">
         <div class="spec-title">
           <span>ÅTDRAGNINGSMOMENT V8</span>
           <span class="spec-badge">FT-LBS & NM</span>
         </div>
 
-        <!-- CHEVY SBC -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 6px;">CHEVY SMALL BLOCK (283, 305, 327, 350, 400):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
@@ -788,7 +768,6 @@
           <tr><td>Insugsbultar (inifrån och ut)</td><td>30</td><td>41 Nm</td></tr>
         </table>
 
-        <!-- CHEVY BBC -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">CHEVY BIG BLOCK (396, 427, 454):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
@@ -800,7 +779,6 @@
           <tr><td>Insugsbultar</td><td>30</td><td>41 Nm</td></tr>
         </table>
 
-        <!-- FORD WINDSOR & 302 -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">FORD SMALL BLOCK (289, 302, 351W):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
@@ -812,7 +790,6 @@
           <tr><td>Svängningsdämpare centrombult</td><td>70–90</td><td>95–122 Nm</td></tr>
         </table>
 
-        <!-- FORD 351C & 429/460 -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">FORD 351 CLEVELAND & BIG BLOCK (429, 460, FE 390):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
@@ -822,7 +799,6 @@
           <tr><td>Svänghjul mot vev</td><td>75–85</td><td>102–115 Nm</td></tr>
         </table>
 
-        <!-- MOPAR LA & BB -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">CHRYSLER / MOPAR LA (318, 360) & B/RB (383, 440):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
@@ -834,7 +810,6 @@
           <tr><td>Svängningsdämpare (centrombult)</td><td>135</td><td>183 Nm</td></tr>
         </table>
 
-        <!-- PONTIAC -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">PONTIAC V8 (326, 350, 400, 455):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
@@ -845,7 +820,6 @@
           <tr><td>Svängningsdämpare centrombult</td><td>160</td><td>217 Nm</td></tr>
         </table>
 
-        <!-- OLDS & BUICK -->
         <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 14px;">OLDSMOBILE & BUICK V8 (350, 403, 455):</p>
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
@@ -1131,11 +1105,10 @@
   </div>
 </div>
 
-<!-- Firebase SDKs -->
+<!-- Firebase SDKs (Endast App, Auth och Firestore behövs) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
 <script>
   const firebaseConfig = {
@@ -1150,7 +1123,6 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   const db = firebase.firestore();
-  const storage = firebase.storage();
 
   auth.onAuthStateChanged(user => {
     if (user) {
@@ -1218,6 +1190,34 @@
   function updateFileName() {
     const f = document.getElementById('post-file').files[0];
     document.getElementById('file-chosen').innerText = f ? f.name : '';
+  }
+
+  /* KLIENT-KOMPRIMERING AV BILD TILL BASE64 (INGET STORAGE KRÄVS) */
+  function compressImage(file, maxWidth = 900, quality = 0.65) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = event => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.onerror = err => reject(err);
+      };
+      reader.onerror = err => reject(err);
+    });
   }
 
   /* STATUS / KAFFE */
@@ -1387,30 +1387,38 @@
     });
   }
 
-  /* FLÖDE & BILD */
+  /* PUBLICERA INLÄGG MED BILD (DIREKT TILL FIRESTORE) */
   async function publishPost() {
     const text = document.getElementById('post-text').value.trim();
     const file = document.getElementById('post-file').files[0];
     if (!text && !file) return;
 
-    let imageUrl = '';
-    if (file) {
-      const ref = storage.ref(`posts/${Date.now()}_${file.name}`);
-      const upload = await ref.put(file);
-      imageUrl = await upload.ref.getDownloadURL();
-    }
+    const btn = document.getElementById('btn-publish');
+    btn.disabled = true;
+    btn.innerText = 'BRÄNNER...';
 
+    let imageUrl = '';
     try {
+      if (file) {
+        imageUrl = await compressImage(file, 900, 0.65);
+      }
+
       await db.collection('posts').add({
         text: text,
         imageUrl: imageUrl,
         author: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+
       document.getElementById('post-text').value = '';
       document.getElementById('post-file').value = '';
       document.getElementById('file-chosen').innerText = '';
-    } catch (err) { alert(err.message); }
+    } catch (err) {
+      alert('Kunde inte publicera: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'BRÄNN AV';
+    }
   }
 
   function loadFeed() {
@@ -1484,7 +1492,6 @@
 
   /* ------------------- KALKYLER & VERKTYG ------------------- */
 
-  // 1. Statisk & Dynamisk CR
   function calcCR() {
     const bore = parseFloat(document.getElementById('cr-bore').value) || 4.0;
     const stroke = parseFloat(document.getElementById('cr-stroke').value) || 3.48;
@@ -1514,7 +1521,6 @@
     document.getElementById('res-dcr').innerText = `Dynamisk DCR: ${dcr.toFixed(2)}:1 (Effektivt slag: ${effectiveStroke.toFixed(2)}")`;
   }
 
-  // 2. Kolvhastighet
   function calcPistonSpeed() {
     const stroke = parseFloat(document.getElementById('ps-stroke').value) || 3.48;
     const rpm = parseFloat(document.getElementById('ps-rpm').value) || 6000;
@@ -1523,7 +1529,6 @@
     document.getElementById('res-pistonspeed').innerText = `${ms.toFixed(2)} m/s (${Math.round(ftmin)} ft/min)`;
   }
 
-  // 3. Däckomvandlare
   function calcTireMetric() {
     const w = parseFloat(document.getElementById('tire-w').value) || 275;
     const p = parseFloat(document.getElementById('tire-p').value) || 60;
@@ -1537,7 +1542,6 @@
     document.getElementById('res-tire-calc').innerText = `${diameterIn.toFixed(1)}" diameter (${circCm.toFixed(1)} cm omkrets)`;
   }
 
-  // 4. Hastighetsmätarfel
   function calcSpeedoError() {
     const oldD = parseFloat(document.getElementById('old-tire').value) || 26;
     const newD = parseFloat(document.getElementById('new-tire').value) || 28;
@@ -1548,7 +1552,6 @@
     document.getElementById('res-speedo-error').innerText = `${actualSpeed.toFixed(1)} km/h (${sign}${diffPercent} %)`;
   }
 
-  // 5. Spridarstorlek
   function calcInjector() {
     const hp = parseFloat(document.getElementById('inj-hp').value) || 450;
     const count = parseFloat(document.getElementById('inj-count').value) || 8;
@@ -1560,7 +1563,6 @@
     document.getElementById('res-injector').innerText = `${lbs.toFixed(1)} lbs/hr (${Math.round(cc)} cc/min)`;
   }
 
-  // 6. Spänningsfall 12V
   function calcVdrop() {
     const amp = parseFloat(document.getElementById('vdrop-amp').value) || 20;
     const len = parseFloat(document.getElementById('vdrop-len').value) || 6.0;
