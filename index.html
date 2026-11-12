@@ -551,6 +551,109 @@
     .bes-green { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid #2ecc71; }
     .bes-yellow { background: rgba(243, 156, 18, 0.15); color: #f39c12; border: 1px solid #f39c12; }
     .bes-red { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid #e74c3c; }
+
+    /* MÅNADSKALENDER & EVENT-KNAPPAR */
+    .cal-header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #3a2c24;
+      padding-bottom: 8px;
+    }
+    .cal-nav-btn {
+      background: #28201b;
+      border: 1px solid var(--border-rivet);
+      color: var(--cream-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: 'Alfa Slab One', cursive;
+      cursor: pointer;
+    }
+    .cal-month-label {
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 0.95rem;
+      color: var(--cream-bg);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+    .cal-weekday {
+      font-size: 0.7rem;
+      color: var(--rust-glow);
+      font-weight: 700;
+      padding-bottom: 4px;
+    }
+    .cal-day {
+      background: #140f0c;
+      border: 1px solid #2b211b;
+      border-radius: 4px;
+      min-height: 40px;
+      padding: 4px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--cream-text);
+    }
+    .cal-day.empty {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+    }
+    .cal-day.today {
+      border-color: var(--rust-glow);
+      box-shadow: inset 0 0 6px rgba(217, 98, 43, 0.35);
+    }
+    .cal-day.selected {
+      background: #331c11;
+      border-color: var(--cream-bg);
+    }
+    .cal-dots {
+      display: flex;
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .cal-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .btn-rsvp {
+      flex: 1;
+      background: #28201b;
+      border: 1px solid var(--border-rivet);
+      color: var(--cream-bg);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-rsvp.joined {
+      background: rgba(46, 204, 113, 0.18);
+      border-color: var(--led-green);
+      color: var(--led-green);
+    }
+    .btn-ics {
+      background: #1e1713;
+      border: 1px solid var(--rust-primary);
+      color: var(--cream-muted);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -629,19 +732,19 @@
           </div>
         </div>
 
+        <div class="menu-card" onclick="openModule('board', 'KALENDER & TRÄFFAR')">
+          <div class="menu-card-icon">📅</div>
+          <div class="menu-card-content">
+            <h3>KALENDER & TRÄFFAR</h3>
+            <p>Månadskalender, mekkvällar, bilträffar, OSA & kalenderexport.</p>
+          </div>
+        </div>
+
         <div class="menu-card" onclick="openModule('tips', 'MEK-DATA & KALKYLER')">
           <div class="menu-card-icon">📐</div>
           <div class="menu-card-content">
             <h3>MEK-DATA & KALKYLER</h3>
             <p>Tändföljder, tändgrader, moment, bultmönster, kompression & elguider.</p>
-          </div>
-        </div>
-
-        <div class="menu-card" onclick="openModule('board', 'SPEEDSHOP-TAVLAN')">
-          <div class="menu-card-icon">📌</div>
-          <div class="menu-card-content">
-            <h3>SPEEDSHOP-TAVLAN</h3>
-            <p>Planering av gemensamma garagedagar, grillkvällar och träffar.</p>
           </div>
         </div>
 
@@ -779,24 +882,56 @@
       <div id="cars-container">Laddar fordonsregistret...</div>
     </div>
 
-    <!-- 3. SPEEDSHOP-TAVLAN -->
+    <!-- 3. KALENDER & TRÄFFAR -->
     <div id="board-tab" class="view">
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>NYTT PÅ TAVLAN</span>
-          <span class="spec-badge">PLANERING</span>
+
+      <!-- VISUELL MÅNADSKALENDER -->
+      <div class="spec-card" style="border-top-color: var(--rust-glow);">
+        <div class="cal-header-nav">
+          <button class="cal-nav-btn" onclick="changeCalendarMonth(-1)">◀</button>
+          <span class="cal-month-label" id="cal-month-title">NOVEMBER 2026</span>
+          <button class="cal-nav-btn" onclick="changeCalendarMonth(1)">▶</button>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Städlördag, Grillkväll)">
-          <div style="display: flex; gap: 8px;">
-            <input type="date" id="event-date" class="garage-input" style="flex: 1;">
-            <input type="text" id="event-time" class="garage-input" placeholder="Tid (t.ex. 10:00)" style="flex: 1;">
-          </div>
-          <input type="text" id="event-desc" class="garage-input" placeholder="Detaljer, anmälan eller inköpsplan...">
-          <button class="btn-speed" onclick="addEvent()" style="padding: 10px; font-size: 0.95rem;">SPIKA PÅ TAVLAN</button>
+        <div class="cal-grid">
+          <div class="cal-weekday">MÅN</div>
+          <div class="cal-weekday">TIS</div>
+          <div class="cal-weekday">ONS</div>
+          <div class="cal-weekday">TOR</div>
+          <div class="cal-weekday">FRE</div>
+          <div class="cal-weekday">LÖR</div>
+          <div class="cal-weekday">SÖN</div>
+        </div>
+        <div id="cal-days-grid" class="cal-grid" style="margin-top: 4px;"></div>
+        <div id="cal-filter-bar" style="display: none; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #3a2c24; font-size: 0.8rem;">
+          <span id="cal-filter-text" style="color: var(--rust-glow); font-weight: 700;"></span>
+          <button class="btn-quick-menu" onclick="clearDateFilter()">Visa alla kommande</button>
         </div>
       </div>
-      <div id="events-container">Laddar tavlan...</div>
+
+      <!-- BOKA IN NY HÄNDELSE -->
+      <div class="spec-card">
+        <div class="spec-title" style="cursor: pointer;" onclick="toggleAddEventForm()">
+          <span>➕ LÄGG IN TRÄFF / MEKKVÄLL</span>
+          <span class="spec-badge" id="event-form-toggle">VISA FORMULÄR ▼</span>
+        </div>
+        <div id="add-event-form" style="display: none; flex-direction: column; gap: 8px; margin-top: 10px;">
+          <select id="event-category" class="garage-input">
+            <option value="mek">🔧 Mekkväll / Garagehäng</option>
+            <option value="race">🏁 Bilträff / Race / Cruising</option>
+            <option value="grill">🍔 Grillkväll & Fest</option>
+            <option value="stad">🧹 Städ & Underhåll</option>
+          </select>
+          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Kvällsskruv på 34:an, Street Week)">
+          <div style="display: flex; gap: 8px;">
+            <input type="date" id="event-date" class="garage-input" style="flex: 1;">
+            <input type="text" id="event-time" class="garage-input" placeholder="Tid (t.ex. 18:00)" style="flex: 1;">
+          </div>
+          <input type="text" id="event-desc" class="garage-input" placeholder="Plats, detaljer eller vad som ska fixas...">
+          <button class="btn-speed" onclick="addEvent()" style="padding: 10px; font-size: 0.95rem;">SPIKA I KALENDERN</button>
+        </div>
+      </div>
+
+      <div id="events-container">Laddar kalendern...</div>
     </div>
 
     <!-- 4. SKROTNISSE-LAGRET -->
@@ -1283,1051 +1418,4 @@
         <table class="spec-table">
           <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
           <tr><td>Topplocksbultar (289/302: 7/16")</td><td>65–70</td><td>88–95 Nm</td></tr>
-          <tr><td>Topplocksbultar (351W: 1/2")</td><td>95–105</td><td>129–142 Nm</td></tr>
-          <tr><td>Vevstaksbultar</td><td>25–45</td><td>34–61 Nm</td></tr>
-          <tr><td>Ramlagerbultar</td><td>65–105</td><td>88–142 Nm</td></tr>
-        </table>
-
-        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHRYSLER / MOPAR LA (318, 360) & B/RB (383, 440):</p>
-        <table class="spec-table">
-          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
-          <tr><td>Topplocksbultar (LA 318/360)</td><td>85</td><td>115 Nm</td></tr>
-          <tr><td>Topplocksbultar (B/RB 383/440)</td><td>70</td><td>95 Nm</td></tr>
-          <tr><td>Vevstaksbultar</td><td>45–50</td><td>61–68 Nm</td></tr>
-          <tr><td>Ramlagerbultar</td><td>85–90</td><td>115–122 Nm</td></tr>
-        </table>
-      </div>
-
-    </div>
-
-    <!-- 8. VIKTIGA KONTAKTER -->
-    <div id="contacts-tab" class="view">
-      <div class="spec-card">
-        <div class="spec-title"><span>BURN CREEK SPEEDSHOP</span><span class="spec-badge">CREW</span></div>
-        <div class="contact-item"><div><div class="contact-name">Fredrik Tengmark</div><div class="contact-phone">079-347 53 52</div></div><a href="tel:0793475352" class="btn-call">📞 RING</a></div>
-        <div class="contact-item"><div><div class="contact-name">Tony Olsson</div><div class="contact-phone">070-678 00 16</div></div><a href="tel:0706780016" class="btn-call">📞 RING</a></div>
-        <div class="contact-item"><div><div class="contact-name">Kenneth Eklund</div><div class="contact-phone">076-824 71 50</div></div><a href="tel:0768247150" class="btn-call">📞 RING</a></div>
-        <div class="contact-item"><div><div class="contact-name">Håkan Gustafsson</div><div class="contact-phone">070-577 57 33</div></div><a href="tel:0705775733" class="btn-call">📞 RING</a></div>
-        <div class="contact-item"><div><div class="contact-name">Pierre Danhall</div><div class="contact-phone">072-309 68 52</div></div><a href="tel:0723096852" class="btn-call">📞 RING</a></div>
-      </div>
-
-      <div class="spec-card">
-        <div class="spec-title"><span>FASTIGHETEN</span><span class="spec-badge">HYRESVÄRD</span></div>
-        <div class="contact-item"><div><div class="contact-name">Andreas Ivarsson</div><div class="contact-phone">070-611 56 36</div></div><a href="tel:0706115636" class="btn-call">📞 RING</a></div>
-        <div class="contact-item"><div><div class="contact-name">Andreas Johansson</div><div class="contact-phone">076-016 09 48</div></div><a href="tel:0760160948" class="btn-call">📞 RING</a></div>
-      </div>
-
-      <div class="spec-card">
-        <div class="spec-title"><span>SAMARBETSPARTNERS</span><span class="spec-badge">EXTERN</span></div>
-        <div class="contact-item"><div><div class="contact-name">Midwalls Garage (Erik Midwall)</div><div class="contact-phone">076-669 71 50</div></div><a href="tel:0766697150" class="btn-call">📞 RING</a></div>
-        <div class="contact-item"><div><div class="contact-name">Kulan Trading (Kulan)</div><div class="contact-phone">070-684 94 80</div></div><a href="tel:0706849480" class="btn-call">📞 RING</a></div>
-      </div>
-    </div>
-
-    <!-- 9. ADMINPANEL -->
-    <div id="admin-tab" class="view">
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>ANVÄNDARHANTERING</span>
-          <span class="spec-badge">ADMIN</span>
-        </div>
-        
-        <div style="margin-bottom: 14px;">
-          <button class="btn-speed btn-wrench" onclick="syncUsersFromPosts()" style="padding: 8px 12px; font-size: 0.8rem; width: 100%;">
-            🔄 SYNKRONISERA BEFINTLIGA PROFILER FRÅN INLÄGG
-          </button>
-        </div>
-
-        <div id="admin-users-list">Laddar användare...</div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyAyn6xM-pkDVK7ojbQXCjfHO07P8rwevMQ",
-    authDomain: "burncreekspeedshop.firebaseapp.com",
-    projectId: "burncreekspeedshop",
-    storageBucket: "burncreekspeedshop.firebasestorage.app",
-    messagingSenderId: "611870239128",
-    appId: "1:611870239128:web:5e8973ec49556be0f823ed"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
-
-  const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
-  let isAdmin = false;
-  let allCarsCache = [];
-
-  auth.onAuthStateChanged(async user => {
-    if (user) {
-      const email = user.email.toLowerCase();
-      isAdmin = (email === ADMIN_EMAIL.toLowerCase());
-
-      const userRef = db.collection('users').doc(user.uid);
-      const userDoc = await userRef.get();
-      
-      if (!userDoc.exists) {
-        await userRef.set({
-          name: user.displayName || email.split('@')[0],
-          email: email,
-          approved: isAdmin,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      }
-
-      const userData = userDoc.exists ? userDoc.data() : { approved: isAdmin };
-
-      if (!userData.approved && !isAdmin) {
-        document.getElementById('auth-view').style.display = 'none';
-        document.getElementById('main-view').style.display = 'none';
-        document.getElementById('pending-view').style.display = 'block';
-        return;
-      }
-
-      document.getElementById('auth-view').style.display = 'none';
-      document.getElementById('pending-view').style.display = 'none';
-      document.getElementById('main-view').style.display = 'flex';
-
-      if (isAdmin) {
-        document.getElementById('admin-menu-card').style.display = 'flex';
-        loadAdminUsers();
-      }
-      
-      if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-        Notification.requestPermission();
-      }
-
-      loadFeed();
-      loadCars();
-      loadTodos();
-      loadGarageStatus();
-      loadCurrentBoardMessage();
-      loadEvents();
-      loadParts();
-      loadGuests();
-
-      calcRpm();
-      calcCfm();
-      calcCR();
-      calcPistonSpeed();
-      calcTireMetric();
-      calcSpeedoError();
-      calcInjector();
-      calcVdrop();
-    } else {
-      document.getElementById('auth-view').style.display = 'block';
-      document.getElementById('pending-view').style.display = 'none';
-      document.getElementById('main-view').style.display = 'none';
-    }
-  });
-
-  async function register() {
-    const name = document.getElementById('auth-name').value.trim();
-    const email = document.getElementById('auth-email').value.trim();
-    const pass = document.getElementById('auth-password').value;
-    if (!name) return alert('Ange förarnamn!');
-
-    try {
-      const res = await auth.createUserWithEmailAndPassword(email, pass);
-      await res.user.updateProfile({ displayName: name });
-      
-      const isAdm = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
-      
-      await db.collection('users').doc(res.user.uid).set({
-        name: name,
-        email: email.toLowerCase(),
-        approved: isAdm,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      await db.collection('posts').add({
-        text: `🎟️ Ny medlem har kvitterat ut sitt pit-pass: ${name}! Välkommen till Burn Creek Speedshop.`,
-        imageUrl: '',
-        author: 'SPEEDSHOP DEPÅ',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      location.reload();
-    } catch (err) { 
-      document.getElementById('auth-error').innerText = err.message; 
-    }
-  }
-
-  async function login() {
-    const email = document.getElementById('auth-email').value.trim();
-    const pass = document.getElementById('auth-password').value;
-    try {
-      await auth.signInWithEmailAndPassword(email, pass);
-    } catch (err) { document.getElementById('auth-error').innerText = err.message; }
-  }
-
-  function logout() { auth.signOut(); }
-
-  function toggleMenu() {
-    document.getElementById('menu-overlay').classList.toggle('open');
-  }
-
-  function openModule(tabId, title) {
-    const tabs = ['feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
-    tabs.forEach(t => {
-      const el = document.getElementById(`${t}-tab`);
-      if (el) el.classList.toggle('active', t === tabId);
-    });
-    document.getElementById('breadcrumb-title').innerText = title;
-    toggleMenu();
-  }
-
-  function updateFileName() {
-    const f = document.getElementById('post-file').files[0];
-    document.getElementById('file-chosen').innerText = f ? f.name : '';
-  }
-
-  async function deleteDoc(col, id) {
-    if (confirm('Vill du ta bort detta inlägg/fordon?')) {
-      try {
-        await db.collection(col).doc(id).delete();
-      } catch (err) {
-        alert('Fel vid radering: ' + err.message);
-      }
-    }
-  }
-
-  /* ------------------- FORDONSREGISTER & REGNR-SNABBKOLL ------------------- */
-  function toggleAddCarForm() {
-    const form = document.getElementById('add-car-form');
-    const toggleText = document.getElementById('car-form-toggle');
-    if (form.style.display === 'none' || form.style.display === '') {
-      form.style.display = 'flex';
-      toggleText.innerText = 'DÖLJ FORMULÄR ▲';
-    } else {
-      form.style.display = 'none';
-      toggleText.innerText = 'VISA FORMULÄR ▼';
-    }
-  }
-
-  function updateCarFileName() {
-    const f = document.getElementById('car-file').files[0];
-    document.getElementById('car-file-chosen').innerText = f ? f.name : '';
-  }
-
-  async function addCar() {
-    const reg = document.getElementById('car-reg').value.trim().toUpperCase();
-    const year = document.getElementById('car-year').value.trim();
-    const model = document.getElementById('car-model').value.trim();
-    const engine = document.getElementById('car-engine').value.trim();
-    const oil = document.getElementById('car-oil').value.trim();
-    const plugs = document.getElementById('car-plugs').value.trim();
-    const timing = document.getElementById('car-timing').value.trim();
-    const status = document.getElementById('car-status').value;
-    const notes = document.getElementById('car-notes').value.trim();
-    const file = document.getElementById('car-file').files[0];
-
-    if (!reg || !model) return alert('Ange minst regnr och bilmodell!');
-
-    const btn = document.getElementById('btn-save-car');
-    btn.disabled = true;
-    btn.innerText = 'SPARAR...';
-
-    const user = auth.currentUser;
-    const ownerName = user ? (user.displayName || user.email.split('@')[0]) : 'Medlem';
-
-    let imageUrl = '';
-    try {
-      if (file) {
-        imageUrl = await compressImage(file, 900, 0.65);
-      }
-
-      await db.collection('cars').add({
-        reg,
-        year,
-        model,
-        engine,
-        oil,
-        plugs,
-        timing,
-        status,
-        notes,
-        imageUrl,
-        owner: ownerName,
-        ownerUid: user ? user.uid : '',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      document.getElementById('car-reg').value = '';
-      document.getElementById('car-year').value = '';
-      document.getElementById('car-model').value = '';
-      document.getElementById('car-engine').value = '';
-      document.getElementById('car-oil').value = '';
-      document.getElementById('car-plugs').value = '';
-      document.getElementById('car-timing').value = '';
-      document.getElementById('car-notes').value = '';
-      document.getElementById('car-file').value = '';
-      document.getElementById('car-file-chosen').innerText = '';
-      toggleAddCarForm();
-    } catch (err) {
-      alert('Kunde inte spara fordon: ' + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.innerText = 'SPARA FORDON I REGISTRET';
-    }
-  }
-
-  function loadCars() {
-    db.collection('cars').onSnapshot(snapshot => {
-      allCarsCache = [];
-      snapshot.forEach(doc => {
-        allCarsCache.push({ id: doc.id, ...doc.data() });
-      });
-      allCarsCache.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
-      
-      const badge = document.getElementById('cars-count-badge');
-      if (badge) badge.innerText = `${allCarsCache.length} BILAR`;
-      
-      renderCars(allCarsCache);
-    });
-  }
-
-  function filterCars() {
-    const q = document.getElementById('car-search').value.trim().toLowerCase();
-    if (!q) {
-      renderCars(allCarsCache);
-      return;
-    }
-    const filtered = allCarsCache.filter(c => 
-      (c.reg && c.reg.toLowerCase().includes(q)) ||
-      (c.model && c.model.toLowerCase().includes(q)) ||
-      (c.owner && c.owner.toLowerCase().includes(q)) ||
-      (c.engine && c.engine.toLowerCase().includes(q))
-    );
-    renderCars(filtered);
-  }
-
-  function renderCars(list) {
-    const container = document.getElementById('cars-container');
-    container.innerHTML = '';
-
-    if (list.length === 0) {
-      container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 15px;">Inga fordon hittades.</p>';
-      return;
-    }
-
-    const currentUser = auth.currentUser;
-
-    list.forEach(c => {
-      let statusLabel = '🟢 Besiktigad & Klar';
-      let statusClass = 'bes-green';
-      if (c.status === 'yellow') { statusLabel = '🟡 Dags för besiktning'; statusClass = 'bes-yellow'; }
-      if (c.status === 'red') { statusLabel = '🔴 Projekt / Avställd'; statusClass = 'bes-red'; }
-
-      const canDelete = isAdmin || (currentUser && c.ownerUid === currentUser.uid);
-
-      container.innerHTML += `
-        <div class="post-card" style="border-left-width: 6px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-            <div class="reg-plate">
-              <div class="reg-plate-s">S</div>
-              <div class="reg-plate-num">${c.reg}</div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 6px;">
-              <span class="bes-badge ${statusClass}">${statusLabel}</span>
-              ${canDelete ? `<button class="btn-delete" onclick="deleteDoc('cars', '${c.id}')">✕</button>` : ''}
-            </div>
-          </div>
-
-          <div style="font-family: 'Alfa Slab One', cursive; font-size: 1.05rem; color: var(--cream-bg);">
-            ${c.year ? c.year + ' ' : ''}${c.model}
-          </div>
-          <div style="font-size: 0.78rem; color: var(--rust-glow); font-weight: 700; margin-bottom: 6px;">
-            Ägare: ${c.owner || 'Medlem'}
-          </div>
-
-          ${c.imageUrl ? `<img src="${c.imageUrl}" class="post-image" style="margin-bottom: 10px;" loading="lazy">` : ''}
-
-          <div class="car-spec-grid">
-            <div class="car-spec-item">
-              <span class="car-spec-label">Motor & Låda</span>
-              <span class="car-spec-val">${c.engine || '–'}</span>
-            </div>
-            <div class="car-spec-item">
-              <span class="car-spec-label">Tändinställning</span>
-              <span class="car-spec-val">${c.timing || '–'}</span>
-            </div>
-            <div class="car-spec-item">
-              <span class="car-spec-label">Olja & Filter</span>
-              <span class="car-spec-val">${c.oil || '–'}</span>
-            </div>
-            <div class="car-spec-item">
-              <span class="car-spec-label">Tändstift & Gap</span>
-              <span class="car-spec-val">${c.plugs || '–'}</span>
-            </div>
-          </div>
-
-          ${c.notes ? `<p style="font-size: 0.82rem; color: var(--cream-muted); margin-top: 8px; line-height: 1.4; border-top: 1px dashed #332720; padding-top: 6px;">${c.notes}</p>` : ''}
-        </div>
-      `;
-    });
-  }
-
-  /* SNABBMEDDELANDE TILL TAVLAN */
-  async function sendBoardMessage() {
-    const text = document.getElementById('board-msg-input').value.trim();
-    if (!text) return alert('Skriv ett meddelande först!');
-    const user = auth.currentUser;
-    const authorName = user ? (user.displayName || user.email.split('@')[0]) : 'Depå';
-
-    try {
-      await db.collection('announcements').doc('current').set({
-        text: text,
-        author: authorName,
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      document.getElementById('board-msg-input').value = '';
-    } catch (err) {
-      alert('Kunde inte skicka meddelande: ' + err.message);
-    }
-  }
-
-  async function clearBoardMessage() {
-    try {
-      await db.collection('announcements').doc('current').delete();
-    } catch (err) {
-      alert('Kunde inte rensa tavlan: ' + err.message);
-    }
-  }
-
-  function loadCurrentBoardMessage() {
-    db.collection('announcements').doc('current').onSnapshot(doc => {
-      const badge = document.getElementById('board-msg-badge');
-      if (badge) {
-        if (doc.exists && doc.data().text) {
-          badge.innerText = 'AKTIVT ANSLAG';
-          badge.style.background = 'var(--led-green)';
-        } else {
-          badge.innerText = 'INGET ANSLAG';
-          badge.style.background = 'var(--rust-primary)';
-        }
-      }
-    });
-  }
-
-  async function syncUsersFromPosts() {
-    try {
-      const postsSnap = await db.collection('posts').get();
-      const existingUsers = {};
-      postsSnap.forEach(doc => {
-        const a = doc.data().author;
-        if (a && a !== 'SPEEDSHOP DEPÅ' && a !== 'Depå') {
-          existingUsers[a] = true;
-        }
-      });
-
-      let added = 0;
-      for (const authorName of Object.keys(existingUsers)) {
-        const query = await db.collection('users').where('name', '==', authorName).get();
-        if (query.empty) {
-          await db.collection('users').add({
-            name: authorName,
-            email: `${authorName.toLowerCase()}@burncreek.local`,
-            approved: true,
-            syncedFromPosts: true,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-          added++;
-        }
-      }
-
-      alert(`Synkronisering klar! Lade till ${added} befintliga medlemmar i listan.`);
-    } catch (err) {
-      alert('Kunde inte synka profiler: ' + err.message);
-    }
-  }
-
-  function loadAdminUsers() {
-    db.collection('users').onSnapshot(snapshot => {
-      const container = document.getElementById('admin-users-list');
-      container.innerHTML = '';
-
-      if (snapshot.empty) {
-        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem;">Inga användare hittades i databasen.</p>';
-        return;
-      }
-
-      const pendingUsers = [];
-      const approvedUsers = [];
-      let fredrikUser = null;
-
-      snapshot.forEach(doc => {
-        const u = { id: doc.id, ...doc.data() };
-        if (u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-          fredrikUser = u;
-        } else if (u.approved) {
-          approvedUsers.push(u);
-        } else {
-          pendingUsers.push(u);
-        }
-      });
-
-      let html = '';
-
-      if (fredrikUser) {
-        html += `
-          <div style="background: #1e1713; border: 2px solid var(--rust-primary); padding: 10px; margin-bottom: 14px; border-radius: 4px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <div style="font-weight: 700; color: var(--cream-bg); font-size: 1rem;">👑 ${fredrikUser.name}</div>
-                <div style="font-size: 0.75rem; color: var(--cream-muted);">${fredrikUser.email}</div>
-              </div>
-              <span style="font-size: 0.75rem; background: var(--rust-primary); color: #fff; padding: 2px 6px; border-radius: 3px; font-weight: 700;">ÄGARE / ADMIN</span>
-            </div>
-          </div>
-        `;
-      }
-
-      html += `<div style="font-family: 'Alfa Slab One', cursive; font-size: 0.85rem; color: #e67e22; margin-bottom: 8px; text-transform: uppercase;">
-        ⏳ Väntar på godkännande (${pendingUsers.length})
-      </div>`;
-
-      if (pendingUsers.length === 0) {
-        html += '<p style="color: var(--cream-muted); font-size: 0.8rem; margin-bottom: 16px;">Inga nya ansökningar just nu.</p>';
-      } else {
-        pendingUsers.forEach(u => {
-          html += `
-            <div style="display: flex; justify-content: space-between; align-items: center; background: #160f0b; border: 1px solid #74290a; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
-              <div>
-                <div style="font-weight: 700; color: #eedcc0; font-size: 0.95rem;">${u.name || 'Namnlös'}</div>
-                <div style="font-size: 0.75rem; color: #aa957c;">${u.email || 'Ingen e-post'}</div>
-              </div>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-speed" style="padding: 6px 12px; font-size: 0.75rem;" onclick="approveUser('${u.id}')">GODKÄNN</button>
-                <button class="btn-killswitch" style="padding: 6px 8px; font-size: 0.75rem;" onclick="deleteUser('${u.id}')">RADERA</button>
-              </div>
-            </div>
-          `;
-        });
-        html += '<div style="margin-bottom: 16px;"></div>';
-      }
-
-      html += `<div style="font-family: 'Alfa Slab One', cursive; font-size: 0.85rem; color: var(--led-green); margin-bottom: 8px; text-transform: uppercase;">
-        ✓ Godkända medlemmar (${approvedUsers.length})
-      </div>`;
-
-      if (approvedUsers.length === 0) {
-        html += '<p style="color: var(--cream-muted); font-size: 0.8rem;">Inga andra medlemmar godkända än. Använd knappen ovan för att synka in Tony & Håkan.</p>';
-      } else {
-        approvedUsers.forEach(u => {
-          html += `
-            <div style="display: flex; justify-content: space-between; align-items: center; background: #0d0a08; border: 1px solid #332720; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
-              <div>
-                <div style="font-weight: 700; color: #eedcc0; font-size: 0.95rem;">${u.name || 'Namnlös'}</div>
-                <div style="font-size: 0.75rem; color: #aa957c;">${u.email || 'Befintlig medlem'}</div>
-              </div>
-              <div style="display: flex; gap: 6px;">
-                <button class="btn-killswitch" style="padding: 6px 10px; font-size: 0.75rem;" onclick="revokeUser('${u.id}')">SPÄRRA</button>
-                <button class="btn-killswitch" style="padding: 6px 8px; font-size: 0.75rem;" onclick="deleteUser('${u.id}')">RADERA</button>
-              </div>
-            </div>
-          `;
-        });
-      }
-
-      container.innerHTML = html;
-    });
-  }
-
-  async function approveUser(uid) {
-    try {
-      await db.collection('users').doc(uid).update({ approved: true });
-    } catch (err) { alert(err.message); }
-  }
-
-  async function revokeUser(uid) {
-    try {
-      await db.collection('users').doc(uid).update({ approved: false });
-    } catch (err) { alert(err.message); }
-  }
-
-  async function deleteUser(uid) {
-    if (confirm('Ta bort detta konto helt?')) {
-      try {
-        await db.collection('users').doc(uid).delete();
-      } catch (err) { alert(err.message); }
-    }
-  }
-
-  function compressImage(file, maxWidth = 900, quality = 0.65) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = event => {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = () => {
-          let width = img.width;
-          let height = img.height;
-          if (width > maxWidth) {
-            height = Math.round((height * maxWidth) / width);
-            width = maxWidth;
-          }
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', quality));
-        };
-        img.onerror = err => reject(err);
-      };
-      reader.onerror = err => reject(err);
-    });
-  }
-
-  async function checkInGarage() {
-    const user = auth.currentUser;
-    if (!user) return alert('Du måste vara inloggad!');
-    const name = user.displayName || user.email.split('@')[0];
-
-    try {
-      await db.collection('active_members').doc(user.uid).set({
-        name: name,
-        checkedInAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      if ("Notification" in window && Notification.permission === "granted") {
-        const title = "☕ Burn Creek Speedshop";
-        const options = {
-          body: `${name} är i garaget! Kaffet är påslaget.`,
-          icon: "logo.png"
-        };
-        try {
-          if ('serviceWorker' in navigator) {
-            const reg = await navigator.serviceWorker.ready;
-            reg.showNotification(title, options);
-          } else {
-            new Notification(title, options);
-          }
-        } catch(e) {
-          console.log('Notis visades inte:', e);
-        }
-      }
-    } catch (err) { 
-      alert('Kunde inte checka in: ' + err.message); 
-    }
-  }
-
-  async function leaveGarage() {
-    const user = auth.currentUser;
-    if (!user) return;
-    try {
-      await db.collection('active_members').doc(user.uid).delete();
-    } catch (err) { 
-      alert('Kunde inte checka ut: ' + err.message); 
-    }
-  }
-
-  function loadGarageStatus() {
-    const user = auth.currentUser;
-    db.collection('active_members').onSnapshot(snapshot => {
-      const led = document.getElementById('garage-led');
-      const text = document.getElementById('garage-status-text');
-      const leaveBtn = document.getElementById('garage-leave-btn');
-      
-      if (snapshot.empty) {
-        led.classList.remove('online');
-        text.innerText = 'Garaget är tomt just nu.';
-        if (leaveBtn) leaveBtn.style.display = 'none';
-        return;
-      }
-
-      led.classList.add('online');
-      const names = [];
-      let amICheckedIn = false;
-
-      snapshot.forEach(doc => {
-        const d = doc.data();
-        names.push(d.name);
-        if (user && doc.id === user.uid) amICheckedIn = true;
-      });
-
-      text.innerHTML = `<span style="color: var(--led-green);">${names.join(', ')}</span> är på plats! ☕`;
-      if (leaveBtn) leaveBtn.style.display = amICheckedIn ? 'block' : 'none';
-    });
-  }
-
-  async function addEvent() {
-    const title = document.getElementById('event-title').value.trim();
-    const date = document.getElementById('event-date').value;
-    const time = document.getElementById('event-time').value.trim();
-    const desc = document.getElementById('event-desc').value.trim();
-    if (!title) return alert('Ange en titel!');
-    try {
-      await db.collection('events').add({
-        title, date, time, desc,
-        author: auth.currentUser.displayName || 'Depå',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      document.getElementById('event-title').value = '';
-      document.getElementById('event-date').value = '';
-      document.getElementById('event-time').value = '';
-      document.getElementById('event-desc').value = '';
-    } catch (err) { alert(err.message); }
-  }
-
-  function loadEvents() {
-    db.collection('events').onSnapshot(snapshot => {
-      const c = document.getElementById('events-container');
-      c.innerHTML = '';
-      if (snapshot.empty) {
-        c.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center;">Inga planerade datum på tavlan just nu.</p>';
-        return;
-      }
-      snapshot.forEach(doc => {
-        const e = doc.data();
-        c.innerHTML += `
-          <div class="post-card">
-            <div class="post-header">
-              <span class="post-author">${e.title}</span>
-              <div>
-                <span>${e.date || 'TBA'} ${e.time || ''}</span>
-                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('events', '${doc.id}')">✕ RADERA</button>` : ''}
-              </div>
-            </div>
-            ${e.desc ? `<p style="font-size: 0.9rem; line-height: 1.4;">${e.desc}</p>` : ''}
-            <div style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">Spikat av: ${e.author}</div>
-          </div>
-        `;
-      });
-    });
-  }
-
-  async function addPart() {
-    const type = document.getElementById('part-type').value;
-    const title = document.getElementById('part-title').value.trim();
-    const price = document.getElementById('part-price').value.trim();
-    const desc = document.getElementById('part-desc').value.trim();
-    if (!title) return alert('Ange vad för del/material!');
-    try {
-      await db.collection('parts').add({
-        type, title, price, desc,
-        author: auth.currentUser.displayName || 'Depå',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      document.getElementById('part-title').value = '';
-      document.getElementById('part-price').value = '';
-      document.getElementById('part-desc').value = '';
-    } catch (err) { alert(err.message); }
-  }
-
-  function loadParts() {
-    db.collection('parts').onSnapshot(snapshot => {
-      const c = document.getElementById('parts-container');
-      c.innerHTML = '';
-      if (snapshot.empty) {
-        c.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center;">Lagret är tomt. Lägg upp delar eller efterlysningar!</p>';
-        return;
-      }
-      snapshot.forEach(doc => {
-        const p = doc.data();
-        const isSell = p.type.includes('SÄLJES');
-        c.innerHTML += `
-          <div class="post-card" style="border-left-color: ${isSell ? 'var(--rust-primary)' : '#2980b9'};">
-            <div class="post-header">
-              <span class="post-author">${p.title}</span>
-              <div>
-                <span style="color: ${isSell ? 'var(--rust-glow)' : '#3498db'}; font-weight: 700;">${p.type}</span>
-                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('parts', '${doc.id}')">✕ RADERA</button>` : ''}
-              </div>
-            </div>
-            ${p.price ? `<p style="font-size: 0.95rem; font-weight: 700; color: var(--cream-bg);">Pris/Byte: ${p.price}</p>` : ''}
-            ${p.desc ? `<p style="font-size: 0.85rem; margin-top: 4px; color: var(--cream-muted);">${p.desc}</p>` : ''}
-            <div style="font-size: 0.75rem; color: #88786d; margin-top: 6px;">Kontakt: ${p.author}</div>
-          </div>
-        `;
-      });
-    });
-  }
-
-  async function addGuest() {
-    const name = document.getElementById('guest-name').value.trim();
-    const car = document.getElementById('guest-car').value.trim();
-    const date = document.getElementById('guest-date').value;
-    if (!name || !car) return alert('Ange namn och fordon/arbete!');
-    try {
-      await db.collection('guests').add({
-        name, car, date,
-        host: auth.currentUser.displayName || 'Medlem',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      document.getElementById('guest-name').value = '';
-      document.getElementById('guest-car').value = '';
-      document.getElementById('guest-date').value = '';
-    } catch (err) { alert(err.message); }
-  }
-
-  function loadGuests() {
-    db.collection('guests').onSnapshot(snapshot => {
-      const c = document.getElementById('guests-container');
-      c.innerHTML = '';
-      if (snapshot.empty) {
-        c.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center;">Inga gäster inbokade.</p>';
-        return;
-      }
-      snapshot.forEach(doc => {
-        const g = doc.data();
-        c.innerHTML += `
-          <div class="post-card">
-            <div class="post-header">
-              <span class="post-author">${g.name}</span>
-              <div>
-                <span>${g.date || 'Ej satt'}</span>
-                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('guests', '${doc.id}')">✕ RADERA</button>` : ''}
-              </div>
-            </div>
-            <p style="font-size: 0.9rem;"><strong>Arbete:</strong> ${g.car}</p>
-            <div style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">Ansvarig värd: ${g.host}</div>
-          </div>
-        `;
-      });
-    });
-  }
-
-  async function publishPost() {
-    const text = document.getElementById('post-text').value.trim();
-    const file = document.getElementById('post-file').files[0];
-    if (!text && !file) return;
-
-    const btn = document.getElementById('btn-publish');
-    btn.disabled = true;
-    btn.innerText = 'BRÄNNER...';
-
-    let imageUrl = '';
-    try {
-      if (file) {
-        imageUrl = await compressImage(file, 900, 0.65);
-      }
-
-      await db.collection('posts').add({
-        text: text,
-        imageUrl: imageUrl,
-        author: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      document.getElementById('post-text').value = '';
-      document.getElementById('post-file').value = '';
-      document.getElementById('file-chosen').innerText = '';
-    } catch (err) {
-      alert('Kunde inte publicera: ' + err.message);
-    } finally {
-      btn.disabled = false;
-      btn.innerText = 'BRÄNN AV';
-    }
-  }
-
-  function loadFeed() {
-    db.collection('posts').onSnapshot(snapshot => {
-      const container = document.getElementById('posts-container');
-      container.innerHTML = '';
-      if (snapshot.empty) {
-        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 15px;">Inga inlägg i depåloggen än.</p>';
-        return;
-      }
-      const list = [];
-      snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
-      list.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
-
-      list.forEach(p => {
-        const date = p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString('sv-SE', { hour: '2-digit', minute: '2-digit' }) : 'Depå';
-        container.innerHTML += `
-          <div class="post-card">
-            <div class="post-header">
-              <span class="post-author">${p.author || 'Depå'}</span>
-              <div>
-                <span>${date}</span>
-                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('posts', '${p.id}')">✕ RADERA</button>` : ''}
-              </div>
-            </div>
-            ${p.text ? `<p style="font-size: 0.95rem; line-height: 1.45;">${p.text}</p>` : ''}
-            ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-image" loading="lazy">` : ''}
-          </div>
-        `;
-      });
-    });
-  }
-
-  async function addTodo() {
-    const input = document.getElementById('todo-input');
-    const val = input.value.trim();
-    if (!val) return;
-    try {
-      await db.collection('todos').add({ 
-        text: val, 
-        done: false, 
-        addedBy: auth.currentUser.displayName || 'Depå',
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-      input.value = '';
-    } catch (err) { alert(err.message); }
-  }
-
-  function toggleTodo(id, currentStatus) {
-    db.collection('todos').doc(id).update({ done: !currentStatus });
-  }
-
-  function loadTodos() {
-    db.collection('todos').onSnapshot(snapshot => {
-      const container = document.getElementById('todos-container');
-      container.innerHTML = '';
-      if (snapshot.empty) {
-        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 10px;">Inga punkter på listan än.</p>';
-        return;
-      }
-      const list = [];
-      snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
-      list.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
-
-      list.forEach(t => {
-        container.innerHTML += `
-          <div class="todo-item ${t.done ? 'done' : ''}" onclick="toggleTodo('${t.id}', ${t.done})">
-            <input type="checkbox" ${t.done ? 'checked' : ''} style="cursor: pointer; accent-color: var(--rust-primary);">
-            <span style="flex: 1;">${t.text}</span>
-            <span class="todo-badge">${t.addedBy || 'Depå'}</span>
-            ${isAdmin ? `<button class="btn-delete" onclick="event.stopPropagation(); deleteDoc('todos', '${t.id}')">✕</button>` : ''}
-          </div>
-        `;
-      });
-    });
-  }
-
-  /* KALKYLATORER */
-  function calcRpm() {
-    const kmh = parseFloat(document.getElementById('calc-speed').value) || 0;
-    const tire = parseFloat(document.getElementById('calc-tire').value) || 28;
-    const axle = parseFloat(document.getElementById('calc-axle').value) || 3.73;
-    const trans = parseFloat(document.getElementById('calc-trans').value) || 1.0;
-    const mph = kmh * 0.621371;
-    const rpm = Math.round((mph * axle * trans * 336) / tire);
-    const resEl = document.getElementById('res-rpm');
-    if (resEl) resEl.innerText = `${rpm} RPM`;
-  }
-
-  function calcCfm() {
-    const cid = parseFloat(document.getElementById('calc-cid').value) || 350;
-    const rpm = parseFloat(document.getElementById('calc-maxrpm').value) || 6000;
-    const ve = parseFloat(document.getElementById('calc-ve').value) || 0.85;
-    const cfm = Math.round((cid * rpm * ve) / 3456);
-    const resEl = document.getElementById('res-cfm');
-    if (resEl) resEl.innerText = `${cfm} CFM`;
-  }
-
-  function calcCR() {
-    const bore = parseFloat(document.getElementById('cr-bore').value) || 4.0;
-    const stroke = parseFloat(document.getElementById('cr-stroke').value) || 3.48;
-    const chamber = parseFloat(document.getElementById('cr-chamber').value) || 64.0;
-    const piston = parseFloat(document.getElementById('cr-piston').value) || 5.0;
-    const gThick = parseFloat(document.getElementById('cr-gasket-th').value) || 0.039;
-    const gBore = parseFloat(document.getElementById('cr-gasket-b').value) || 4.06;
-    const deck = parseFloat(document.getElementById('cr-deck').value) || 0.020;
-    const ivc = parseFloat(document.getElementById('cr-ivc').value) || 65;
-    const rod = parseFloat(document.getElementById('cr-rod').value) || 5.7;
-
-    const sweepVol = (Math.PI * Math.pow(bore / 2, 2) * stroke) * 16.387064;
-    const gasketVol = (Math.PI * Math.pow(gBore / 2, 2) * gThick) * 16.387064;
-    const deckVol = (Math.PI * Math.pow(bore / 2, 2) * deck) * 16.387064;
-    const clearanceVol = chamber + piston + gasketVol + deckVol;
-
-    const cr = (sweepVol + clearanceVol) / clearanceVol;
-
-    const radIVC = (ivc * Math.PI) / 180;
-    const crankRadius = stroke / 2;
-    const effPistonPos = crankRadius * (1 - Math.cos(radIVC)) + rod - Math.sqrt(Math.pow(rod, 2) - Math.pow(crankRadius * Math.sin(radIVC), 2));
-    const effectiveStroke = Math.max(0, stroke - effPistonPos);
-    const effSweepVol = (Math.PI * Math.pow(bore / 2, 2) * effectiveStroke) * 16.387064;
-    const dcr = (effSweepVol + clearanceVol) / clearanceVol;
-
-    const resCr = document.getElementById('res-cr');
-    const resDcr = document.getElementById('res-dcr');
-    if (resCr) resCr.innerText = `Statisk CR: ${cr.toFixed(2)}:1`;
-    if (resDcr) resDcr.innerText = `Dynamisk DCR: ${dcr.toFixed(2)}:1 (Effektivt slag: ${effectiveStroke.toFixed(2)}")`;
-  }
-
-  function calcPistonSpeed() {
-    const stroke = parseFloat(document.getElementById('ps-stroke').value) || 3.48;
-    const rpm = parseFloat(document.getElementById('ps-rpm').value) || 6000;
-    const ftmin = (2 * stroke * rpm) / 12;
-    const ms = ftmin * 0.00508;
-    const resEl = document.getElementById('res-pistonspeed');
-    if (resEl) resEl.innerText = `${ms.toFixed(2)} m/s (${Math.round(ftmin)} ft/min)`;
-  }
-
-  function calcTireMetric() {
-    const w = parseFloat(document.getElementById('tire-w').value) || 275;
-    const p = parseFloat(document.getElementById('tire-p').value) || 60;
-    const r = parseFloat(document.getElementById('tire-r').value) || 15;
-
-    const sidewallMm = w * (p / 100);
-    const diameterMm = (sidewallMm * 2) + (r * 25.4);
-    const diameterIn = diameterMm / 25.4;
-    const circCm = (diameterMm * Math.PI) / 10;
-
-    const resEl = document.getElementById('res-tire-calc');
-    if (resEl) resEl.innerText = `${diameterIn.toFixed(1)}" diameter (${circCm.toFixed(1)} cm omkrets)`;
-  }
-
-  function calcSpeedoError() {
-    const oldD = parseFloat(document.getElementById('old-tire').value) || 26;
-    const newD = parseFloat(document.getElementById('new-tire').value) || 28;
-    const factor = newD / oldD;
-    const actualSpeed = 100 * factor;
-    const diffPercent = ((factor - 1) * 100).toFixed(1);
-    const sign = diffPercent > 0 ? '+' : '';
-    const resEl = document.getElementById('res-speedo-error');
-    if (resEl) resEl.innerText = `${actualSpeed.toFixed(1)} km/h (${sign}${diffPercent} %)`;
-  }
-
-  function calcInjector() {
-    const hp = parseFloat(document.getElementById('inj-hp').value) || 450;
-    const count = parseFloat(document.getElementById('inj-count').value) || 8;
-    const bsfc = 0.50;
-    const dutyCycle = 0.85;
-
-    const lbs = (hp * bsfc) / (count * dutyCycle);
-    const cc = lbs * 10.5;
-    const resEl = document.getElementById('res-injector');
-    if (resEl) resEl.innerText = `${lbs.toFixed(1)} lbs/hr (${Math.round(cc)} cc/min)`;
-  }
-
-  function calcVdrop() {
-    const amp = parseFloat(document.getElementById('vdrop-amp').value) || 20;
-    const len = parseFloat(document.getElementById('vdrop-len').value) || 6.0;
-    const maxDrop = 0.38;
-    const reqArea = (amp * 0.0175 * len) / maxDrop;
-
-    let stdArea = 1.5;
-    if (reqArea > 1.5) stdArea = 2.5;
-    if (reqArea > 2.5) stdArea = 4.0;
-    if (reqArea > 4.0) stdArea = 6.0;
-    if (reqArea > 6.0) stdArea = 10.0;
-    if (reqArea > 10.0) stdArea = 16.0;
-    if (reqArea > 16.0) stdArea = 25.0;
-
-    const actualDrop = (amp * 0.0175 * len) / stdArea;
-    const resEl = document.getElementById('res-vdrop');
-    if (resEl) resEl.innerText = `Minst ${stdArea} mm² (Spänningsfall: ${actualDrop.toFixed(2)} V)`;
-  }
-
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
-</body>
-</html>
+          <tr><td>Topplocksbultar (351W: 1/2")</td><td>95–105</td><td>129–14
