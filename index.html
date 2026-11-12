@@ -487,6 +487,70 @@
       font-size: 1.1rem;
       white-space: nowrap;
     }
+
+    /* FORDONSREGISTER & REGNR-SKYLT */
+    .reg-plate {
+      display: inline-flex;
+      align-items: center;
+      background: #f5f5f5;
+      color: #111;
+      border: 2px solid #222;
+      border-radius: 4px;
+      font-family: 'Teko', sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: 1.5px;
+      overflow: hidden;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+    }
+    .reg-plate-s {
+      background: #003399;
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 4px 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Chakra Petch', sans-serif;
+      height: 100%;
+    }
+    .reg-plate-num {
+      padding: 1px 10px;
+      text-transform: uppercase;
+    }
+    .car-spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+      background: #140f0c;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #2e241e;
+    }
+    .car-spec-item {
+      font-size: 0.8rem;
+    }
+    .car-spec-label {
+      color: var(--cream-muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      display: block;
+    }
+    .car-spec-val {
+      color: var(--cream-bg);
+      font-weight: 700;
+    }
+    .bes-badge {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .bes-green { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid #2ecc71; }
+    .bes-yellow { background: rgba(243, 156, 18, 0.15); color: #f39c12; border: 1px solid #f39c12; }
+    .bes-red { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid #e74c3c; }
   </style>
 </head>
 <body>
@@ -553,7 +617,15 @@
           <div class="menu-card-icon">🏁</div>
           <div class="menu-card-content">
             <h3>DEPÅLOGGEN</h3>
-            <p>Live-status, kaffeknapp, depåfoton och mekrapporter.</p>
+            <p>Live-status, kaffeknapp, anslagstavla och mekrapporter.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openModule('cars', 'FORDONSREGISTER & REGNR')">
+          <div class="menu-card-icon">🏎️</div>
+          <div class="menu-card-content">
+            <h3>FORDONSREGISTER & SPEC</h3>
+            <p>Gängets bilar, regnr-sök, oljevolym, tändstift, tändgrader & besiktning.</p>
           </div>
         </div>
 
@@ -655,7 +727,52 @@
       <div id="posts-container">Laddar depåloggen...</div>
     </div>
 
-    <!-- 2. SPEEDSHOP-TAVLAN -->
+    <!-- 2. FORDONSREGISTER & REGNR-SNABBKOLL -->
+    <div id="cars-tab" class="view">
+      
+      <!-- SNABBSÖK PÅ REGNR / BIL / ÄGARE -->
+      <div class="spec-card" style="border-top-color: var(--rust-glow); margin-bottom: 14px;">
+        <div class="spec-title">
+          <span>🔍 SNABBSÖK REGNR / FORDON</span>
+          <span class="spec-badge" id="cars-count-badge">0 BILAR</span>
+        </div>
+        <input type="text" id="car-search" class="garage-input" placeholder="Sök på regnr (t.ex. NHK817), bilmodell eller ägare..." oninput="filterCars()">
+      </div>
+
+      <!-- LÄGG TILL EGET FORDON -->
+      <div class="spec-card">
+        <div class="spec-title" style="cursor: pointer;" onclick="toggleAddCarForm()">
+          <span>➕ LÄGG UPP EGET FORDON</span>
+          <span class="spec-badge" id="car-form-toggle">VISA FORMULÄR ▼</span>
+        </div>
+        <div id="add-car-form" style="display: none; flex-direction: column; gap: 8px; margin-top: 10px;">
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="car-reg" class="garage-input" placeholder="Regnr (t.ex. NHK817)" style="flex: 1; text-transform: uppercase;">
+            <input type="text" id="car-year" class="garage-input" placeholder="Årsmodell (t.ex. 1991)" style="flex: 1;">
+          </div>
+          <input type="text" id="car-model" class="garage-input" placeholder="Märke & Modell (t.ex. Pontiac Firebird Formula)">
+          <input type="text" id="car-engine" class="garage-input" placeholder="Motor & Växellåda (t.ex. Chevy 350 V8 / TH400)">
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="car-oil" class="garage-input" placeholder="Olja & Filter (t.ex. 20W-50 VR1 / Wix 51069)" style="flex: 1;">
+            <input type="text" id="car-plugs" class="garage-input" placeholder="Tändstift & Gap (t.ex. NGK UR5 / 0.035)" style="flex: 1;">
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <input type="text" id="car-timing" class="garage-input" placeholder="Tändinställning (t.ex. 12° bas / 34° total)" style="flex: 1;">
+            <select id="car-status" class="garage-input" style="flex: 1;">
+              <option value="green">🟢 Besiktigad & Klar</option>
+              <option value="yellow">🟡 Dags för besiktning</option>
+              <option value="red">🔴 Projekt / Avställd</option>
+            </select>
+          </div>
+          <textarea id="car-notes" class="garage-input" style="height: 60px; resize: none;" placeholder="Övrig spec (bultmönster, däckdimension, förgasarmunstycken, bakaxelutväxling)..."></textarea>
+          <button class="btn-speed" onclick="addCar()" style="padding: 10px; font-size: 0.95rem;">SPARA FORDON I REGISTRET</button>
+        </div>
+      </div>
+
+      <div id="cars-container">Laddar fordonsregistret...</div>
+    </div>
+
+    <!-- 3. SPEEDSHOP-TAVLAN -->
     <div id="board-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -675,7 +792,7 @@
       <div id="events-container">Laddar tavlan...</div>
     </div>
 
-    <!-- 3. SKROTNISSE-LAGRET -->
+    <!-- 4. SKROTNISSE-LAGRET -->
     <div id="market-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -696,7 +813,7 @@
       <div id="parts-container">Laddar reservdelslagret...</div>
     </div>
 
-    <!-- 4. GÄSTMEK -->
+    <!-- 5. GÄSTMEK -->
     <div id="guests-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -723,7 +840,7 @@
       <div id="guests-container">Laddar gästloggen...</div>
     </div>
 
-    <!-- 5. ATT FIXA -->
+    <!-- 6. ATT FIXA -->
     <div id="todo-tab" class="view">
       <div style="display: flex; gap: 8px; margin-bottom: 16px;">
         <input type="text" id="todo-input" placeholder="T.ex. kapskivor, 10L E85, bromsrengöring..." class="garage-input" style="flex: 1;">
@@ -732,7 +849,7 @@
       <div id="todos-container"></div>
     </div>
 
-    <!-- 6. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
+    <!-- 7. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
 
       <!-- KALKYL: RPM & FART -->
@@ -1176,7 +1293,7 @@
 
     </div>
 
-    <!-- 7. VIKTIGA KONTAKTER -->
+    <!-- 8. VIKTIGA KONTAKTER -->
     <div id="contacts-tab" class="view">
       <div class="spec-card">
         <div class="spec-title"><span>BURN CREEK SPEEDSHOP</span><span class="spec-badge">CREW</span></div>
@@ -1200,7 +1317,7 @@
       </div>
     </div>
 
-    <!-- 8. ADMINPANEL -->
+    <!-- 9. ADMINPANEL -->
     <div id="admin-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -1242,6 +1359,7 @@
 
   const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
   let isAdmin = false;
+  let allCarsCache = [];
 
   auth.onAuthStateChanged(async user => {
     if (user) {
@@ -1283,6 +1401,7 @@
       }
 
       loadFeed();
+      loadCars();
       loadTodos();
       loadGarageStatus();
       loadCurrentBoardMessage();
@@ -1352,7 +1471,7 @@
   }
 
   function openModule(tabId, title) {
-    const tabs = ['feed', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
+    const tabs = ['feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
@@ -1367,14 +1486,166 @@
   }
 
   async function deleteDoc(col, id) {
-    if (!isAdmin) return;
-    if (confirm('Vill du ta bort detta inlägg?')) {
+    if (confirm('Vill du ta bort detta inlägg/fordon?')) {
       try {
         await db.collection(col).doc(id).delete();
       } catch (err) {
         alert('Fel vid radering: ' + err.message);
       }
     }
+  }
+
+  /* ------------------- FORDONSREGISTER & REGNR-SNABBKOLL ------------------- */
+  function toggleAddCarForm() {
+    const form = document.getElementById('add-car-form');
+    const toggleText = document.getElementById('car-form-toggle');
+    if (form.style.display === 'none' || form.style.display === '') {
+      form.style.display = 'flex';
+      toggleText.innerText = 'DÖLJ FORMULÄR ▲';
+    } else {
+      form.style.display = 'none';
+      toggleText.innerText = 'VISA FORMULÄR ▼';
+    }
+  }
+
+  async function addCar() {
+    const reg = document.getElementById('car-reg').value.trim().toUpperCase();
+    const year = document.getElementById('car-year').value.trim();
+    const model = document.getElementById('car-model').value.trim();
+    const engine = document.getElementById('car-engine').value.trim();
+    const oil = document.getElementById('car-oil').value.trim();
+    const plugs = document.getElementById('car-plugs').value.trim();
+    const timing = document.getElementById('car-timing').value.trim();
+    const status = document.getElementById('car-status').value;
+    const notes = document.getElementById('car-notes').value.trim();
+
+    if (!reg || !model) return alert('Ange minst regnr och bilmodell!');
+
+    const user = auth.currentUser;
+    const ownerName = user ? (user.displayName || user.email.split('@')[0]) : 'Medlem';
+
+    try {
+      await db.collection('cars').add({
+        reg,
+        year,
+        model,
+        engine,
+        oil,
+        plugs,
+        timing,
+        status,
+        notes,
+        owner: ownerName,
+        ownerUid: user ? user.uid : '',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      document.getElementById('car-reg').value = '';
+      document.getElementById('car-year').value = '';
+      document.getElementById('car-model').value = '';
+      document.getElementById('car-engine').value = '';
+      document.getElementById('car-oil').value = '';
+      document.getElementById('car-plugs').value = '';
+      document.getElementById('car-timing').value = '';
+      document.getElementById('car-notes').value = '';
+      toggleAddCarForm();
+    } catch (err) {
+      alert('Kunde inte spara fordon: ' + err.message);
+    }
+  }
+
+  function loadCars() {
+    db.collection('cars').onSnapshot(snapshot => {
+      allCarsCache = [];
+      snapshot.forEach(doc => {
+        allCarsCache.push({ id: doc.id, ...doc.data() });
+      });
+      allCarsCache.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+      
+      const badge = document.getElementById('cars-count-badge');
+      if (badge) badge.innerText = `${allCarsCache.length} BILAR`;
+      
+      renderCars(allCarsCache);
+    });
+  }
+
+  function filterCars() {
+    const q = document.getElementById('car-search').value.trim().toLowerCase();
+    if (!q) {
+      renderCars(allCarsCache);
+      return;
+    }
+    const filtered = allCarsCache.filter(c => 
+      (c.reg && c.reg.toLowerCase().includes(q)) ||
+      (c.model && c.model.toLowerCase().includes(q)) ||
+      (c.owner && c.owner.toLowerCase().includes(q)) ||
+      (c.engine && c.engine.toLowerCase().includes(q))
+    );
+    renderCars(filtered);
+  }
+
+  function renderCars(list) {
+    const container = document.getElementById('cars-container');
+    container.innerHTML = '';
+
+    if (list.length === 0) {
+      container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 15px;">Inga fordon hittades.</p>';
+      return;
+    }
+
+    const currentUser = auth.currentUser;
+
+    list.forEach(c => {
+      let statusLabel = '🟢 Besiktigad & Klar';
+      let statusClass = 'bes-green';
+      if (c.status === 'yellow') { statusLabel = '🟡 Dags för besiktning'; statusClass = 'bes-yellow'; }
+      if (c.status === 'red') { statusLabel = '🔴 Projekt / Avställd'; statusClass = 'bes-red'; }
+
+      const canDelete = isAdmin || (currentUser && c.ownerUid === currentUser.uid);
+
+      container.innerHTML += `
+        <div class="post-card" style="border-left-width: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div class="reg-plate">
+              <div class="reg-plate-s">S</div>
+              <div class="reg-plate-num">${c.reg}</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="bes-badge ${statusClass}">${statusLabel}</span>
+              ${canDelete ? `<button class="btn-delete" onclick="deleteDoc('cars', '${c.id}')">✕</button>` : ''}
+            </div>
+          </div>
+
+          <div style="font-family: 'Alfa Slab One', cursive; font-size: 1.05rem; color: var(--cream-bg);">
+            ${c.year ? c.year + ' ' : ''}${c.model}
+          </div>
+          <div style="font-size: 0.78rem; color: var(--rust-glow); font-weight: 700; margin-bottom: 6px;">
+            Ägare: ${c.owner || 'Medlem'}
+          </div>
+
+          <div class="car-spec-grid">
+            <div class="car-spec-item">
+              <span class="car-spec-label">Motor & Låda</span>
+              <span class="car-spec-val">${c.engine || '–'}</span>
+            </div>
+            <div class="car-spec-item">
+              <span class="car-spec-label">Tändinställning</span>
+              <span class="car-spec-val">${c.timing || '–'}</span>
+            </div>
+            <div class="car-spec-item">
+              <span class="car-spec-label">Olja & Filter</span>
+              <span class="car-spec-val">${c.oil || '–'}</span>
+            </div>
+            <div class="car-spec-item">
+              <span class="car-spec-label">Tändstift & Gap</span>
+              <span class="car-spec-val">${c.plugs || '–'}</span>
+            </div>
+          </div>
+
+          ${c.notes ? `<p style="font-size: 0.82rem; color: var(--cream-muted); margin-top: 8px; line-height: 1.4; border-top: 1px dashed #332720; padding-top: 6px;">${c.notes}</p>` : ''}
+        </div>
+      `;
+    });
   }
 
   /* SNABBMEDDELANDE TILL TAVLAN */
