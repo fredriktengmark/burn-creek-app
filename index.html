@@ -765,7 +765,14 @@
             </select>
           </div>
           <textarea id="car-notes" class="garage-input" style="height: 60px; resize: none;" placeholder="Övrig spec (bultmönster, däckdimension, förgasarmunstycken, bakaxelutväxling)..."></textarea>
-          <button class="btn-speed" onclick="addCar()" style="padding: 10px; font-size: 0.95rem;">SPARA FORDON I REGISTRET</button>
+          
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="file" id="car-file" accept="image/*" style="display: none;" onchange="updateCarFileName()">
+            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('car-file').click()" style="padding: 8px 14px; font-size: 0.85rem;">📷 BILD PÅ BILEN</button>
+            <span id="car-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px;"></span>
+          </div>
+
+          <button id="btn-save-car" class="btn-speed" onclick="addCar()" style="padding: 10px; font-size: 0.95rem;">SPARA FORDON I REGISTRET</button>
         </div>
       </div>
 
@@ -1508,6 +1515,11 @@
     }
   }
 
+  function updateCarFileName() {
+    const f = document.getElementById('car-file').files[0];
+    document.getElementById('car-file-chosen').innerText = f ? f.name : '';
+  }
+
   async function addCar() {
     const reg = document.getElementById('car-reg').value.trim().toUpperCase();
     const year = document.getElementById('car-year').value.trim();
@@ -1518,13 +1530,23 @@
     const timing = document.getElementById('car-timing').value.trim();
     const status = document.getElementById('car-status').value;
     const notes = document.getElementById('car-notes').value.trim();
+    const file = document.getElementById('car-file').files[0];
 
     if (!reg || !model) return alert('Ange minst regnr och bilmodell!');
+
+    const btn = document.getElementById('btn-save-car');
+    btn.disabled = true;
+    btn.innerText = 'SPARAR...';
 
     const user = auth.currentUser;
     const ownerName = user ? (user.displayName || user.email.split('@')[0]) : 'Medlem';
 
+    let imageUrl = '';
     try {
+      if (file) {
+        imageUrl = await compressImage(file, 900, 0.65);
+      }
+
       await db.collection('cars').add({
         reg,
         year,
@@ -1535,6 +1557,7 @@
         timing,
         status,
         notes,
+        imageUrl,
         owner: ownerName,
         ownerUid: user ? user.uid : '',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -1548,9 +1571,14 @@
       document.getElementById('car-plugs').value = '';
       document.getElementById('car-timing').value = '';
       document.getElementById('car-notes').value = '';
+      document.getElementById('car-file').value = '';
+      document.getElementById('car-file-chosen').innerText = '';
       toggleAddCarForm();
     } catch (err) {
       alert('Kunde inte spara fordon: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'SPARA FORDON I REGISTRET';
     }
   }
 
@@ -1622,6 +1650,8 @@
           <div style="font-size: 0.78rem; color: var(--rust-glow); font-weight: 700; margin-bottom: 6px;">
             Ägare: ${c.owner || 'Medlem'}
           </div>
+
+          ${c.imageUrl ? `<img src="${c.imageUrl}" class="post-image" style="margin-bottom: 10px;" loading="lazy">` : ''}
 
           <div class="car-spec-grid">
             <div class="car-spec-item">
