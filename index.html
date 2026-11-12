@@ -949,7 +949,14 @@
           <input type="text" id="part-title" class="garage-input" placeholder="Del / Material (t.ex. Holley 650 DP, 2.5 tum rör)">
           <input type="text" id="part-price" class="garage-input" placeholder="Pris / Bytes / Skänkes mot fika">
           <textarea id="part-desc" class="garage-input" style="height: 60px; resize: none;" placeholder="Beskrivning, skick eller mått..."></textarea>
-          <button class="btn-speed" onclick="addPart()" style="padding: 10px; font-size: 0.95rem;">LÄGG UPP DEL</button>
+          
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="file" id="part-file" accept="image/*" style="display: none;" onchange="updatePartFileName()">
+            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('part-file').click()" style="padding: 8px 14px; font-size: 0.85rem;">📷 BILD PÅ DELEN</button>
+            <span id="part-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px;"></span>
+          </div>
+
+          <button id="btn-save-part" class="btn-speed" onclick="addPart()" style="padding: 10px; font-size: 0.95rem;">LÄGG UPP DEL</button>
         </div>
       </div>
       <div id="parts-container">Laddar reservdelslagret...</div>
@@ -2357,22 +2364,45 @@
   }
 
   /* SKROTNISSE */
+  function updatePartFileName() {
+    const f = document.getElementById('part-file').files[0];
+    document.getElementById('part-file-chosen').innerText = f ? f.name : '';
+  }
+
   async function addPart() {
     const type = document.getElementById('part-type').value;
     const title = document.getElementById('part-title').value.trim();
     const price = document.getElementById('part-price').value.trim();
     const desc = document.getElementById('part-desc').value.trim();
+    const file = document.getElementById('part-file').files[0];
     if (!title) return alert('Ange vad för del/material!');
+
+    const btn = document.getElementById('btn-save-part');
+    btn.disabled = true;
+    btn.innerText = 'LÄGGER UPP...';
+
+    let imageUrl = '';
     try {
+      if (file) {
+        imageUrl = await compressImage(file, 900, 0.65);
+      }
+
       await db.collection('parts').add({
-        type, title, price, desc,
+        type, title, price, desc, imageUrl,
         author: auth.currentUser.displayName || 'Depå',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       document.getElementById('part-title').value = '';
       document.getElementById('part-price').value = '';
       document.getElementById('part-desc').value = '';
-    } catch (err) { alert(err.message); }
+      document.getElementById('part-file').value = '';
+      document.getElementById('part-file-chosen').innerText = '';
+    } catch (err) { 
+      alert(err.message); 
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'LÄGG UPP DEL';
+    }
   }
 
   function loadParts() {
@@ -2383,8 +2413,11 @@
         c.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center;">Lagret är tomt. Lägg upp delar eller efterlysningar!</p>';
         return;
       }
-      snapshot.forEach(doc => {
-        const p = doc.data();
+      const list = [];
+      snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+      list.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+
+      list.forEach(p => {
         const isSell = p.type.includes('SÄLJES');
         c.innerHTML += `
           <div class="post-card" style="border-left-color: ${isSell ? 'var(--rust-primary)' : '#2980b9'};">
@@ -2392,11 +2425,12 @@
               <span class="post-author">${p.title}</span>
               <div>
                 <span style="color: ${isSell ? 'var(--rust-glow)' : '#3498db'}; font-weight: 700;">${p.type}</span>
-                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('parts', '${doc.id}')">✕ RADERA</button>` : ''}
+                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('parts', '${p.id}')">✕ RADERA</button>` : ''}
               </div>
             </div>
             ${p.price ? `<p style="font-size: 0.95rem; font-weight: 700; color: var(--cream-bg);">Pris/Byte: ${p.price}</p>` : ''}
             ${p.desc ? `<p style="font-size: 0.85rem; margin-top: 4px; color: var(--cream-muted);">${p.desc}</p>` : ''}
+            ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-image" loading="lazy">` : ''}
             <div style="font-size: 0.75rem; color: #88786d; margin-top: 6px;">Kontakt: ${p.author}</div>
           </div>
         `;
