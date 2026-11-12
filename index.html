@@ -428,25 +428,26 @@
       background: linear-gradient(180deg, #1f1814 0%, #130f0d 100%);
       border: 2px solid var(--border-rivet);
       border-radius: 6px;
-      padding: 12px;
+      padding: 14px;
       margin-bottom: 16px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+      width: 100%;
     }
     .status-indicator-bar { display: flex; align-items: center; gap: 10px; }
-    .led-dot { width: 14px; height: 14px; border-radius: 50%; background: #444; }
+    .led-dot { width: 14px; height: 14px; border-radius: 50%; background: #444; flex-shrink: 0; }
     .led-dot.online { background: var(--led-green); box-shadow: 0 0 10px var(--led-green); }
-    .status-text { font-size: 0.88rem; font-weight: 700; color: var(--cream-bg); flex: 1; }
+    .status-text { font-size: 0.92rem; font-weight: 700; color: var(--cream-bg); flex: 1; text-align: left; }
     .btn-coffee {
       background: linear-gradient(180deg, #4d2310 0%, #2e1206 100%);
       color: var(--cream-bg);
       border: 1px solid var(--rust-primary);
-      padding: 10px;
+      padding: 12px;
       border-radius: 4px;
       font-family: 'Alfa Slab One', cursive;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       text-transform: uppercase;
       cursor: pointer;
       display: flex;
@@ -691,7 +692,7 @@
   <div id="main-view" style="display: none; flex-direction: column; height: 100vh;">
     
     <header>
-      <div style="display: flex; align-items: center; gap: 8px;">
+      <div style="display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="switchToTab('home', 'STARTSKÄRM')">
         <img src="logo.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
         <div>
           <span class="brand-title">BURN CREEK <span>SPEEDSHOP</span></span>
@@ -704,7 +705,7 @@
     </header>
 
     <div class="module-breadcrumb">
-      <span id="breadcrumb-title" class="current-module-title">DEPÅLOGG & BILDER</span>
+      <span id="breadcrumb-title" class="current-module-title">STARTSKÄRM</span>
       <button class="btn-quick-menu" onclick="toggleMenu()">Växla modul ⚙️</button>
     </div>
 
@@ -716,11 +717,19 @@
       </div>
       
       <div class="menu-grid">
+        <div class="menu-card" onclick="openModule('home', 'STARTSKÄRM')">
+          <div class="menu-card-icon">🏠</div>
+          <div class="menu-card-content">
+            <h3>STARTSKÄRM</h3>
+            <p>Logga, närvaroindikator och kaffeknapp.</p>
+          </div>
+        </div>
+
         <div class="menu-card" onclick="openModule('feed', 'DEPÅLOGG & BILDER')">
           <div class="menu-card-icon">🏁</div>
           <div class="menu-card-content">
             <h3>DEPÅLOGGEN</h3>
-            <p>Live-status, kaffeknapp, anslagstavla och mekrapporter.</p>
+            <p>Anslagstavla, depåfoton och mekrapporter.</p>
           </div>
         </div>
 
@@ -790,19 +799,31 @@
       </div>
     </div>
 
-    <!-- 1. FLÖDE -->
-    <div id="feed-tab" class="view active">
-      <div class="status-beacon">
-        <div class="status-indicator-bar">
-          <div id="garage-led" class="led-dot"></div>
-          <div id="garage-status-text" class="status-text">Ingen incheckad i garaget just nu.</div>
-          <button id="garage-leave-btn" class="btn-checkout" style="display: none;" onclick="leaveGarage()">CHECK UT</button>
-        </div>
-        <button class="btn-coffee" onclick="checkInGarage()">
-          <span>☕</span> JAG ÄR PÅ PLATS – KAFFET ÄR VARMT!
-        </button>
-      </div>
+    <!-- 0. STARTSKÄRM -->
+    <div id="home-tab" class="view active">
+      <div style="display: flex; flex-direction: column; align-items: center; padding-top: 10px;">
+        <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 310px; width: 88%; height: auto; margin: 10px auto 22px auto; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.95); border: 4px solid var(--rust-primary); display: block;" onerror="this.style.display='none'">
 
+        <div class="status-beacon">
+          <div class="status-indicator-bar">
+            <div id="garage-led" class="led-dot"></div>
+            <div id="garage-status-text" class="status-text">Ingen incheckad i garaget just nu.</div>
+            <button id="garage-leave-btn" class="btn-checkout" style="display: none;" onclick="leaveGarage()">CHECK UT</button>
+          </div>
+          <button class="btn-coffee" onclick="checkInGarage()">
+            <span>☕</span> JAG ÄR PÅ PLATS – KAFFET ÄR VARMT!
+          </button>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 4px;">
+          <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('feed', 'DEPÅLOGG & BILDER')">🏁 DEPÅLOGGEN</button>
+          <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('cars', 'FORDONSREGISTER & REGNR')">🏎️ BILARNA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 1. FLÖDE -->
+    <div id="feed-tab" class="view">
       <!-- SNABBMEDDELANDE TILL TAVLAN -->
       <div class="spec-card" style="margin-bottom: 16px; border-top-color: var(--rust-glow);">
         <div class="spec-title">
@@ -1622,13 +1643,17 @@
     document.getElementById('menu-overlay').classList.toggle('open');
   }
 
-  function openModule(tabId, title) {
-    const tabs = ['feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
+  function switchToTab(tabId, title) {
+    const tabs = ['home', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
     });
     document.getElementById('breadcrumb-title').innerText = title;
+  }
+
+  function openModule(tabId, title) {
+    switchToTab(tabId, title);
     toggleMenu();
   }
 
