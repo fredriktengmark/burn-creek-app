@@ -551,6 +551,109 @@
     .bes-green { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid #2ecc71; }
     .bes-yellow { background: rgba(243, 156, 18, 0.15); color: #f39c12; border: 1px solid #f39c12; }
     .bes-red { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid #e74c3c; }
+
+    /* MÅNADSKALENDER & EVENT-KNAPPAR */
+    .cal-header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #3a2c24;
+      padding-bottom: 8px;
+    }
+    .cal-nav-btn {
+      background: #28201b;
+      border: 1px solid var(--border-rivet);
+      color: var(--cream-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: 'Alfa Slab One', cursive;
+      cursor: pointer;
+    }
+    .cal-month-label {
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 0.95rem;
+      color: var(--cream-bg);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+    .cal-weekday {
+      font-size: 0.7rem;
+      color: var(--rust-glow);
+      font-weight: 700;
+      padding-bottom: 4px;
+    }
+    .cal-day {
+      background: #140f0c;
+      border: 1px solid #2b211b;
+      border-radius: 4px;
+      min-height: 40px;
+      padding: 4px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--cream-text);
+    }
+    .cal-day.empty {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+    }
+    .cal-day.today {
+      border-color: var(--rust-glow);
+      box-shadow: inset 0 0 6px rgba(217, 98, 43, 0.35);
+    }
+    .cal-day.selected {
+      background: #331c11;
+      border-color: var(--cream-bg);
+    }
+    .cal-dots {
+      display: flex;
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .cal-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .btn-rsvp {
+      flex: 1;
+      background: #28201b;
+      border: 1px solid var(--border-rivet);
+      color: var(--cream-bg);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-rsvp.joined {
+      background: rgba(46, 204, 113, 0.18);
+      border-color: var(--led-green);
+      color: var(--led-green);
+    }
+    .btn-ics {
+      background: #1e1713;
+      border: 1px solid var(--rust-primary);
+      color: var(--cream-muted);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -629,19 +732,19 @@
           </div>
         </div>
 
+        <div class="menu-card" onclick="openModule('board', 'KALENDER & TRÄFFAR')">
+          <div class="menu-card-icon">📅</div>
+          <div class="menu-card-content">
+            <h3>KALENDER & TRÄFFAR</h3>
+            <p>Månadskalender, mekkvällar, bilträffar, OSA & kalenderexport.</p>
+          </div>
+        </div>
+
         <div class="menu-card" onclick="openModule('tips', 'MEK-DATA & KALKYLER')">
           <div class="menu-card-icon">📐</div>
           <div class="menu-card-content">
             <h3>MEK-DATA & KALKYLER</h3>
             <p>Tändföljder, tändgrader, moment, bultmönster, kompression & elguider.</p>
-          </div>
-        </div>
-
-        <div class="menu-card" onclick="openModule('board', 'SPEEDSHOP-TAVLAN')">
-          <div class="menu-card-icon">📌</div>
-          <div class="menu-card-content">
-            <h3>SPEEDSHOP-TAVLAN</h3>
-            <p>Planering av gemensamma garagedagar, grillkvällar och träffar.</p>
           </div>
         </div>
 
@@ -779,24 +882,56 @@
       <div id="cars-container">Laddar fordonsregistret...</div>
     </div>
 
-    <!-- 3. SPEEDSHOP-TAVLAN -->
+    <!-- 3. KALENDER & TRÄFFAR -->
     <div id="board-tab" class="view">
-      <div class="spec-card">
-        <div class="spec-title">
-          <span>NYTT PÅ TAVLAN</span>
-          <span class="spec-badge">PLANERING</span>
+
+      <!-- VISUELL MÅNADSKALENDER -->
+      <div class="spec-card" style="border-top-color: var(--rust-glow);">
+        <div class="cal-header-nav">
+          <button class="cal-nav-btn" onclick="changeCalendarMonth(-1)">◀</button>
+          <span class="cal-month-label" id="cal-month-title">NOVEMBER 2026</span>
+          <button class="cal-nav-btn" onclick="changeCalendarMonth(1)">▶</button>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 8px;">
-          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Städlördag, Grillkväll)">
-          <div style="display: flex; gap: 8px;">
-            <input type="date" id="event-date" class="garage-input" style="flex: 1;">
-            <input type="text" id="event-time" class="garage-input" placeholder="Tid (t.ex. 10:00)" style="flex: 1;">
-          </div>
-          <input type="text" id="event-desc" class="garage-input" placeholder="Detaljer, anmälan eller inköpsplan...">
-          <button class="btn-speed" onclick="addEvent()" style="padding: 10px; font-size: 0.95rem;">SPIKA PÅ TAVLAN</button>
+        <div class="cal-grid">
+          <div class="cal-weekday">MÅN</div>
+          <div class="cal-weekday">TIS</div>
+          <div class="cal-weekday">ONS</div>
+          <div class="cal-weekday">TOR</div>
+          <div class="cal-weekday">FRE</div>
+          <div class="cal-weekday">LÖR</div>
+          <div class="cal-weekday">SÖN</div>
+        </div>
+        <div id="cal-days-grid" class="cal-grid" style="margin-top: 4px;"></div>
+        <div id="cal-filter-bar" style="display: none; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #3a2c24; font-size: 0.8rem;">
+          <span id="cal-filter-text" style="color: var(--rust-glow); font-weight: 700;"></span>
+          <button class="btn-quick-menu" onclick="clearDateFilter()">Visa alla kommande</button>
         </div>
       </div>
-      <div id="events-container">Laddar tavlan...</div>
+
+      <!-- BOKA IN NY HÄNDELSE -->
+      <div class="spec-card">
+        <div class="spec-title" style="cursor: pointer;" onclick="toggleAddEventForm()">
+          <span>➕ LÄGG IN TRÄFF / MEKKVÄLL</span>
+          <span class="spec-badge" id="event-form-toggle">VISA FORMULÄR ▼</span>
+        </div>
+        <div id="add-event-form" style="display: none; flex-direction: column; gap: 8px; margin-top: 10px;">
+          <select id="event-category" class="garage-input">
+            <option value="mek">🔧 Mekkväll / Garagehäng</option>
+            <option value="race">🏁 Bilträff / Race / Cruising</option>
+            <option value="grill">🍔 Grillkväll & Fest</option>
+            <option value="stad">🧹 Städ & Underhåll</option>
+          </select>
+          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Kvällsskruv på 34:an, Street Week)">
+          <div style="display: flex; gap: 8px;">
+            <input type="date" id="event-date" class="garage-input" style="flex: 1;">
+            <input type="text" id="event-time" class="garage-input" placeholder="Tid (t.ex. 18:00)" style="flex: 1;">
+          </div>
+          <input type="text" id="event-desc" class="garage-input" placeholder="Plats, detaljer eller vad som ska fixas...">
+          <button class="btn-speed" onclick="addEvent()" style="padding: 10px; font-size: 0.95rem;">SPIKA I KALENDERN</button>
+        </div>
+      </div>
+
+      <div id="events-container">Laddar kalendern...</div>
     </div>
 
     <!-- 4. SKROTNISSE-LAGRET -->
@@ -1367,6 +1502,9 @@
   const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
   let isAdmin = false;
   let allCarsCache = [];
+  let allEventsCache = [];
+  let calCurrentDate = new Date();
+  let calSelectedDateStr = null;
 
   auth.onAuthStateChanged(async user => {
     if (user) {
@@ -1963,52 +2101,262 @@
     });
   }
 
+  /* ------------------- KALENDER & TRÄFFAR ------------------- */
+  function toggleAddEventForm() {
+    const form = document.getElementById('add-event-form');
+    const toggleText = document.getElementById('event-form-toggle');
+    if (form.style.display === 'none' || form.style.display === '') {
+      form.style.display = 'flex';
+      toggleText.innerText = 'DÖLJ FORMULÄR ▲';
+    } else {
+      form.style.display = 'none';
+      toggleText.innerText = 'VISA FORMULÄR ▼';
+    }
+  }
+
   async function addEvent() {
+    const category = document.getElementById('event-category').value;
     const title = document.getElementById('event-title').value.trim();
     const date = document.getElementById('event-date').value;
     const time = document.getElementById('event-time').value.trim();
     const desc = document.getElementById('event-desc').value.trim();
     if (!title) return alert('Ange en titel!');
+    if (!date) return alert('Välj ett datum!');
+
+    const user = auth.currentUser;
+    const authorName = user ? (user.displayName || user.email.split('@')[0]) : 'Depå';
+
     try {
       await db.collection('events').add({
-        title, date, time, desc,
-        author: auth.currentUser.displayName || 'Depå',
+        category,
+        title,
+        date,
+        time,
+        desc,
+        attendees: [authorName],
+        author: authorName,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       document.getElementById('event-title').value = '';
       document.getElementById('event-date').value = '';
       document.getElementById('event-time').value = '';
       document.getElementById('event-desc').value = '';
+      toggleAddEventForm();
     } catch (err) { alert(err.message); }
+  }
+
+  async function toggleEventRsvp(eventId) {
+    const user = auth.currentUser;
+    if (!user) return;
+    const myName = user.displayName || user.email.split('@')[0];
+    const ev = allEventsCache.find(item => item.id === eventId);
+    if (!ev) return;
+
+    const currentList = Array.isArray(ev.attendees) ? [...ev.attendees] : [];
+    const idx = currentList.indexOf(myName);
+    if (idx > -1) {
+      currentList.splice(idx, 1);
+    } else {
+      currentList.push(myName);
+    }
+
+    try {
+      await db.collection('events').doc(eventId).update({ attendees: currentList });
+    } catch (err) {
+      alert('Kunde inte uppdatera anmälan: ' + err.message);
+    }
+  }
+
+  function downloadEventIcs(eventId) {
+    const ev = allEventsCache.find(item => item.id === eventId);
+    if (!ev || !ev.date) return;
+
+    const cleanDate = ev.date.replace(/-/g, '');
+    let startHour = '180000';
+    let endHour = '210000';
+    if (ev.time && ev.time.includes(':')) {
+      const parts = ev.time.split(':');
+      const hh = parts[0].padStart(2, '0');
+      const mm = parts[1].padStart(2, '0');
+      startHour = `${hh}${mm}00`;
+      const endH = String(Math.min(23, parseInt(hh, 10) + 3)).padStart(2, '0');
+      endHour = `${endH}${mm}00`;
+    }
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Burn Creek Speedshop//Garage Kalender//SV',
+      'BEGIN:VEVENT',
+      `DTSTART:${cleanDate}T${startHour}`,
+      `DTEND:${cleanDate}T${endHour}`,
+      `SUMMARY:${ev.title} (Burn Creek Speedshop)`,
+      `DESCRIPTION:${(ev.desc || '').replace(/\n/g, ' ')}`,
+      'LOCATION:Burn Creek Speedshop, Brännehylte',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${ev.title.replace(/[^a-zA-Z0-9åäöÅÄÖ]/g, '_')}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function changeCalendarMonth(delta) {
+    calCurrentDate.setMonth(calCurrentDate.getMonth() + delta);
+    renderCalendarGrid();
+  }
+
+  function selectCalendarDate(dateStr) {
+    if (calSelectedDateStr === dateStr) {
+      calSelectedDateStr = null;
+    } else {
+      calSelectedDateStr = dateStr;
+      const dateInput = document.getElementById('event-date');
+      if (dateInput) dateInput.value = dateStr;
+    }
+    renderCalendarGrid();
+    renderEventsList();
+  }
+
+  function clearDateFilter() {
+    calSelectedDateStr = null;
+    renderCalendarGrid();
+    renderEventsList();
+  }
+
+  function getCategoryStyle(cat) {
+    switch (cat) {
+      case 'race': return { label: '🏁 TRÄFF / RACE', color: '#e74c3c' };
+      case 'grill': return { label: '🍔 GRILL & FEST', color: '#f39c12' };
+      case 'stad': return { label: '🧹 STÄD & UNDERHÅLL', color: '#3498db' };
+      default: return { label: '🔧 MEKKVÄLL', color: '#2ecc71' };
+    }
+  }
+
+  function renderCalendarGrid() {
+    const grid = document.getElementById('cal-days-grid');
+    const titleEl = document.getElementById('cal-month-title');
+    if (!grid || !titleEl) return;
+
+    const year = calCurrentDate.getFullYear();
+    const month = calCurrentDate.getMonth();
+    const monthNames = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'];
+    titleEl.innerText = `${monthNames[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const todayObj = new Date();
+    const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+
+    let html = '';
+    for (let i = 0; i < startOffset; i++) {
+      html += '<div class="cal-day empty"></div>';
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const dayEvents = allEventsCache.filter(e => e.date === dateStr);
+      const isToday = (dateStr === todayStr);
+      const isSelected = (dateStr === calSelectedDateStr);
+
+      let dotsHtml = '';
+      if (dayEvents.length > 0) {
+        dotsHtml = '<div class="cal-dots">';
+        dayEvents.slice(0, 4).forEach(ev => {
+          const st = getCategoryStyle(ev.category);
+          dotsHtml += `<span class="cal-dot" style="background: ${st.color};"></span>`;
+        });
+        dotsHtml += '</div>';
+      }
+
+      html += `
+        <div class="cal-day ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}" onclick="selectCalendarDate('${dateStr}')">
+          <span>${d}</span>
+          ${dotsHtml}
+        </div>
+      `;
+    }
+
+    grid.innerHTML = html;
   }
 
   function loadEvents() {
     db.collection('events').onSnapshot(snapshot => {
-      const c = document.getElementById('events-container');
-      c.innerHTML = '';
-      if (snapshot.empty) {
-        c.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center;">Inga planerade datum på tavlan just nu.</p>';
-        return;
-      }
+      allEventsCache = [];
       snapshot.forEach(doc => {
-        const e = doc.data();
-        c.innerHTML += `
-          <div class="post-card">
-            <div class="post-header">
-              <span class="post-author">${e.title}</span>
-              <div>
-                <span>${e.date || 'TBA'} ${e.time || ''}</span>
-                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('events', '${doc.id}')">✕ RADERA</button>` : ''}
-              </div>
-            </div>
-            ${e.desc ? `<p style="font-size: 0.9rem; line-height: 1.4;">${e.desc}</p>` : ''}
-            <div style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">Spikat av: ${e.author}</div>
-          </div>
-        `;
+        allEventsCache.push({ id: doc.id, ...doc.data() });
       });
+      allEventsCache.sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'));
+      renderCalendarGrid();
+      renderEventsList();
     });
   }
 
+  function renderEventsList() {
+    const c = document.getElementById('events-container');
+    const filterBar = document.getElementById('cal-filter-bar');
+    const filterText = document.getElementById('cal-filter-text');
+    if (!c) return;
+
+    let listToRender = allEventsCache;
+    if (calSelectedDateStr) {
+      listToRender = allEventsCache.filter(e => e.date === calSelectedDateStr);
+      if (filterBar) filterBar.style.display = 'flex';
+      if (filterText) filterText.innerText = `Visar händelser för ${calSelectedDateStr}`;
+    } else {
+      if (filterBar) filterBar.style.display = 'none';
+    }
+
+    c.innerHTML = '';
+    if (listToRender.length === 0) {
+      c.innerHTML = `<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 10px;">${calSelectedDateStr ? 'Inga händelser detta datum.' : 'Inga planerade datum i kalendern just nu.'}</p>`;
+      return;
+    }
+
+    const user = auth.currentUser;
+    const myName = user ? (user.displayName || user.email.split('@')[0]) : '';
+
+    listToRender.forEach(e => {
+      const catStyle = getCategoryStyle(e.category);
+      const attendees = Array.isArray(e.attendees) ? e.attendees : [];
+      const amIJoined = myName && attendees.includes(myName);
+
+      c.innerHTML += `
+        <div class="post-card" style="border-left-color: ${catStyle.color};">
+          <div class="post-header">
+            <span style="font-size: 0.72rem; font-weight: 700; color: ${catStyle.color};">${catStyle.label}</span>
+            <div>
+              <span style="font-weight: 700; color: var(--cream-bg);">${e.date || 'TBA'} ${e.time ? 'kl ' + e.time : ''}</span>
+              ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('events', '${e.id}')">✕ RADERA</button>` : ''}
+            </div>
+          </div>
+          <div class="post-author" style="margin-bottom: 4px;">${e.title}</div>
+          ${e.desc ? `<p style="font-size: 0.9rem; line-height: 1.4; margin-bottom: 8px;">${e.desc}</p>` : ''}
+          
+          <div style="background: #140f0c; border: 1px solid #2e241e; border-radius: 4px; padding: 8px; margin-top: 8px;">
+            <div style="font-size: 0.75rem; color: var(--cream-muted); margin-bottom: 6px;">
+              <strong>Kommer (${attendees.length}):</strong> ${attendees.length > 0 ? attendees.join(', ') : 'Ingen anmäld än'}
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn-rsvp ${amIJoined ? 'joined' : ''}" onclick="toggleEventRsvp('${e.id}')">
+                ${amIJoined ? '✓ JAG KOMMER (AVBOKA)' : '+ JAG KOMMER!'}
+              </button>
+              <button class="btn-ics" onclick="downloadEventIcs('${e.id}')">📅 KALENDER</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  /* SKROTNISSE */
   async function addPart() {
     const type = document.getElementById('part-type').value;
     const title = document.getElementById('part-title').value.trim();
@@ -2056,6 +2404,7 @@
     });
   }
 
+  /* GÄSTMEK */
   async function addGuest() {
     const name = document.getElementById('guest-name').value.trim();
     const car = document.getElementById('guest-car').value.trim();
