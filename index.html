@@ -2034,7 +2034,7 @@
     }
   }
 
-  function compressImage(file, maxWidth = 900, quality = 0.65) {
+function compressImage(file, maxWidth = 900, quality = 0.65) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -2052,8 +2052,35 @@
           canvas.width = width;
           canvas.height = height;
           const ctx = canvas.getContext('2d');
+          
+          // Rita upp själva fotot
           ctx.drawImage(img, 0, 0, width, height);
-          resolve(canvas.toDataURL('image/jpeg', quality));
+
+          // Ladda in och rita ut Burn Creek-loggan uppe till höger
+          const logo = new Image();
+          logo.src = 'logo.png';
+          logo.onload = () => {
+            const logoSize = Math.round(width * 0.14); // 14% av bildens bredd
+            const margin = Math.round(width * 0.025);  // Marginal från kanterna
+            const x = width - logoSize - margin;
+            const y = margin;
+
+            ctx.save();
+            ctx.globalAlpha = 0.88; // Lätt genomskinlighet så den smälter in snyggt
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.drawImage(logo, x, y, logoSize, logoSize);
+            ctx.restore();
+
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+
+          // Fallback om logo.png av någon anledning inte laddas
+          logo.onerror = () => {
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
         };
         img.onerror = err => reject(err);
       };
