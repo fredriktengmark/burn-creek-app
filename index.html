@@ -2223,6 +2223,13 @@
     if (!user) return alert('Du måste vara inloggad!');
     const name = user.displayName || user.email.split('@')[0];
 
+    const btn = document.querySelector('.btn-coffee');
+    const origHtml = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> SKICKAR PLING TILL GÄNGET...';
+    }
+
     try {
       await db.collection('active_members').doc(user.uid).set({
         name: name,
@@ -2235,9 +2242,13 @@
       );
     } catch (err) { 
       alert('Kunde inte checka in: ' + err.message); 
+    } finally {
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = origHtml;
+      }
     }
   }
-
   async function leaveGarage() {
     const user = auth.currentUser;
     if (!user) return;
