@@ -662,6 +662,18 @@
 <div id="app-container">
   <div class="checker-divider"></div>
 
+  <!-- NYÅRSÖVERRASKNING MODAL -->
+  <div id="newyear-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 8, 7, 0.95); z-index: 300; justify-content: center; align-items: center; padding: 20px;">
+    <div style="background: var(--card-bg); border: 2px solid var(--rust-glow); border-radius: 8px; padding: 22px; max-width: 420px; width: 100%; box-shadow: 0 10px 40px rgba(217, 98, 43, 0.4); text-align: center; position: relative;">
+      <div style="font-size: 2.5rem; margin-bottom: 6px;">🏎️💥🥂</div>
+      <h2 style="font-family: 'Alfa Slab One', cursive; font-size: 1.2rem; color: var(--rust-glow); margin-bottom: 12px; text-transform: uppercase;">GOTT NYTT ÅR FRÅN BURN CREEK!</h2>
+      <p style="font-size: 0.88rem; line-height: 1.5; color: var(--cream-text); margin-bottom: 18px; text-align: left;">
+        Ett stort tack för ett legendariskt år i Brännehylte – från svetsloppor, 10 mm-hylsor som spårlöst försvunnit och kaffekokare på övertid, till klockrena provturer och gôtt häng. <br><br>Nu tömmer vi sista slurken kaffe, firar av året med värdighet och laddar för nya konverteringar, däckbyten och runda tider nästa år!<br><br><strong>Pelle i botten och Gott Nytt År, gänget! 🍻</strong>
+      </p>
+      <button class="btn-speed" onclick="closeNewYearModal()" style="width: 100%; padding: 10px; font-size: 0.95rem;">TÄND AV MOTORN & FIRA AV</button>
+    </div>
+  </div>
+
   <!-- INLOGGNING -->
   <div id="auth-view" class="view active">
     <div style="text-align: center; margin: 15px 0 10px 0;">
@@ -725,7 +737,8 @@
           </div>
         </div>
 
-        <div class="menu-card" onclick="openModule('calendar-view', 'ROSTIG JULKALENDER')">
+        <!-- Julkalendern döljs automatiskt efter årsskiftet -->
+        <div id="menu-card-calendar" class="menu-card" onclick="openModule('calendar-view', 'ROSTIG JULKALENDER')">
           <div class="menu-card-icon">🎄</div>
           <div class="menu-card-content">
             <h3>ROSTIG JULKALENDER</h3>
@@ -823,8 +836,8 @@
           </button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 4px;">
-          <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('calendar-view', 'ROSTIG JULKALENDER')">🎄 JULKALENDER</button>
+        <div id="home-calendar-btn-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 4px;">
+          <button id="home-cal-btn" class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('calendar-view', 'ROSTIG JULKALENDER')">🎄 JULKALENDER</button>
           <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('feed', 'DEPÅLOGG & BILDER')">🏁 DEPÅLOGGEN</button>
         </div>
       </div>
@@ -1247,7 +1260,7 @@
           <tr><td><strong>DOT 5 (Lila)</strong></td><td>260 °C</td><td>180 °C</td><td>Silikon</td></tr>
         </table>
         <div class="warning-box">
-          ⚠️ <strong>FÖRBUD:</strong> Blanda ALDRIG DOT 5 (silikon) med DOT 3, DOT 4 eller DOT 5.1 (glykol)! Vätskorna skär sig, packningar sväller och bromstrycket försvinner.
+          ⚠️ <strong>FÖRBUD:</strong> Blanda aldrig DOT 5 (silikon) med DOT 3, DOT 4 eller DOT 5.1 (glykol)! Vätskorna skär sig, packningar sväller och bromstrycket försvinner.
         </div>
       </div>
 
@@ -1639,7 +1652,8 @@
       loadEvents();
       loadParts();
       loadGuests();
-      renderCalendar(); // <-- Ritar ut julkalendern
+      checkAndToggleCalendarVisibility(); 
+      checkNewYearPopup(); // <-- Kontrollerar om det är nyårsafton och visar överraskningen
 
       calcRpm();
       calcCfm();
@@ -1731,19 +1745,59 @@
     }
   }
 
-  /* JULKALENDER FUNKTIONER (MED AKTIVERAD DATUMSPÄRR) */
+  /* NYÅRSÖVERRASKNING LOGIK */
+  function checkNewYearPopup() {
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1; // 12 = december
+    const currentDate = now.getDate();
+
+    // Visas endast den 31 december
+    const isNewYearsEve = (currentMonth === 12 && currentDate === 31);
+    const shownKey = 'burn_creek_newyear_shown_' + now.getFullYear();
+
+    if (isNewYearsEve && !localStorage.getItem(shownKey)) {
+      document.getElementById('newyear-modal').style.display = 'flex';
+      localStorage.setItem(shownKey, 'true');
+    }
+  }
+
+  function closeNewYearModal() {
+    document.getElementById('newyear-modal').style.display = 'none';
+  }
+
+  /* AUTOMATISK DÖLJNING AV JULKALENDERN EFTER ÅRSSKIFTET */
+  function checkAndToggleCalendarVisibility() {
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1; // 1 = januari
+    const currentDate = now.getDate();
+
+    // Döljs automatiskt så fort det blir januari (eller efter den 31 december)
+    const shouldHide = (currentMonth === 1) || (currentMonth === 12 && currentDate > 31);
+
+    const menuCard = document.getElementById('menu-card-calendar');
+    const homeBtn = document.getElementById('home-calendar-btn-container');
+
+    if (shouldHide) {
+      if (menuCard) menuCard.style.display = 'none';
+      if (homeBtn) homeBtn.style.display = 'none';
+    } else {
+      if (menuCard) menuCard.style.display = 'flex';
+      if (homeBtn) homeBtn.style.display = 'grid';
+      renderCalendar();
+    }
+  }
+
+  /* JULKALENDER FUNKTIONER */
   function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
     if (!grid) return;
 
     const now = new Date();
-    const currentMonth = now.getMonth() + 1; // 12 = december
+    const currentMonth = now.getMonth() + 1; 
     const currentDate = now.getDate();
 
     let html = '';
     garageCalendar.forEach(item => {
-      // Datumspärr: Kräver att månaden är december (eller senare) och att dagens datum har nått luckans dag.
-      // (Vill du tjuvprova alla luckor igen under utveckling kan du ändra till: ... || true i slutet)
       const isUnlocked = currentMonth > 12 || (currentMonth === 12 && currentDate >= item.day); 
       
       html += `
