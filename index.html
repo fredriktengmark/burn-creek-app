@@ -11,57 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Rye&family=Chakra+Petch:wght@500;700&family=Teko:wght@600;700&display=swap" rel="stylesheet">
   
-  <!-- OneSignal SDK v16 -->
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-  <script>
-    window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      try {
-        await OneSignal.init({
-          appId: "2212ea0b-a94d-4069-8f5b-ac38b776c280",
-          safari_web_id: "web.onesignal.auto.165f55d2-2c2b-457d-b7b8-8b89270f4464",
-          serviceWorkerParam: { scope: "/burn-creek-app/" },
-          serviceWorkerPath: "/burn-creek-app/OneSignalSDKWorker.js",
-          notifyButton: { enable: false },
-        });
-
-        updatePushButtonUI(OneSignal.User.PushSubscription.optedIn);
-        OneSignal.User.PushSubscription.addEventListener("change", function(event) {
-          updatePushButtonUI(event.current.optedIn);
-        });
-      } catch (err) {
-        console.error("OneSignal init-fel:", err);
-      }
-    });
-
-    function updatePushButtonUI(isSubscribed) {
-      const btn = document.getElementById('btn-push-subscribe');
-      if (!btn) return;
-      if (isSubscribed) {
-        btn.innerHTML = '<span>🔔</span> PUSH-NOTISER AKTIVERADE ✓';
-        btn.style.borderColor = 'var(--led-green)';
-        btn.style.color = 'var(--led-green)';
-      } else {
-        btn.innerHTML = '<span>🔕</span> AKTIVERA PUSH-NOTISER';
-        btn.style.borderColor = 'var(--rust-primary)';
-        btn.style.color = 'var(--cream-bg)';
-      }
-    }
-
-    async function requestOneSignalPush() {
-      window.OneSignalDeferred = window.OneSignalDeferred || [];
-      OneSignalDeferred.push(async function(OneSignal) {
-        try {
-          await OneSignal.Notifications.requestPermission();
-          await OneSignal.User.PushSubscription.optIn();
-          updatePushButtonUI(OneSignal.User.PushSubscription.optedIn);
-        } catch (err) {
-          alert("Kunde inte aktivera notiser: " + err.message);
-        }
-      });
-    }
-  </script>
-
   <style>
     :root {
       --rust-primary: #b34b1e;
@@ -506,23 +455,6 @@
       justify-content: center;
       gap: 6px;
     }
-    .btn-push-toggle {
-      background: #1a1411;
-      border: 1px solid var(--rust-primary);
-      color: var(--cream-bg);
-      padding: 9px;
-      border-radius: 4px;
-      font-family: 'Chakra Petch', sans-serif;
-      font-size: 0.8rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      width: 100%;
-      margin-bottom: 12px;
-    }
     .btn-checkout {
       background: #2a110c;
       border: 1px solid #77261a;
@@ -557,6 +489,7 @@
       white-space: nowrap;
     }
 
+    /* FORDONSREGISTER & REGNR-SKYLT */
     .reg-plate {
       display: inline-flex;
       align-items: center;
@@ -596,28 +529,132 @@
       border-radius: 4px;
       border: 1px solid #2e241e;
     }
-    .car-spec-item { font-size: 0.8rem; }
-    .car-spec-label { color: var(--cream-muted); font-size: 0.7rem; text-transform: uppercase; display: block; }
-    .car-spec-val { color: var(--cream-bg); font-weight: 700; }
-    .bes-badge { font-size: 0.72rem; padding: 3px 8px; border-radius: 3px; font-weight: 700; text-transform: uppercase; }
+    .car-spec-item {
+      font-size: 0.8rem;
+    }
+    .car-spec-label {
+      color: var(--cream-muted);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      display: block;
+    }
+    .car-spec-val {
+      color: var(--cream-bg);
+      font-weight: 700;
+    }
+    .bes-badge {
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
     .bes-green { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid #2ecc71; }
     .bes-yellow { background: rgba(243, 156, 18, 0.15); color: #f39c12; border: 1px solid #f39c12; }
     .bes-red { background: rgba(231, 76, 60, 0.15); color: #e74c3c; border: 1px solid #e74c3c; }
 
-    .cal-header-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border-bottom: 1px solid #3a2c24; padding-bottom: 8px; }
-    .cal-nav-btn { background: #28201b; border: 1px solid var(--border-rivet); color: var(--cream-bg); padding: 4px 10px; border-radius: 4px; font-family: 'Alfa Slab One', cursive; cursor: pointer; }
-    .cal-month-label { font-family: 'Alfa Slab One', cursive; font-size: 0.95rem; color: var(--cream-bg); text-transform: uppercase; letter-spacing: 0.5px; }
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; }
-    .cal-weekday { font-size: 0.7rem; color: var(--rust-glow); font-weight: 700; padding-bottom: 4px; }
-    .cal-day { background: #140f0c; border: 1px solid #2b211b; border-radius: 4px; min-height: 40px; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; font-size: 0.85rem; cursor: pointer; color: var(--cream-text); }
-    .cal-day.empty { background: transparent; border-color: transparent; cursor: default; }
-    .cal-day.today { border-color: var(--rust-glow); box-shadow: inset 0 0 6px rgba(217, 98, 43, 0.35); }
-    .cal-day.selected { background: #331c11; border-color: var(--cream-bg); }
-    .cal-dots { display: flex; gap: 2px; margin-top: 2px; }
-    .cal-dot { width: 6px; height: 6px; border-radius: 50%; }
-    .btn-rsvp { flex: 1; background: #28201b; border: 1px solid var(--border-rivet); color: var(--cream-bg); padding: 6px 10px; border-radius: 4px; font-family: 'Chakra Petch', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
-    .btn-rsvp.joined { background: rgba(46, 204, 113, 0.18); border-color: var(--led-green); color: var(--led-green); }
-    .btn-ics { background: #1e1713; border: 1px solid var(--rust-primary); color: var(--cream-muted); padding: 6px 10px; border-radius: 4px; font-family: 'Chakra Petch', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+    /* MÅNADSKALENDER & EVENT-KNAPPAR */
+    .cal-header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #3a2c24;
+      padding-bottom: 8px;
+    }
+    .cal-nav-btn {
+      background: #28201b;
+      border: 1px solid var(--border-rivet);
+      color: var(--cream-bg);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: 'Alfa Slab One', cursive;
+      cursor: pointer;
+    }
+    .cal-month-label {
+      font-family: 'Alfa Slab One', cursive;
+      font-size: 0.95rem;
+      color: var(--cream-bg);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+      text-align: center;
+    }
+    .cal-weekday {
+      font-size: 0.7rem;
+      color: var(--rust-glow);
+      font-weight: 700;
+      padding-bottom: 4px;
+    }
+    .cal-day {
+      background: #140f0c;
+      border: 1px solid #2b211b;
+      border-radius: 4px;
+      min-height: 40px;
+      padding: 4px 2px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      cursor: pointer;
+      color: var(--cream-text);
+    }
+    .cal-day.empty {
+      background: transparent;
+      border-color: transparent;
+      cursor: default;
+    }
+    .cal-day.today {
+      border-color: var(--rust-glow);
+      box-shadow: inset 0 0 6px rgba(217, 98, 43, 0.35);
+    }
+    .cal-day.selected {
+      background: #331c11;
+      border-color: var(--cream-bg);
+    }
+    .cal-dots {
+      display: flex;
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .cal-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+    .btn-rsvp {
+      flex: 1;
+      background: #28201b;
+      border: 1px solid var(--border-rivet);
+      color: var(--cream-bg);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-rsvp.joined {
+      background: rgba(46, 204, 113, 0.18);
+      border-color: var(--led-green);
+      color: var(--led-green);
+    }
+    .btn-ics {
+      background: #1e1713;
+      border: 1px solid var(--rust-primary);
+      color: var(--cream-muted);
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -672,7 +709,7 @@
       <button class="btn-quick-menu" onclick="toggleMenu()">Växla modul ⚙️</button>
     </div>
 
-    <!-- MENY -->
+    <!-- HELSKÄRMSMENY -->
     <div id="menu-overlay">
       <div class="menu-header">
         <h2>VERKTYGSLÅDAN</h2>
@@ -684,7 +721,7 @@
           <div class="menu-card-icon">🏠</div>
           <div class="menu-card-content">
             <h3>STARTSKÄRM</h3>
-            <p>Logga, närvaroindikator, kaffeknapp och push-notiser.</p>
+            <p>Logga, närvaroindikator och kaffeknapp.</p>
           </div>
         </div>
 
@@ -764,8 +801,8 @@
 
     <!-- 0. STARTSKÄRM -->
     <div id="home-tab" class="view active">
-      <div style="display: flex; flex-direction: column; align-items: center; padding-top: 8px;">
-        <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 290px; width: 84%; height: auto; margin: 6px auto 18px auto; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.95); border: 4px solid var(--rust-primary); display: block;" onerror="this.style.display='none'">
+      <div style="display: flex; flex-direction: column; align-items: center; padding-top: 10px;">
+        <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 310px; width: 88%; height: auto; margin: 10px auto 22px auto; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.95); border: 4px solid var(--rust-primary); display: block;" onerror="this.style.display='none'">
 
         <div class="status-beacon">
           <div class="status-indicator-bar">
@@ -778,11 +815,7 @@
           </button>
         </div>
 
-        <button id="btn-push-subscribe" class="btn-push-toggle" onclick="requestOneSignalPush()">
-          <span>🔔</span> AKTIVERA PUSH-NOTISER
-        </button>
-
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 4px;">
           <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('feed', 'DEPÅLOGG & BILDER')">🏁 DEPÅLOGGEN</button>
           <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('cars', 'FORDONSREGISTER & REGNR')">🏎️ BILARNA</button>
         </div>
@@ -791,6 +824,7 @@
 
     <!-- 1. FLÖDE -->
     <div id="feed-tab" class="view">
+      <!-- SNABBMEDDELANDE TILL TAVLAN -->
       <div class="spec-card" style="margin-bottom: 16px; border-top-color: var(--rust-glow);">
         <div class="spec-title">
           <span>📢 ANSLAG TILL TAVLAN</span>
@@ -807,20 +841,20 @@
 
       <div class="post-creator">
         <textarea id="post-text" class="garage-input" placeholder="Rapport från garaget, mekstatus eller bytesdelar..."></textarea>
-        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
-          <input type="file" id="post-file" accept="image/*" style="display: none;" onchange="updateFileName('post-file', 'file-chosen')">
-          <input type="file" id="post-camera" accept="image/*" capture="environment" style="display: none;" onchange="updateFileName('post-camera', 'file-chosen')">
-          <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('post-camera').click()" style="padding: 6px 10px; font-size: 0.82rem;">📸 KAMERA</button>
-          <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('post-file').click()" style="padding: 6px 10px; font-size: 0.82rem;">🖼️ GALLERI</button>
-          <span id="file-chosen" style="font-size: 0.75rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;"></span>
-          <button id="btn-publish" class="btn-speed" style="margin-left: auto; padding: 6px 14px; font-size: 0.9rem;" onclick="publishPost()">BRÄNN AV</button>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <input type="file" id="post-file" accept="image/*" style="display: none;" onchange="updateFileName()">
+          <button class="btn-speed btn-wrench" onclick="document.getElementById('post-file').click()" style="padding: 6px 14px; font-size: 0.9rem;">📷 BILD</button>
+          <span id="file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;"></span>
+          <button id="btn-publish" class="btn-speed" style="margin-left: auto; padding: 6px 18px; font-size: 0.95rem;" onclick="publishPost()">BRÄNN AV</button>
         </div>
       </div>
       <div id="posts-container">Laddar depåloggen...</div>
     </div>
 
-    <!-- 2. FORDONSREGISTER -->
+    <!-- 2. FORDONSREGISTER & REGNR-SNABBKOLL -->
     <div id="cars-tab" class="view">
+      
+      <!-- SNABBSÖK PÅ REGNR / BIL / ÄGARE -->
       <div class="spec-card" style="border-top-color: var(--rust-glow); margin-bottom: 14px;">
         <div class="spec-title">
           <span>🔍 SNABBSÖK REGNR / FORDON</span>
@@ -829,6 +863,7 @@
         <input type="text" id="car-search" class="garage-input" placeholder="Sök på regnr (t.ex. NHK817), bilmodell eller ägare..." oninput="filterCars()">
       </div>
 
+      <!-- LÄGG TILL EGET FORDON -->
       <div class="spec-card">
         <div class="spec-title" style="cursor: pointer;" onclick="toggleAddCarForm()">
           <span>➕ LÄGG UPP EGET FORDON</span>
@@ -853,14 +888,12 @@
               <option value="red">🔴 Projekt / Avställd</option>
             </select>
           </div>
-          <textarea id="car-notes" class="garage-input" style="height: 60px; resize: none;" placeholder="Övrig spec..."></textarea>
+          <textarea id="car-notes" class="garage-input" style="height: 60px; resize: none;" placeholder="Övrig spec (bultmönster, däckdimension, förgasarmunstycken, bakaxelutväxling)..."></textarea>
           
-          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
-            <input type="file" id="car-file" accept="image/*" style="display: none;" onchange="updateFileName('car-file', 'car-file-chosen')">
-            <input type="file" id="car-camera" accept="image/*" capture="environment" style="display: none;" onchange="updateFileName('car-camera', 'car-file-chosen')">
-            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('car-camera').click()" style="padding: 8px 12px; font-size: 0.82rem;">📸 TA FOTO</button>
-            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('car-file').click()" style="padding: 8px 12px; font-size: 0.82rem;">🖼️ GALLERI</button>
-            <span id="car-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;"></span>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="file" id="car-file" accept="image/*" style="display: none;" onchange="updateCarFileName()">
+            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('car-file').click()" style="padding: 8px 14px; font-size: 0.85rem;">📷 BILD PÅ BILEN</button>
+            <span id="car-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px;"></span>
           </div>
 
           <button id="btn-save-car" class="btn-speed" onclick="addCar()" style="padding: 10px; font-size: 0.95rem;">SPARA FORDON I REGISTRET</button>
@@ -870,8 +903,10 @@
       <div id="cars-container">Laddar fordonsregistret...</div>
     </div>
 
-    <!-- 3. KALENDER -->
+    <!-- 3. KALENDER & TRÄFFAR -->
     <div id="board-tab" class="view">
+
+      <!-- VISUELL MÅNADSKALENDER -->
       <div class="spec-card" style="border-top-color: var(--rust-glow);">
         <div class="cal-header-nav">
           <button class="cal-nav-btn" onclick="changeCalendarMonth(-1)">◀</button>
@@ -879,12 +914,22 @@
           <button class="cal-nav-btn" onclick="changeCalendarMonth(1)">▶</button>
         </div>
         <div class="cal-grid">
-          <div class="cal-weekday">MÅN</div><div class="cal-weekday">TIS</div><div class="cal-weekday">ONS</div>
-          <div class="cal-weekday">TOR</div><div class="cal-weekday">FRE</div><div class="cal-weekday">LÖR</div><div class="cal-weekday">SÖN</div>
+          <div class="cal-weekday">MÅN</div>
+          <div class="cal-weekday">TIS</div>
+          <div class="cal-weekday">ONS</div>
+          <div class="cal-weekday">TOR</div>
+          <div class="cal-weekday">FRE</div>
+          <div class="cal-weekday">LÖR</div>
+          <div class="cal-weekday">SÖN</div>
         </div>
         <div id="cal-days-grid" class="cal-grid" style="margin-top: 4px;"></div>
+        <div id="cal-filter-bar" style="display: none; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px dashed #3a2c24; font-size: 0.8rem;">
+          <span id="cal-filter-text" style="color: var(--rust-glow); font-weight: 700;"></span>
+          <button class="btn-quick-menu" onclick="clearDateFilter()">Visa alla kommande</button>
+        </div>
       </div>
 
+      <!-- BOKA IN NY HÄNDELSE -->
       <div class="spec-card">
         <div class="spec-title" style="cursor: pointer;" onclick="toggleAddEventForm()">
           <span>➕ LÄGG IN TRÄFF / MEKKVÄLL</span>
@@ -897,12 +942,12 @@
             <option value="grill">🍔 Grillkväll & Fest</option>
             <option value="stad">🧹 Städ & Underhåll</option>
           </select>
-          <input type="text" id="event-title" class="garage-input" placeholder="Titel...">
+          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Kvällsskruv på 34:an, Street Week)">
           <div style="display: flex; gap: 8px;">
             <input type="date" id="event-date" class="garage-input" style="flex: 1;">
-            <input type="text" id="event-time" class="garage-input" placeholder="Tid (18:00)" style="flex: 1;">
+            <input type="text" id="event-time" class="garage-input" placeholder="Tid (t.ex. 18:00)" style="flex: 1;">
           </div>
-          <input type="text" id="event-desc" class="garage-input" placeholder="Plats / detaljer...">
+          <input type="text" id="event-desc" class="garage-input" placeholder="Plats, detaljer eller vad som ska fixas...">
           <button class="btn-speed" onclick="addEvent()" style="padding: 10px; font-size: 0.95rem;">SPIKA I KALENDERN</button>
         </div>
       </div>
@@ -910,51 +955,515 @@
       <div id="events-container">Laddar kalendern...</div>
     </div>
 
-    <!-- 4. SKROTNISSE -->
+    <!-- 4. SKROTNISSE-LAGRET -->
     <div id="market-tab" class="view">
       <div class="spec-card">
-        <div class="spec-title"><span>ANNONSERA I SKROTNISSE-LAGRET</span><span class="spec-badge">INTERNT</span></div>
+        <div class="spec-title">
+          <span>ANNONSERA I SKROTNISSE-LAGRET</span>
+          <span class="spec-badge">INTERNT</span>
+        </div>
         <div style="display: flex; flex-direction: column; gap: 8px;">
           <select id="part-type" class="garage-input">
             <option value="SÄLJES / FINNES">📦 SÄLJES / FINNES PÅ HYLLAN</option>
             <option value="SÖKES / ÖNSKAS">🔍 SÖKES / NÅGON SOM HAR?</option>
           </select>
-          <input type="text" id="part-title" class="garage-input" placeholder="Del / Material...">
-          <input type="text" id="part-price" class="garage-input" placeholder="Pris / Bytes...">
-          <textarea id="part-desc" class="garage-input" style="height: 60px; resize: none;" placeholder="Beskrivning..."></textarea>
-          <button class="btn-speed" onclick="addPart()" style="padding: 10px; font-size: 0.95rem;">LÄGG UPP DEL</button>
+          <input type="text" id="part-title" class="garage-input" placeholder="Del / Material (t.ex. Holley 650 DP, 2.5 tum rör)">
+          <input type="text" id="part-price" class="garage-input" placeholder="Pris / Bytes / Skänkes mot fika">
+          <textarea id="part-desc" class="garage-input" style="height: 60px; resize: none;" placeholder="Beskrivning, skick eller mått..."></textarea>
+          
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <input type="file" id="part-file" accept="image/*" style="display: none;" onchange="updatePartFileName()">
+            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('part-file').click()" style="padding: 8px 14px; font-size: 0.85rem;">📷 BILD PÅ DELEN</button>
+            <span id="part-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px;"></span>
+          </div>
+
+          <button id="btn-save-part" class="btn-speed" onclick="addPart()" style="padding: 10px; font-size: 0.95rem;">LÄGG UPP DEL</button>
         </div>
       </div>
-      <div id="parts-container">Laddar lagret...</div>
+      <div id="parts-container">Laddar reservdelslagret...</div>
     </div>
 
     <!-- 5. GÄSTMEK -->
     <div id="guests-tab" class="view">
       <div class="spec-card">
-        <div class="spec-title"><span>GÄSTMEK-POLICY</span><span class="spec-badge">ANSVAR</span></div>
-        <p style="font-size: 0.85rem; line-height: 1.5;">Värdansvar: Den medlem som bjuder in gäst ansvarar för ordningen.</p>
+        <div class="spec-title">
+          <span>GÄSTMEK-POLICY</span>
+          <span class="spec-badge">ANSVAR</span>
+        </div>
+        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--cream-text);">
+          <strong>Värdansvar:</strong> Den medlem som bjuder in eller lånar ut en plats till en gäst ansvarar fullt ut för gästen, ordningen och att lokalen lämnas i ordnat skick.
+        </p>
       </div>
-      <div id="guests-container"></div>
+
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>REGISTRERA GÄSTMEK</span>
+          <span class="spec-badge">LOGG</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <input type="text" id="guest-name" class="garage-input" placeholder="Gästens namn">
+          <input type="text" id="guest-car" class="garage-input" placeholder="Fordon & arbete (t.ex. Impala -65, bromsbyte)">
+          <input type="date" id="guest-date" class="garage-input">
+          <button class="btn-speed" onclick="addGuest()" style="padding: 10px; font-size: 0.95rem;">REGISTRERA GÄSTPASS</button>
+        </div>
+      </div>
+      <div id="guests-container">Laddar gästloggen...</div>
     </div>
 
     <!-- 6. ATT FIXA -->
     <div id="todo-tab" class="view">
       <div style="display: flex; gap: 8px; margin-bottom: 16px;">
-        <input type="text" id="todo-input" placeholder="Ny punkt..." class="garage-input" style="flex: 1;">
+        <input type="text" id="todo-input" placeholder="T.ex. kapskivor, 10L E85, bromsrengöring..." class="garage-input" style="flex: 1;">
         <button class="btn-speed" style="padding: 8px 14px; font-size: 0.95rem;" onclick="addTodo()">LÄGG TILL</button>
       </div>
       <div id="todos-container"></div>
     </div>
 
-    <!-- 7. TIPS & KALKYLER -->
+    <!-- 7. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
+
+      <!-- KALKYL: RPM & FART -->
       <div class="spec-card">
-        <div class="spec-title"><span>VERKSTADSTIPS & TABELLER</span><span class="spec-badge">INFO</span></div>
-        <p style="font-size: 0.85rem;">Använd verktygslådan i menyn för att navigera bland tändföljder, moment och kalkylatorer.</p>
+        <div class="spec-title">
+          <span>RPM- & FARTKALKYLATOR</span>
+          <span class="spec-badge">DRIVLINA</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">HASTIGHET (KM/H)</label>
+            <input type="number" id="calc-speed" class="garage-input" value="100" oninput="calcRpm()">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">DÄCKHÖJD (TUM)</label>
+            <input type="number" id="calc-tire" step="0.5" class="garage-input" value="28" oninput="calcRpm()">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">BAKAXELUTVÄXLING</label>
+            <input type="number" id="calc-axle" step="0.01" class="garage-input" value="3.73" oninput="calcRpm()">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">VÄXELLÅDA (UTVÄXLING)</label>
+            <select id="calc-trans" class="garage-input" onchange="calcRpm()">
+              <option value="1.00">1.00 (TH350 / TH400 / PG / 4-vxl)</option>
+              <option value="0.70">0.70 (TH700R4 / 4L60E OD)</option>
+              <option value="0.75">0.75 (4L80E Overdrive)</option>
+              <option value="0.67">0.67 (Ford AOD)</option>
+              <option value="0.64">0.64 (T56 6:e växel)</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Beräknat motorvarv:</span>
+          <span class="calc-val" id="res-rpm">2795 RPM</span>
+        </div>
       </div>
+
+      <!-- KALKYL: FÖRGASARSTORLEK (CFM) -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>FÖRGASARSTORLEK (CFM)</span>
+          <span class="spec-badge">BRÄNSLE</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">MOTORVOLYM (CID)</label>
+            <input type="number" id="calc-cid" class="garage-input" value="350" oninput="calcCfm()">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">MAXVARV (RPM)</label>
+            <input type="number" id="calc-maxrpm" class="garage-input" value="6000" oninput="calcCfm()">
+          </div>
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">MOTORTYP (VERKNINGSGRAD VE)</label>
+            <select id="calc-ve" class="garage-input" onchange="calcCfm()">
+              <option value="0.80">Original / Standard gata (80 % VE)</option>
+              <option value="0.85" selected>Mild trimmad / kam & headers (85 % VE)</option>
+              <option value="0.95">Vass gata / portade toppar (95 % VE)</option>
+              <option value="1.05">Race / Högvarvig strippenmaskin (105 % VE)</option>
+            </select>
+          </div>
+        </div>
+        <div class="calc-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Rekommenderad förgasare:</span>
+          <span class="calc-val" id="res-cfm">516 CFM</span>
+        </div>
+      </div>
+
+      <!-- BULTMÖNSTER, ET & NAV PÅ VETERANBILAR -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>BULTMÖNSTER, ET & NAV</span>
+          <span class="spec-badge">FÄLGAR</span>
+        </div>
+        <table class="spec-table">
+          <tr><th>Märke / Modell</th><th>Tum</th><th>Metriskt</th><th>Navhål</th></tr>
+          <tr><td><strong>Chevy Pass (Camaro, Chevelle, Nova)</strong></td><td>5x4.75"</td><td>5x120.65 mm</td><td>70.3 mm</td></tr>
+          <tr><td><strong>Chevy Fullsize (-70) / C10 Truck</strong></td><td>5x5.0"</td><td>5x127 mm</td><td>78.3 mm</td></tr>
+          <tr><td><strong>Ford Pass (Mustang, Fairlane, Galaxie)</strong></td><td>5x4.5"</td><td>5x114.3 mm</td><td>70.5 mm</td></tr>
+          <tr><td><strong>Ford F-100 / F-150 Truck</strong></td><td>5x5.5"</td><td>5x139.7 mm</td><td>87.1 mm</td></tr>
+          <tr><td><strong>Mopar A-Body (Tidig Dart, Valiant)</strong></td><td>5x4.0"</td><td>5x101.6 mm</td><td>–</td></tr>
+          <tr><td><strong>Mopar B & E-Body (Charger, Cuda mfl)</strong></td><td>5x4.5"</td><td>5x114.3 mm</td><td>71.5 mm</td></tr>
+          <tr><td><strong>GM C-Body (Cadillac, Pontiac, Buick BB)</strong></td><td>5x5.0"</td><td>5x127 mm</td><td>78.3 mm</td></tr>
+        </table>
+        <p style="font-size: 0.75rem; color: var(--cream-muted); margin-top: 6px;">
+          ET: RWD-jänkare kör oftast neutral till låg/negativ ET (ET 0 till ET -12) eller backspacing runt 3.75"–4.5" på en 8"-fälg.
+        </p>
+      </div>
+
+      <!-- MOTOR & KOMPRESSION (KALKYLER) -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>KOMPRESSION & DCR-KALKYL</span>
+          <span class="spec-badge">CR & DCR</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; gap: 6px;">
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">BORR (TUM)</label><input type="number" id="cr-bore" step="0.005" class="garage-input" value="4.000" oninput="calcCR()"></div>
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">SLAG (TUM)</label><input type="number" id="cr-stroke" step="0.005" class="garage-input" value="3.480" oninput="calcCR()"></div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">FÖRBRÄNNINGSRUM (CC)</label><input type="number" id="cr-chamber" step="0.5" class="garage-input" value="64.0" oninput="calcCR()"></div>
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">KOLVDISH/DOME (+/- CC)</label><input type="number" id="cr-piston" step="0.5" class="garage-input" value="5.0" oninput="calcCR()"></div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">PACKNINGSTJOCKLEK (TUM)</label><input type="number" id="cr-gasket-th" step="0.001" class="garage-input" value="0.039" oninput="calcCR()"></div>
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">PACKNINGSBORR (TUM)</label><input type="number" id="cr-gasket-b" step="0.005" class="garage-input" value="4.060" oninput="calcCR()"></div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">DECK CLEARANCE (TUM)</label><input type="number" id="cr-deck" step="0.001" class="garage-input" value="0.020" oninput="calcCR()"></div>
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">STÄNGNINGSVINKEL IVC (°ABDC)</label><input type="number" id="cr-ivc" step="1" class="garage-input" value="65" oninput="calcCR()"></div>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">VEVSTAKSLÄNGD (TUM)</label><input type="number" id="cr-rod" step="0.01" class="garage-input" value="5.70" oninput="calcCR()"></div>
+          </div>
+        </div>
+        <div class="calc-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Statisk & Dynamisk Kompression:</span>
+          <span class="calc-val" id="res-cr">Statisk CR: 9.85:1</span>
+          <span style="font-size: 0.95rem; font-weight: 700; color: #eedcc0; display: block; margin-top: 4px;" id="res-dcr">Dynamisk DCR: 7.95:1</span>
+          <span style="font-size: 0.75rem; color: var(--cream-muted); display: block; margin-top: 2px;">(Sikte för 98-oktan: ca 8.0:1 – 8.5:1 DCR)</span>
+        </div>
+      </div>
+
+      <!-- KOLVHASTIGHET -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>KOLVHASTIGHET (PISTON SPEED)</span>
+          <span class="spec-badge">BELASTNING</span>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">SLAGLÄNGD (TUM)</label><input type="number" id="ps-stroke" step="0.005" class="garage-input" value="3.480" oninput="calcPistonSpeed()"></div>
+          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">VARVTAL (RPM)</label><input type="number" id="ps-rpm" step="100" class="garage-input" value="6500" oninput="calcPistonSpeed()"></div>
+        </div>
+        <div class="calc-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted); text-transform: uppercase;">Medelkolvhastighet:</span>
+          <span class="calc-val" id="res-pistonspeed">19.16 m/s (3770 ft/min)</span>
+        </div>
+      </div>
+
+      <!-- DÄCKDIMENSIONS-OMVANDLARE & HASTIGHETSMÄTARE -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>DÄCKOMVANDLARE & HASTIGHETSMÄTARE</span>
+          <span class="spec-badge">DÄCK</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">METRISK DIMENSION (T.EX. 275/60R15)</label>
+            <div style="display: flex; gap: 4px;">
+              <input type="number" id="tire-w" class="garage-input" value="275" placeholder="Bredd" oninput="calcTireMetric()">
+              <input type="number" id="tire-p" class="garage-input" value="60" placeholder="Profil" oninput="calcTireMetric()">
+              <input type="number" id="tire-r" class="garage-input" value="15" placeholder="Fälg" oninput="calcTireMetric()">
+            </div>
+          </div>
+          <div class="calc-box" style="margin-top: 0;">
+            <span style="font-size: 0.75rem; color: var(--cream-muted);">USA-mått & Rullomkrets:</span>
+            <span class="calc-val" id="res-tire-calc">28.0" diameter (Rullomkrets: 223.3 cm)</span>
+          </div>
+
+          <div style="margin-top: 6px;">
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">MÄTARFEL VID DÄCKBYTE (GAMMALT VS NYTT DÄCK)</label>
+            <div style="display: flex; gap: 6px;">
+              <input type="number" id="old-tire" class="garage-input" value="26.0" placeholder="Gammal höjd tum" oninput="calcSpeedoError()">
+              <input type="number" id="new-tire" class="garage-input" value="28.0" placeholder="Ny höjd tum" oninput="calcSpeedoError()">
+            </div>
+          </div>
+          <div class="calc-box" style="margin-top: 0;">
+            <span style="font-size: 0.75rem; color: var(--cream-muted);">Verklig fart när mätaren visar 100 km/h:</span>
+            <span class="calc-val" id="res-speedo-error">107.7 km/h (+7.7 %)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STALL SPEED, TURBIN & BROMSVÄTSKA -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>STALL SPEED & BROMSVÄTSKA</span>
+          <span class="spec-badge">DRIVLINA</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--rust-glow); font-weight: 700;">Riktlinjer för turbin (Stall Speed):</p>
+        <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.5; color: var(--cream-text);">
+          <li><strong>Original / Mild cruising:</strong> 1600–2000 RPM stall. Låg värmeutveckling.</li>
+          <li><strong>Mild trimkam (215°–230° @ 0.050"):</strong> 2400–2800 RPM stall. Kräver extra oljekylare.</li>
+          <li><strong>Vass kam (230°+ @ 0.050"):</strong> 3000–3500+ RPM stall. Kräver minst 3.73 i bakaxeln.</li>
+        </ul>
+
+        <p style="font-size: 0.8rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Bromsvätskeguide & Kokpunkter:</p>
+        <table class="spec-table">
+          <tr><th>Typ</th><th>Torr kokpunkt</th><th>Våt kokpunkt</th><th>Bas</th></tr>
+          <tr><td><strong>DOT 3</strong></td><td>205 °C</td><td>140 °C</td><td>Glykol</td></tr>
+          <tr><td><strong>DOT 4</strong></td><td>230 °C</td><td>155 °C</td><td>Glykol</td></tr>
+          <tr><td><strong>DOT 5.1</strong></td><td>260 °C</td><td>180 °C</td><td>Glykol</td></tr>
+          <tr><td><strong>DOT 5 (Lila)</strong></td><td>260 °C</td><td>180 °C</td><td>Silikon</td></tr>
+        </table>
+        <div class="warning-box">
+          ⚠️ <strong>FÖRBUD:</strong> Blanda ALDRIG DOT 5 (silikon) med DOT 3, DOT 4 eller DOT 5.1 (glykol)! Vätskorna skär sig, packningar sväller och bromstrycket försvinner.
+        </div>
+      </div>
+
+      <!-- SPRIDARSTORLEK & FÖRGASARMUNSTYCKEN -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>SPRIDARE, MUNSTYCKEN & E85</span>
+          <span class="spec-badge">BRÄNSLE</span>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">MÅLEFFEKT (BHP)</label><input type="number" id="inj-hp" class="garage-input" value="450" oninput="calcInjector()"></div>
+          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">ANTAL SPRIDARE</label><input type="number" id="inj-count" class="garage-input" value="8" oninput="calcInjector()"></div>
+        </div>
+        <div class="calc-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted);">Rekommenderad spridare (vid 85% duty cycle):</span>
+          <span class="calc-val" id="res-injector">33.1 lbs/hr (348 cc/min)</span>
+        </div>
+
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Holley Munstycken (Flödesindex VS Hålstorlek):</p>
+        <table class="spec-table">
+          <tr><th>Holley Jet #</th><th>Håldiameter (tum)</th><th>Håldiameter (mm)</th></tr>
+          <tr><td>#66 – #68</td><td>0.066" – 0.069"</td><td>1.68 – 1.75 mm</td></tr>
+          <tr><td>#70 – #72</td><td>0.073" – 0.077"</td><td>1.85 – 1.95 mm</td></tr>
+          <tr><td>#74 – #76</td><td>0.081" – 0.084"</td><td>2.06 – 2.13 mm</td></tr>
+          <tr><td>#80 – #82</td><td>0.093" – 0.096"</td><td>2.36 – 2.44 mm</td></tr>
+        </table>
+        <p style="font-size: 0.8rem; color: var(--cream-text); margin-top: 8px;">
+          <strong>Power Valve-väljare:</strong> Mät vakuum i tum Hg vid tomgång med driven i. Dela med 2 VS 6.5 Power Valve.
+        </p>
+        <p style="font-size: 0.8rem; color: var(--cream-text); margin-top: 4px;">
+          <strong>E85 VS Bensin:</strong> Kräver ca <strong>+30–35 %</strong> mer bränslemängd (+8–10 munstycksnummer i förgasare).
+        </p>
+      </div>
+
+      <!-- BORR- & GÄNGTABELL -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>BORR- & GÄNGTABELL</span>
+          <span class="spec-badge">VERKSTAD</span>
+        </div>
+        <table class="spec-table">
+          <tr><th>Gänga (UNC / UNF / Metrisk)</th><th>Förborrning mm</th><th>Tum-borr</th></tr>
+          <tr><td>1/4"-20 UNC</td><td>5.1 mm</td><td>#7 (0.201")</td></tr>
+          <tr><td>5/16"-18 UNC</td><td>6.6 mm</td><td>F (0.257")</td></tr>
+          <tr><td>3/8"-16 UNC (SBC standard)</td><td>8.0 mm</td><td>5/16"</td></tr>
+          <tr><td>7/16"-14 UNC</td><td>9.4 mm</td><td>U (0.368")</td></tr>
+          <tr><td>1/2"-13 UNC</td><td>10.7 mm</td><td>27/64"</td></tr>
+          <tr><td>7/16"-20 UNF (Fingänga)</td><td>9.9 mm</td><td>25/64"</td></tr>
+          <tr><td>1/2"-20 UNF (Hjulbultar)</td><td>11.5 mm</td><td>29/64"</td></tr>
+          <tr><td>M6 x 1.0 / M8 x 1.25</td><td>5.0 mm / 6.8 mm</td><td>–</td></tr>
+          <tr><td>M10 x 1.5 / M12 x 1.75</td><td>8.5 mm / 10.2 mm</td><td>–</td></tr>
+        </table>
+      </div>
+
+      <!-- BULTGRADER & HÅLLFASTHET -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>BULTGRADER & MOMENTGRÄNSER</span>
+          <span class="spec-badge">HÅLLFASTHET</span>
+        </div>
+        <table class="spec-table">
+          <tr><th>Märkning bultskalle</th><th>Klass</th><th>Användningsområde</th></tr>
+          <tr><td>Inga streck</td><td>SAE Grade 2</td><td>Klammer, plåt, icke-bärande</td></tr>
+          <tr><td>3 radiella streck</td><td>SAE Grade 5 (~8.8)</td><td>Fästen, chassi, allmänt</td></tr>
+          <tr><td>6 radiella streck</td><td>SAE Grade 8 (~10.9)</td><td>Vevstakar, svänghjul, bärarmar</td></tr>
+          <tr><td>Märkt 12.9</td><td>Klass 12.9</td><td>ARP-topplocksbult, ramlager</td></tr>
+        </table>
+        <p style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">
+          Torr VS Oljad gänga: Smörjning sänker friktionen med ca 20–25 %. Dra aldrig ett moment avsett för oljad gänga på en torr gänga (och tvärtom).
+        </p>
+      </div>
+
+      <!-- RÖR & KOPPLINGAR -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>AN VS NPT VS MM KOPPLINGAR</span>
+          <span class="spec-badge">SLANG & RÖR</span>
+        </div>
+        <table class="spec-table">
+          <tr><th>AN-storlek</th><th>Slang invändig</th><th>NPT-gänga</th><th>Exempel</th></tr>
+          <tr><td><strong>AN-4</strong></td><td>1/4" (6.3 mm)</td><td>1/8" NPT</td><td>Oljetrycksmätare, broms</td></tr>
+          <tr><td><strong>AN-6</strong></td><td>3/8" (9.5 mm)</td><td>1/4" NPT</td><td>Standard bränsleslang</td></tr>
+          <tr><td><strong>AN-8</strong></td><td>1/2" (12.7 mm)</td><td>3/8" NPT</td><td>Bränsle hög effekt, oljekyl</td></tr>
+          <tr><td><strong>AN-10</strong></td><td>5/8" (15.9 mm)</td><td>1/2" NPT</td><td>Vevhusventilation</td></tr>
+          <tr><td><strong>AN-12</strong></td><td>3/4" (19.0 mm)</td><td>3/4" NPT</td><td>Kylarslangar</td></tr>
+        </table>
+      </div>
+
+      <!-- SPÄNNINGSFALL 12V -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>SPÄNNINGSFALLSKALKYLATOR (12V)</span>
+          <span class="spec-badge">ELSYSTEM</span>
+        </div>
+        <div style="display: flex; gap: 6px;">
+          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">STRÖM (AMPERE)</label><input type="number" id="vdrop-amp" class="garage-input" value="20" oninput="calcVdrop()"></div>
+          <div style="flex: 1;"><label style="font-size: 0.7rem; color: var(--cream-muted);">KABELLÄNGD T&R (M)</label><input type="number" id="vdrop-len" class="garage-input" value="6.0" oninput="calcVdrop()"></div>
+        </div>
+        <div class="calc-box">
+          <span style="font-size: 0.75rem; color: var(--cream-muted);">Rekommenderad kabelarea (max 3% fall):</span>
+          <span class="calc-val" id="res-vdrop">Minst 6.0 mm² (AWG 10)</span>
+        </div>
+      </div>
+
+      <!-- TÄNDSTIFT & GENERATORBUDGET -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TÄNDSTIFT & GENERATOR</span>
+          <span class="spec-badge">DIAGNOSTIK</span>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700;">Tändstiftsfärg & Motordiagnostik:</p>
+        <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.45; color: var(--cream-text);">
+          <li><strong>Ljusbrun / Grå:</strong> Perfekt förbränning och tändkurva.</li>
+          <li><strong>Svart torr sot:</strong> Fet bränsleblandning, felbestyckad förgasare.</li>
+          <li><strong>Svart blöt olja:</strong> Otäta ventilstyrningar eller kolvringar.</li>
+          <li><strong>Kritvit med små blåsor:</strong> Mager blandning / för mycket förtändning.</li>
+        </ul>
+
+        <p style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">Generatorbudget (Ampere-förbrukare):</p>
+        <table class="spec-table">
+          <tr><th>Förbrukare</th><th>Normal ström</th><th>Kommentar</th></tr>
+          <tr><td>Dubbla elfläktar</td><td>25–35 A</td><td>Hög startström</td></tr>
+          <tr><td>Elektrisk bränslepump</td><td>8–15 A</td><td>Konstant last</td></tr>
+          <tr><td>MSD / Tändbox</td><td>5–10 A</td><td>Ökar med varvtal</td></tr>
+          <tr><td>Halvljus + instrument</td><td>12–15 A</td><td>Standard H4</td></tr>
+        </table>
+      </div>
+
+      <!-- VÄTSKOR, OLJA & ZDDP -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>VÄTSKOR, OLJA & ZDDP</span>
+          <span class="spec-badge">SMÖRJNING</span>
+        </div>
+        <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.5; color: var(--cream-text);">
+          <li><strong>Glykol 50/50:</strong> Frysskydd ner till ca -38 °C och rostskydd för gjutjärn/aluminium.</li>
+          <li><strong>Flat Tappet-kamaxlar:</strong> Kräver motorolja med hög zink/fosforhalt (minst <strong>1000–1400 ppm ZDDP</strong>) t.ex. Valvoline VR1 Racing eller Lucas Hot Rod Oil.</li>
+          <li><strong>Rullkam (Roller):</strong> Inte känslig för ZDDP på samma sätt.</li>
+        </ul>
+      </div>
+
+      <!-- ENHETSSNABBOMVANDLARE -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>ENHETSSNABBOMVANDLARE</span>
+          <span class="spec-badge">FORMELTABELL</span>
+        </div>
+        <table class="spec-table">
+          <tr><th>Omvandling</th><th>Formel</th></tr>
+          <tr><td>psi → bar</td><td>psi × 0.0689 = bar (15 psi ≈ 1.03 bar)</td></tr>
+          <tr><td>ft-lb → Nm</td><td>ft-lb × 1.356 = Nm</td></tr>
+          <tr><td>in-lb → Nm</td><td>in-lb × 0.113 = Nm</td></tr>
+          <tr><td>US Gallon → Liter</td><td>US gal × 3.785 = Liter</td></tr>
+          <tr><td>Quart → Liter</td><td>qt × 0.946 = Liter</td></tr>
+          <tr><td>CFM → m³/min</td><td>CFM × 0.0283 = m³/min</td></tr>
+          <tr><td>°F → °C</td><td>(°F - 32) × 5/9 = °C (180°F = 82°C)</td></tr>
+        </table>
+      </div>
+
+      <!-- TÄNDFÖLJD & TÄNDGRADER -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>TÄNDFÖLJD & TÄNDGRADER</span>
+          <span class="spec-badge">KOMPLETT V8</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 6px;">
+          <em>Koppla alltid ur och plugga vakuumslangen till fördelaren när tändningen ställs med stroboskop!</em>
+        </p>
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVROLET SBC (283–400) & BBC (396–454):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Medurs</strong> | Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Tändning: 10°–14° BTDC tomgång | Total: 34°–36° (SBC) / 36°–38° (BBC) vid 3000 RPM</p>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span></div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVY LS-FAMILJEN (LS1, LS3, 4.8, 5.3, 6.0):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Elektronisk tändning (Coil-on-plug). Cylindrar som traditionell Chevy.</p>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span></div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD SMALL BLOCK (260, 289, STD 302):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Passagerarsida: 1-2-3-4 | Förarsida: 5-6-7-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–35° vid 3000 RPM</p>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">8</span></div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD 351W, 351 CLEVELAND, 351M, 400 & 5.0L H.O.:</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Cylindrar: 1-4 höger, 5-8 vänster<br>Tändning: 10°–14° BTDC tomgång | Total: 32°–34° vid 3000 RPM</p>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">3</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">4</span><span class="cylinder-chip">8</span></div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHRYSLER / MOPAR LA (318, 360), B/RB (383, 440) & HEMI:</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Rotation: <strong>Medurs på LA</strong> | <strong>Moturs på B/RB (383/440)</strong><br>Tändning: 10°–14° BTDC tomgång | Total: 32°–36° vid 2800–3000 RPM</p>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span></div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">PONTIAC V8 (326, 350, 400, 455):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Rotation: <strong>Moturs</strong> | Förarsida: 1-3-5-7 | Passagerarsida: 2-4-6-8<br>Tändning: 10°–12° BTDC tomgång | Total: 32°–34° vid 2800 RPM</p>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span></div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">OLDSMOBILE V8 (307, 350, 403, 455) & BUICK V8 (350, 455):</p>
+        <p style="font-size: 0.78rem; color: var(--cream-muted);">Olds Rotation: <strong>Moturs</strong> | Buick Rotation: <strong>Medurs</strong><br>Tändföljd: 1-8-4-3-6-5-7-2 | Tändning: 10°–12° BTDC tomgång | Total: 32°–36°</p>
+        <div class="firing-seq"><span class="cylinder-chip">1</span><span class="cylinder-chip">8</span><span class="cylinder-chip">4</span><span class="cylinder-chip">3</span><span class="cylinder-chip">6</span><span class="cylinder-chip">5</span><span class="cylinder-chip">7</span><span class="cylinder-chip">2</span></div>
+      </div>
+
+      <!-- MOMENTTABELLER -->
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>ÅTDRAGNINGSMOMENT V8</span>
+          <span class="spec-badge">FT-LBS & NM</span>
+        </div>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 6px;">CHEVY SMALL BLOCK (283–400):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (3 steg: 25, 45, 65)</td><td>65</td><td>88 Nm</td></tr>
+          <tr><td>Vevstaksbultar (3/8" original)</td><td>40–45</td><td>54–61 Nm</td></tr>
+          <tr><td>Ramlager (2-bult / 4-bult inre)</td><td>75 / 70</td><td>102 / 95 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>60</td><td>81 Nm</td></tr>
+          <tr><td>Svängningsdämpare (centrombult)</td><td>60</td><td>81 Nm</td></tr>
+          <tr><td>Insugsbultar</td><td>30</td><td>41 Nm</td></tr>
+        </table>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHEVY BIG BLOCK (396–454):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar</td><td>80</td><td>108 Nm</td></tr>
+          <tr><td>Vevstaksbultar (3/8" / 7/16")</td><td>50 / 70</td><td>68 / 95 Nm</td></tr>
+          <tr><td>Ramlager (2-bult / 4-bult)</td><td>105–110</td><td>142–149 Nm</td></tr>
+          <tr><td>Svänghjul mot vev</td><td>65</td><td>88 Nm</td></tr>
+        </table>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">FORD SMALL BLOCK (289, 302, 351W):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (289/302: 7/16")</td><td>65–70</td><td>88–95 Nm</td></tr>
+          <tr><td>Topplocksbultar (351W: 1/2")</td><td>95–105</td><td>129–142 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>25–45</td><td>34–61 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>65–105</td><td>88–142 Nm</td></tr>
+        </table>
+
+        <p style="font-size: 0.85rem; color: var(--rust-glow); font-weight: 700; margin-top: 10px;">CHRYSLER / MOPAR LA (318, 360) & B/RB (383, 440):</p>
+        <table class="spec-table">
+          <tr><th>Komponent</th><th>Ft-lbs</th><th>Nm</th></tr>
+          <tr><td>Topplocksbultar (LA 318/360)</td><td>85</td><td>115 Nm</td></tr>
+          <tr><td>Topplocksbultar (B/RB 383/440)</td><td>70</td><td>95 Nm</td></tr>
+          <tr><td>Vevstaksbultar</td><td>45–50</td><td>61–68 Nm</td></tr>
+          <tr><td>Ramlagerbultar</td><td>85–90</td><td>115–122 Nm</td></tr>
+        </table>
+      </div>
+
     </div>
 
-    <!-- 8. KONTAKTER -->
+    <!-- 8. VIKTIGA KONTAKTER -->
     <div id="contacts-tab" class="view">
       <div class="spec-card">
         <div class="spec-title"><span>BURN CREEK SPEEDSHOP</span><span class="spec-badge">CREW</span></div>
@@ -964,12 +1473,34 @@
         <div class="contact-item"><div><div class="contact-name">Håkan Gustafsson</div><div class="contact-phone">070-577 57 33</div></div><a href="tel:0705775733" class="btn-call">📞 RING</a></div>
         <div class="contact-item"><div><div class="contact-name">Pierre Danhall</div><div class="contact-phone">072-309 68 52</div></div><a href="tel:0723096852" class="btn-call">📞 RING</a></div>
       </div>
+
+      <div class="spec-card">
+        <div class="spec-title"><span>FASTIGHETEN</span><span class="spec-badge">HYRESVÄRD</span></div>
+        <div class="contact-item"><div><div class="contact-name">Andreas Ivarsson</div><div class="contact-phone">070-611 56 36</div></div><a href="tel:0706115636" class="btn-call">📞 RING</a></div>
+        <div class="contact-item"><div><div class="contact-name">Andreas Johansson</div><div class="contact-phone">076-016 09 48</div></div><a href="tel:0760160948" class="btn-call">📞 RING</a></div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title"><span>SAMARBETSPARTNERS</span><span class="spec-badge">EXTERN</span></div>
+        <div class="contact-item"><div><div class="contact-name">Midwalls Garage (Erik Midwall)</div><div class="contact-phone">076-669 71 50</div></div><a href="tel:0766697150" class="btn-call">📞 RING</a></div>
+        <div class="contact-item"><div><div class="contact-name">Kulan Trading (Kulan)</div><div class="contact-phone">070-684 94 80</div></div><a href="tel:0706849480" class="btn-call">📞 RING</a></div>
+      </div>
     </div>
 
-    <!-- 9. ADMIN -->
+    <!-- 9. ADMINPANEL -->
     <div id="admin-tab" class="view">
       <div class="spec-card">
-        <div class="spec-title"><span>ADMINPANEL</span><span class="spec-badge">ADMIN</span></div>
+        <div class="spec-title">
+          <span>ANVÄNDARHANTERING</span>
+          <span class="spec-badge">ADMIN</span>
+        </div>
+        
+        <div style="margin-bottom: 14px;">
+          <button class="btn-speed btn-wrench" onclick="syncUsersFromPosts()" style="padding: 8px 12px; font-size: 0.8rem; width: 100%;">
+            🔄 SYNKRONISERA BEFINTLIGA PROFILER FRÅN INLÄGG
+          </button>
+        </div>
+
         <div id="admin-users-list">Laddar användare...</div>
       </div>
     </div>
@@ -1037,6 +1568,10 @@
         document.getElementById('admin-menu-card').style.display = 'flex';
         loadAdminUsers();
       }
+      
+      if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+      }
 
       loadFeed();
       loadCars();
@@ -1046,6 +1581,15 @@
       loadEvents();
       loadParts();
       loadGuests();
+
+      calcRpm();
+      calcCfm();
+      calcCR();
+      calcPistonSpeed();
+      calcTireMetric();
+      calcSpeedoError();
+      calcInjector();
+      calcVdrop();
     } else {
       document.getElementById('auth-view').style.display = 'block';
       document.getElementById('pending-view').style.display = 'none';
@@ -1062,6 +1606,7 @@
     try {
       const res = await auth.createUserWithEmailAndPassword(email, pass);
       await res.user.updateProfile({ displayName: name });
+      
       const isAdm = (email.toLowerCase() === ADMIN_EMAIL.toLowerCase());
       
       await db.collection('users').doc(res.user.uid).set({
@@ -1070,6 +1615,14 @@
         approved: isAdm,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+
+      await db.collection('posts').add({
+        text: `🎟️ Ny medlem har kvitterat ut sitt pit-pass: ${name}! Välkommen till Burn Creek Speedshop.`,
+        imageUrl: '',
+        author: 'SPEEDSHOP DEPÅ',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
       location.reload();
     } catch (err) { 
       document.getElementById('auth-error').innerText = err.message; 
@@ -1085,10 +1638,14 @@
   }
 
   function logout() { auth.signOut(); }
-  function toggleMenu() { document.getElementById('menu-overlay').classList.toggle('open'); }
+
+  function toggleMenu() {
+    document.getElementById('menu-overlay').classList.toggle('open');
+  }
 
   function switchToTab(tabId, title) {
-    ['home', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'].forEach(t => {
+    const tabs = ['home', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
+    tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
     });
@@ -1100,15 +1657,435 @@
     toggleMenu();
   }
 
-  function updateFileName(activeId, labelId) {
-    const f = document.getElementById(activeId).files[0];
-    document.getElementById(labelId).innerText = f ? f.name : '';
+  function updateFileName() {
+    const f = document.getElementById('post-file').files[0];
+    document.getElementById('file-chosen').innerText = f ? f.name : '';
   }
 
   async function deleteDoc(col, id) {
-    if (confirm('Ta bort?')) {
-      await db.collection(col).doc(id).delete();
+    if (confirm('Vill du ta bort detta inlägg/fordon?')) {
+      try {
+        await db.collection(col).doc(id).delete();
+      } catch (err) {
+        alert('Fel vid radering: ' + err.message);
+      }
     }
+  }
+
+  /* ------------------- FORDONSREGISTER & REGNR-SNABBKOLL ------------------- */
+  function toggleAddCarForm() {
+    const form = document.getElementById('add-car-form');
+    const toggleText = document.getElementById('car-form-toggle');
+    if (form.style.display === 'none' || form.style.display === '') {
+      form.style.display = 'flex';
+      toggleText.innerText = 'DÖLJ FORMULÄR ▲';
+    } else {
+      form.style.display = 'none';
+      toggleText.innerText = 'VISA FORMULÄR ▼';
+    }
+  }
+
+  function updateCarFileName() {
+    const f = document.getElementById('car-file').files[0];
+    document.getElementById('car-file-chosen').innerText = f ? f.name : '';
+  }
+
+  async function addCar() {
+    const reg = document.getElementById('car-reg').value.trim().toUpperCase();
+    const year = document.getElementById('car-year').value.trim();
+    const model = document.getElementById('car-model').value.trim();
+    const engine = document.getElementById('car-engine').value.trim();
+    const oil = document.getElementById('car-oil').value.trim();
+    const plugs = document.getElementById('car-plugs').value.trim();
+    const timing = document.getElementById('car-timing').value.trim();
+    const status = document.getElementById('car-status').value;
+    const notes = document.getElementById('car-notes').value.trim();
+    const file = document.getElementById('car-file').files[0];
+
+    if (!reg || !model) return alert('Ange minst regnr och bilmodell!');
+
+    const btn = document.getElementById('btn-save-car');
+    btn.disabled = true;
+    btn.innerText = 'SPARAR...';
+
+    const user = auth.currentUser;
+    const ownerName = user ? (user.displayName || user.email.split('@')[0]) : 'Medlem';
+
+    let imageUrl = '';
+    try {
+      if (file) {
+        imageUrl = await compressImage(file, 900, 0.65);
+      }
+
+      await db.collection('cars').add({
+        reg,
+        year,
+        model,
+        engine,
+        oil,
+        plugs,
+        timing,
+        status,
+        notes,
+        imageUrl,
+        owner: ownerName,
+        ownerUid: user ? user.uid : '',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      document.getElementById('car-reg').value = '';
+      document.getElementById('car-year').value = '';
+      document.getElementById('car-model').value = '';
+      document.getElementById('car-engine').value = '';
+      document.getElementById('car-oil').value = '';
+      document.getElementById('car-plugs').value = '';
+      document.getElementById('car-timing').value = '';
+      document.getElementById('car-notes').value = '';
+      document.getElementById('car-file').value = '';
+      document.getElementById('car-file-chosen').innerText = '';
+      toggleAddCarForm();
+    } catch (err) {
+      alert('Kunde inte spara fordon: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'SPARA FORDON I REGISTRET';
+    }
+  }
+
+  function loadCars() {
+    db.collection('cars').onSnapshot(snapshot => {
+      allCarsCache = [];
+      snapshot.forEach(doc => {
+        allCarsCache.push({ id: doc.id, ...doc.data() });
+      });
+      allCarsCache.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+      
+      const badge = document.getElementById('cars-count-badge');
+      if (badge) badge.innerText = `${allCarsCache.length} BILAR`;
+      
+      renderCars(allCarsCache);
+    });
+  }
+
+  function filterCars() {
+    const q = document.getElementById('car-search').value.trim().toLowerCase();
+    if (!q) {
+      renderCars(allCarsCache);
+      return;
+    }
+    const filtered = allCarsCache.filter(c => 
+      (c.reg && c.reg.toLowerCase().includes(q)) ||
+      (c.model && c.model.toLowerCase().includes(q)) ||
+      (c.owner && c.owner.toLowerCase().includes(q)) ||
+      (c.engine && c.engine.toLowerCase().includes(q))
+    );
+    renderCars(filtered);
+  }
+
+  function renderCars(list) {
+    const container = document.getElementById('cars-container');
+    container.innerHTML = '';
+
+    if (list.length === 0) {
+      container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 15px;">Inga fordon hittades.</p>';
+      return;
+    }
+
+    const currentUser = auth.currentUser;
+
+    list.forEach(c => {
+      let statusLabel = '🟢 Besiktigad & Klar';
+      let statusClass = 'bes-green';
+      if (c.status === 'yellow') { statusLabel = '🟡 Dags för besiktning'; statusClass = 'bes-yellow'; }
+      if (c.status === 'red') { statusLabel = '🔴 Projekt / Avställd'; statusClass = 'bes-red'; }
+
+      const canDelete = isAdmin || (currentUser && c.ownerUid === currentUser.uid);
+
+      container.innerHTML += `
+        <div class="post-card" style="border-left-width: 6px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div class="reg-plate">
+              <div class="reg-plate-s">S</div>
+              <div class="reg-plate-num">${c.reg}</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span class="bes-badge ${statusClass}">${statusLabel}</span>
+              ${canDelete ? `<button class="btn-delete" onclick="deleteDoc('cars', '${c.id}')">✕</button>` : ''}
+            </div>
+          </div>
+
+          <div style="font-family: 'Alfa Slab One', cursive; font-size: 1.05rem; color: var(--cream-bg);">
+            ${c.year ? c.year + ' ' : ''}${c.model}
+          </div>
+          <div style="font-size: 0.78rem; color: var(--rust-glow); font-weight: 700; margin-bottom: 6px;">
+            Ägare: ${c.owner || 'Medlem'}
+          </div>
+
+          ${c.imageUrl ? `<img src="${c.imageUrl}" class="post-image" style="margin-bottom: 10px;" loading="lazy">` : ''}
+
+          <div class="car-spec-grid">
+            <div class="car-spec-item">
+              <span class="car-spec-label">Motor & Låda</span>
+              <span class="car-spec-val">${c.engine || '–'}</span>
+            </div>
+            <div class="car-spec-item">
+              <span class="car-spec-label">Tändinställning</span>
+              <span class="car-spec-val">${c.timing || '–'}</span>
+            </div>
+            <div class="car-spec-item">
+              <span class="car-spec-label">Olja & Filter</span>
+              <span class="car-spec-val">${c.oil || '–'}</span>
+            </div>
+            <div class="car-spec-item">
+              <span class="car-spec-label">Tändstift & Gap</span>
+              <span class="car-spec-val">${c.plugs || '–'}</span>
+            </div>
+          </div>
+
+          ${c.notes ? `<p style="font-size: 0.82rem; color: var(--cream-muted); margin-top: 8px; line-height: 1.4; border-top: 1px dashed #332720; padding-top: 6px;">${c.notes}</p>` : ''}
+        </div>
+      `;
+    });
+  }
+
+  /* SNABBMEDDELANDE TILL TAVLAN */
+  async function sendBoardMessage() {
+    const text = document.getElementById('board-msg-input').value.trim();
+    if (!text) return alert('Skriv ett meddelande först!');
+    const user = auth.currentUser;
+    const authorName = user ? (user.displayName || user.email.split('@')[0]) : 'Depå';
+
+    try {
+      await db.collection('announcements').doc('current').set({
+        text: text,
+        author: authorName,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      document.getElementById('board-msg-input').value = '';
+    } catch (err) {
+      alert('Kunde inte skicka meddelande: ' + err.message);
+    }
+  }
+
+  async function clearBoardMessage() {
+    try {
+      await db.collection('announcements').doc('current').delete();
+    } catch (err) {
+      alert('Kunde inte rensa tavlan: ' + err.message);
+    }
+  }
+
+  function loadCurrentBoardMessage() {
+    db.collection('announcements').doc('current').onSnapshot(doc => {
+      const badge = document.getElementById('board-msg-badge');
+      if (badge) {
+        if (doc.exists && doc.data().text) {
+          badge.innerText = 'AKTIVT ANSLAG';
+          badge.style.background = 'var(--led-green)';
+        } else {
+          badge.innerText = 'INGET ANSLAG';
+          badge.style.background = 'var(--rust-primary)';
+        }
+      }
+    });
+  }
+
+  async function syncUsersFromPosts() {
+    try {
+      const postsSnap = await db.collection('posts').get();
+      const existingUsers = {};
+      postsSnap.forEach(doc => {
+        const a = doc.data().author;
+        if (a && a !== 'SPEEDSHOP DEPÅ' && a !== 'Depå') {
+          existingUsers[a] = true;
+        }
+      });
+
+      let added = 0;
+      for (const authorName of Object.keys(existingUsers)) {
+        const query = await db.collection('users').where('name', '==', authorName).get();
+        if (query.empty) {
+          await db.collection('users').add({
+            name: authorName,
+            email: `${authorName.toLowerCase()}@burncreek.local`,
+            approved: true,
+            syncedFromPosts: true,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          added++;
+        }
+      }
+
+      alert(`Synkronisering klar! Lade till ${added} befintliga medlemmar i listan.`);
+    } catch (err) {
+      alert('Kunde inte synka profiler: ' + err.message);
+    }
+  }
+
+  function loadAdminUsers() {
+    db.collection('users').onSnapshot(snapshot => {
+      const container = document.getElementById('admin-users-list');
+      container.innerHTML = '';
+
+      if (snapshot.empty) {
+        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem;">Inga användare hittades i databasen.</p>';
+        return;
+      }
+
+      const pendingUsers = [];
+      const approvedUsers = [];
+      let fredrikUser = null;
+
+      snapshot.forEach(doc => {
+        const u = { id: doc.id, ...doc.data() };
+        if (u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+          fredrikUser = u;
+        } else if (u.approved) {
+          approvedUsers.push(u);
+        } else {
+          pendingUsers.push(u);
+        }
+      });
+
+      let html = '';
+
+      if (fredrikUser) {
+        html += `
+          <div style="background: #1e1713; border: 2px solid var(--rust-primary); padding: 10px; margin-bottom: 14px; border-radius: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <div style="font-weight: 700; color: var(--cream-bg); font-size: 1rem;">👑 ${fredrikUser.name}</div>
+                <div style="font-size: 0.75rem; color: var(--cream-muted);">${fredrikUser.email}</div>
+              </div>
+              <span style="font-size: 0.75rem; background: var(--rust-primary); color: #fff; padding: 2px 6px; border-radius: 3px; font-weight: 700;">ÄGARE / ADMIN</span>
+            </div>
+          </div>
+        `;
+      }
+
+      html += `<div style="font-family: 'Alfa Slab One', cursive; font-size: 0.85rem; color: #e67e22; margin-bottom: 8px; text-transform: uppercase;">
+        ⏳ Väntar på godkännande (${pendingUsers.length})
+      </div>`;
+
+      if (pendingUsers.length === 0) {
+        html += '<p style="color: var(--cream-muted); font-size: 0.8rem; margin-bottom: 16px;">Inga nya ansökningar just nu.</p>';
+      } else {
+        pendingUsers.forEach(u => {
+          html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #160f0b; border: 1px solid #74290a; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
+              <div>
+                <div style="font-weight: 700; color: #eedcc0; font-size: 0.95rem;">${u.name || 'Namnlös'}</div>
+                <div style="font-size: 0.75rem; color: #aa957c;">${u.email || 'Ingen e-post'}</div>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-speed" style="padding: 6px 12px; font-size: 0.75rem;" onclick="approveUser('${u.id}')">GODKÄNN</button>
+                <button class="btn-killswitch" style="padding: 6px 8px; font-size: 0.75rem;" onclick="deleteUser('${u.id}')">RADERA</button>
+              </div>
+            </div>
+          `;
+        });
+        html += '<div style="margin-bottom: 16px;"></div>';
+      }
+
+      html += `<div style="font-family: 'Alfa Slab One', cursive; font-size: 0.85rem; color: var(--led-green); margin-bottom: 8px; text-transform: uppercase;">
+        ✓ Godkända medlemmar (${approvedUsers.length})
+      </div>`;
+
+      if (approvedUsers.length === 0) {
+        html += '<p style="color: var(--cream-muted); font-size: 0.8rem;">Inga andra medlemmar godkända än. Använd knappen ovan för att synka in Tony & Håkan.</p>';
+      } else {
+        approvedUsers.forEach(u => {
+          html += `
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #0d0a08; border: 1px solid #332720; padding: 10px; margin-bottom: 8px; border-radius: 4px;">
+              <div>
+                <div style="font-weight: 700; color: #eedcc0; font-size: 0.95rem;">${u.name || 'Namnlös'}</div>
+                <div style="font-size: 0.75rem; color: #aa957c;">${u.email || 'Befintlig medlem'}</div>
+              </div>
+              <div style="display: flex; gap: 6px;">
+                <button class="btn-killswitch" style="padding: 6px 10px; font-size: 0.75rem;" onclick="revokeUser('${u.id}')">SPÄRRA</button>
+                <button class="btn-killswitch" style="padding: 6px 8px; font-size: 0.75rem;" onclick="deleteUser('${u.id}')">RADERA</button>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      container.innerHTML = html;
+    });
+  }
+
+  async function approveUser(uid) {
+    try {
+      await db.collection('users').doc(uid).update({ approved: true });
+    } catch (err) { alert(err.message); }
+  }
+
+  async function revokeUser(uid) {
+    try {
+      await db.collection('users').doc(uid).update({ approved: false });
+    } catch (err) { alert(err.message); }
+  }
+
+  async function deleteUser(uid) {
+    if (confirm('Ta bort detta konto helt?')) {
+      try {
+        await db.collection('users').doc(uid).delete();
+      } catch (err) { alert(err.message); }
+    }
+  }
+
+function compressImage(file, maxWidth = 900, quality = 0.65) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = event => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+          if (width > maxWidth) {
+            height = Math.round((height * maxWidth) / width);
+            width = maxWidth;
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          
+          // Rita upp själva fotot
+          ctx.drawImage(img, 0, 0, width, height);
+
+          // Ladda in och rita ut Burn Creek-loggan uppe till höger
+          const logo = new Image();
+          logo.src = 'logo.png';
+          logo.onload = () => {
+            const logoSize = Math.round(width * 0.14); // 14% av bildens bredd
+            const margin = Math.round(width * 0.025);  // Marginal från kanterna
+            const x = width - logoSize - margin;
+            const y = margin;
+
+            ctx.save();
+            ctx.globalAlpha = 0.88; // Lätt genomskinlighet så den smälter in snyggt
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+            ctx.shadowBlur = 8;
+            ctx.shadowOffsetX = 2;
+            ctx.shadowOffsetY = 2;
+            ctx.drawImage(logo, x, y, logoSize, logoSize);
+            ctx.restore();
+
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+
+          // Fallback om logo.png av någon anledning inte laddas
+          logo.onerror = () => {
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+        };
+        img.onerror = err => reject(err);
+      };
+      reader.onerror = err => reject(err);
+    });
   }
 
   async function checkInGarage() {
@@ -1122,15 +2099,23 @@
         checkedInAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      // Skapar automatiskt ett inlägg i depåloggen så gänget ser det direkt i flödet
-      await db.collection('posts').add({
-        text: `☕ ${name} har checkat in i garaget – kaffet är påslaget!`,
-        imageUrl: '',
-        author: name,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      });
-
-      alert("Incheckad i garaget! Kaffeknappen tände lampan och skickade notis i depåloggen.");
+      if ("Notification" in window && Notification.permission === "granted") {
+        const title = "☕ Burn Creek Speedshop";
+        const options = {
+          body: `${name} är i garaget! Kaffet är påslaget.`,
+          icon: "logo.png"
+        };
+        try {
+          if ('serviceWorker' in navigator) {
+            const reg = await navigator.serviceWorker.ready;
+            reg.showNotification(title, options);
+          } else {
+            new Notification(title, options);
+          }
+        } catch(e) {
+          console.log('Notis visades inte:', e);
+        }
+      }
     } catch (err) { 
       alert('Kunde inte checka in: ' + err.message); 
     }
@@ -1141,7 +2126,9 @@
     if (!user) return;
     try {
       await db.collection('active_members').doc(user.uid).delete();
-    } catch (err) { alert(err.message); }
+    } catch (err) { 
+      alert('Kunde inte checka ut: ' + err.message); 
+    }
   }
 
   function loadGarageStatus() {
@@ -1173,7 +2160,414 @@
     });
   }
 
-  // Övriga funktioner för flöde, bilar, kalender, todos etc. hålls intakt via Firebase
+  /* ------------------- KALENDER & TRÄFFAR ------------------- */
+  function toggleAddEventForm() {
+    const form = document.getElementById('add-event-form');
+    const toggleText = document.getElementById('event-form-toggle');
+    if (form.style.display === 'none' || form.style.display === '') {
+      form.style.display = 'flex';
+      toggleText.innerText = 'DÖLJ FORMULÄR ▲';
+    } else {
+      form.style.display = 'none';
+      toggleText.innerText = 'VISA FORMULÄR ▼';
+    }
+  }
+
+  async function addEvent() {
+    const category = document.getElementById('event-category').value;
+    const title = document.getElementById('event-title').value.trim();
+    const date = document.getElementById('event-date').value;
+    const time = document.getElementById('event-time').value.trim();
+    const desc = document.getElementById('event-desc').value.trim();
+    if (!title) return alert('Ange en titel!');
+    if (!date) return alert('Välj ett datum!');
+
+    const user = auth.currentUser;
+    const authorName = user ? (user.displayName || user.email.split('@')[0]) : 'Depå';
+
+    try {
+      await db.collection('events').add({
+        category,
+        title,
+        date,
+        time,
+        desc,
+        attendees: [authorName],
+        author: authorName,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      document.getElementById('event-title').value = '';
+      document.getElementById('event-date').value = '';
+      document.getElementById('event-time').value = '';
+      document.getElementById('event-desc').value = '';
+      toggleAddEventForm();
+    } catch (err) { alert(err.message); }
+  }
+
+  async function toggleEventRsvp(eventId) {
+    const user = auth.currentUser;
+    if (!user) return;
+    const myName = user.displayName || user.email.split('@')[0];
+    const ev = allEventsCache.find(item => item.id === eventId);
+    if (!ev) return;
+
+    const currentList = Array.isArray(ev.attendees) ? [...ev.attendees] : [];
+    const idx = currentList.indexOf(myName);
+    if (idx > -1) {
+      currentList.splice(idx, 1);
+    } else {
+      currentList.push(myName);
+    }
+
+    try {
+      await db.collection('events').doc(eventId).update({ attendees: currentList });
+    } catch (err) {
+      alert('Kunde inte uppdatera anmälan: ' + err.message);
+    }
+  }
+
+  function downloadEventIcs(eventId) {
+    const ev = allEventsCache.find(item => item.id === eventId);
+    if (!ev || !ev.date) return;
+
+    const cleanDate = ev.date.replace(/-/g, '');
+    let startHour = '180000';
+    let endHour = '210000';
+    if (ev.time && ev.time.includes(':')) {
+      const parts = ev.time.split(':');
+      const hh = parts[0].padStart(2, '0');
+      const mm = parts[1].padStart(2, '0');
+      startHour = `${hh}${mm}00`;
+      const endH = String(Math.min(23, parseInt(hh, 10) + 3)).padStart(2, '0');
+      endHour = `${endH}${mm}00`;
+    }
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Burn Creek Speedshop//Garage Kalender//SV',
+      'BEGIN:VEVENT',
+      `DTSTART:${cleanDate}T${startHour}`,
+      `DTEND:${cleanDate}T${endHour}`,
+      `SUMMARY:${ev.title} (Burn Creek Speedshop)`,
+      `DESCRIPTION:${(ev.desc || '').replace(/\n/g, ' ')}`,
+      'LOCATION:Burn Creek Speedshop, Brännehylte',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${ev.title.replace(/[^a-zA-Z0-9åäöÅÄÖ]/g, '_')}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function changeCalendarMonth(delta) {
+    calCurrentDate.setMonth(calCurrentDate.getMonth() + delta);
+    renderCalendarGrid();
+  }
+
+  function selectCalendarDate(dateStr) {
+    if (calSelectedDateStr === dateStr) {
+      calSelectedDateStr = null;
+    } else {
+      calSelectedDateStr = dateStr;
+      const dateInput = document.getElementById('event-date');
+      if (dateInput) dateInput.value = dateStr;
+    }
+    renderCalendarGrid();
+    renderEventsList();
+  }
+
+  function clearDateFilter() {
+    calSelectedDateStr = null;
+    renderCalendarGrid();
+    renderEventsList();
+  }
+
+  function getCategoryStyle(cat) {
+    switch (cat) {
+      case 'race': return { label: '🏁 TRÄFF / RACE', color: '#e74c3c' };
+      case 'grill': return { label: '🍔 GRILL & FEST', color: '#f39c12' };
+      case 'stad': return { label: '🧹 STÄD & UNDERHÅLL', color: '#3498db' };
+      default: return { label: '🔧 MEKKVÄLL', color: '#2ecc71' };
+    }
+  }
+
+  function renderCalendarGrid() {
+    const grid = document.getElementById('cal-days-grid');
+    const titleEl = document.getElementById('cal-month-title');
+    if (!grid || !titleEl) return;
+
+    const year = calCurrentDate.getFullYear();
+    const month = calCurrentDate.getMonth();
+    const monthNames = ['Januari', 'Februari', 'Mars', 'April', 'Maj', 'Juni', 'Juli', 'Augusti', 'September', 'Oktober', 'November', 'December'];
+    titleEl.innerText = `${monthNames[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const startOffset = (firstDay === 0) ? 6 : firstDay - 1;
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const todayObj = new Date();
+    const todayStr = `${todayObj.getFullYear()}-${String(todayObj.getMonth() + 1).padStart(2, '0')}-${String(todayObj.getDate()).padStart(2, '0')}`;
+
+    let html = '';
+    for (let i = 0; i < startOffset; i++) {
+      html += '<div class="cal-day empty"></div>';
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+      const dayEvents = allEventsCache.filter(e => e.date === dateStr);
+      const isToday = (dateStr === todayStr);
+      const isSelected = (dateStr === calSelectedDateStr);
+
+      let dotsHtml = '';
+      if (dayEvents.length > 0) {
+        dotsHtml = '<div class="cal-dots">';
+        dayEvents.slice(0, 4).forEach(ev => {
+          const st = getCategoryStyle(ev.category);
+          dotsHtml += `<span class="cal-dot" style="background: ${st.color};"></span>`;
+        });
+        dotsHtml += '</div>';
+      }
+
+      html += `
+        <div class="cal-day ${isToday ? 'today' : ''} ${isSelected ? 'selected' : ''}" onclick="selectCalendarDate('${dateStr}')">
+          <span>${d}</span>
+          ${dotsHtml}
+        </div>
+      `;
+    }
+
+    grid.innerHTML = html;
+  }
+
+  function loadEvents() {
+    db.collection('events').onSnapshot(snapshot => {
+      allEventsCache = [];
+      snapshot.forEach(doc => {
+        allEventsCache.push({ id: doc.id, ...doc.data() });
+      });
+      allEventsCache.sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'));
+      renderCalendarGrid();
+      renderEventsList();
+    });
+  }
+
+  function renderEventsList() {
+    const c = document.getElementById('events-container');
+    const filterBar = document.getElementById('cal-filter-bar');
+    const filterText = document.getElementById('cal-filter-text');
+    if (!c) return;
+
+    let listToRender = allEventsCache;
+    if (calSelectedDateStr) {
+      listToRender = allEventsCache.filter(e => e.date === calSelectedDateStr);
+      if (filterBar) filterBar.style.display = 'flex';
+      if (filterText) filterText.innerText = `Visar händelser för ${calSelectedDateStr}`;
+    } else {
+      if (filterBar) filterBar.style.display = 'none';
+    }
+
+    c.innerHTML = '';
+    if (listToRender.length === 0) {
+      c.innerHTML = `<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 10px;">${calSelectedDateStr ? 'Inga händelser detta datum.' : 'Inga planerade datum i kalendern just nu.'}</p>`;
+      return;
+    }
+
+    const user = auth.currentUser;
+    const myName = user ? (user.displayName || user.email.split('@')[0]) : '';
+
+    listToRender.forEach(e => {
+      const catStyle = getCategoryStyle(e.category);
+      const attendees = Array.isArray(e.attendees) ? e.attendees : [];
+      const amIJoined = myName && attendees.includes(myName);
+
+      c.innerHTML += `
+        <div class="post-card" style="border-left-color: ${catStyle.color};">
+          <div class="post-header">
+            <span style="font-size: 0.72rem; font-weight: 700; color: ${catStyle.color};">${catStyle.label}</span>
+            <div>
+              <span style="font-weight: 700; color: var(--cream-bg);">${e.date || 'TBA'} ${e.time ? 'kl ' + e.time : ''}</span>
+              ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('events', '${e.id}')">✕ RADERA</button>` : ''}
+            </div>
+          </div>
+          <div class="post-author" style="margin-bottom: 4px;">${e.title}</div>
+          ${e.desc ? `<p style="font-size: 0.9rem; line-height: 1.4; margin-bottom: 8px;">${e.desc}</p>` : ''}
+          
+          <div style="background: #140f0c; border: 1px solid #2e241e; border-radius: 4px; padding: 8px; margin-top: 8px;">
+            <div style="font-size: 0.75rem; color: var(--cream-muted); margin-bottom: 6px;">
+              <strong>Kommer (${attendees.length}):</strong> ${attendees.length > 0 ? attendees.join(', ') : 'Ingen anmäld än'}
+            </div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <button class="btn-rsvp ${amIJoined ? 'joined' : ''}" onclick="toggleEventRsvp('${e.id}')">
+                ${amIJoined ? '✓ JAG KOMMER (AVBOKA)' : '+ JAG KOMMER!'}
+              </button>
+              <button class="btn-ics" onclick="downloadEventIcs('${e.id}')">📅 KALENDER</button>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+  }
+
+  /* SKROTNISSE */
+  function updatePartFileName() {
+    const f = document.getElementById('part-file').files[0];
+    document.getElementById('part-file-chosen').innerText = f ? f.name : '';
+  }
+
+  async function addPart() {
+    const type = document.getElementById('part-type').value;
+    const title = document.getElementById('part-title').value.trim();
+    const price = document.getElementById('part-price').value.trim();
+    const desc = document.getElementById('part-desc').value.trim();
+    const file = document.getElementById('part-file').files[0];
+    if (!title) return alert('Ange vad för del/material!');
+
+    const btn = document.getElementById('btn-save-part');
+    btn.disabled = true;
+    btn.innerText = 'LÄGGER UPP...';
+
+    let imageUrl = '';
+    try {
+      if (file) {
+        imageUrl = await compressImage(file, 900, 0.65);
+      }
+
+      await db.collection('parts').add({
+        type, title, price, desc, imageUrl,
+        author: auth.currentUser.displayName || 'Depå',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      document.getElementById('part-title').value = '';
+      document.getElementById('part-price').value = '';
+      document.getElementById('part-desc').value = '';
+      document.getElementById('part-file').value = '';
+      document.getElementById('part-file-chosen').innerText = '';
+    } catch (err) { 
+      alert(err.message); 
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'LÄGG UPP DEL';
+    }
+  }
+
+  function loadParts() {
+    db.collection('parts').onSnapshot(snapshot => {
+      const c = document.getElementById('parts-container');
+      c.innerHTML = '';
+      if (snapshot.empty) {
+        c.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center;">Lagret är tomt. Lägg upp delar eller efterlysningar!</p>';
+        return;
+      }
+      const list = [];
+      snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+      list.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+
+      list.forEach(p => {
+        const isSell = p.type.includes('SÄLJES');
+        c.innerHTML += `
+          <div class="post-card" style="border-left-color: ${isSell ? 'var(--rust-primary)' : '#2980b9'};">
+            <div class="post-header">
+              <span class="post-author">${p.title}</span>
+              <div>
+                <span style="color: ${isSell ? 'var(--rust-glow)' : '#3498db'}; font-weight: 700;">${p.type}</span>
+                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('parts', '${p.id}')">✕ RADERA</button>` : ''}
+              </div>
+            </div>
+            ${p.price ? `<p style="font-size: 0.95rem; font-weight: 700; color: var(--cream-bg);">Pris/Byte: ${p.price}</p>` : ''}
+            ${p.desc ? `<p style="font-size: 0.85rem; margin-top: 4px; color: var(--cream-muted);">${p.desc}</p>` : ''}
+            ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-image" loading="lazy">` : ''}
+            <div style="font-size: 0.75rem; color: #88786d; margin-top: 6px;">Kontakt: ${p.author}</div>
+          </div>
+        `;
+      });
+    });
+  }
+
+  /* GÄSTMEK */
+  async function addGuest() {
+    const name = document.getElementById('guest-name').value.trim();
+    const car = document.getElementById('guest-car').value.trim();
+    const date = document.getElementById('guest-date').value;
+    if (!name || !car) return alert('Ange namn och fordon/arbete!');
+    try {
+      await db.collection('guests').add({
+        name, car, date,
+        host: auth.currentUser.displayName || 'Medlem',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      document.getElementById('guest-name').value = '';
+      document.getElementById('guest-car').value = '';
+      document.getElementById('guest-date').value = '';
+    } catch (err) { alert(err.message); }
+  }
+
+  function loadGuests() {
+    db.collection('guests').onSnapshot(snapshot => {
+      const c = document.getElementById('guests-container');
+      c.innerHTML = '';
+      if (snapshot.empty) {
+        c.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center;">Inga gäster inbokade.</p>';
+        return;
+      }
+      snapshot.forEach(doc => {
+        const g = doc.data();
+        c.innerHTML += `
+          <div class="post-card">
+            <div class="post-header">
+              <span class="post-author">${g.name}</span>
+              <div>
+                <span>${g.date || 'Ej satt'}</span>
+                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('guests', '${doc.id}')">✕ RADERA</button>` : ''}
+              </div>
+            </div>
+            <p style="font-size: 0.9rem;"><strong>Arbete:</strong> ${g.car}</p>
+            <div style="font-size: 0.75rem; color: var(--rust-glow); margin-top: 6px;">Ansvarig värd: ${g.host}</div>
+          </div>
+        `;
+      });
+    });
+  }
+
+  async function publishPost() {
+    const text = document.getElementById('post-text').value.trim();
+    const file = document.getElementById('post-file').files[0];
+    if (!text && !file) return;
+
+    const btn = document.getElementById('btn-publish');
+    btn.disabled = true;
+    btn.innerText = 'BRÄNNER...';
+
+    let imageUrl = '';
+    try {
+      if (file) {
+        imageUrl = await compressImage(file, 900, 0.65);
+      }
+
+      await db.collection('posts').add({
+        text: text,
+        imageUrl: imageUrl,
+        author: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      document.getElementById('post-text').value = '';
+      document.getElementById('post-file').value = '';
+      document.getElementById('file-chosen').innerText = '';
+    } catch (err) {
+      alert('Kunde inte publicera: ' + err.message);
+    } finally {
+      btn.disabled = false;
+      btn.innerText = 'BRÄNN AV';
+    }
+  }
+
   function loadFeed() {
     db.collection('posts').onSnapshot(snapshot => {
       const container = document.getElementById('posts-container');
@@ -1190,59 +2584,185 @@
         const date = p.createdAt ? new Date(p.createdAt.toDate()).toLocaleDateString('sv-SE', { hour: '2-digit', minute: '2-digit' }) : 'Depå';
         container.innerHTML += `
           <div class="post-card">
-            <div class="post-header"><span class="post-author">${p.author || 'Depå'}</span><span>${date}</span></div>
-            <p style="font-size: 0.95rem; line-height: 1.45;">${p.text}</p>
+            <div class="post-header">
+              <span class="post-author">${p.author || 'Depå'}</span>
+              <div>
+                <span>${date}</span>
+                ${isAdmin ? `<button class="btn-delete" onclick="deleteDoc('posts', '${p.id}')">✕ RADERA</button>` : ''}
+              </div>
+            </div>
+            ${p.text ? `<p style="font-size: 0.95rem; line-height: 1.45;">${p.text}</p>` : ''}
+            ${p.imageUrl ? `<img src="${p.imageUrl}" class="post-image" loading="lazy">` : ''}
           </div>
         `;
       });
     });
   }
 
-  async function publishPost() {
-    const text = document.getElementById('post-text').value.trim();
-    if (!text) return;
-    const authorName = auth.currentUser.displayName || 'Depå';
-    await db.collection('posts').add({
-      text, author: authorName, createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-    document.getElementById('post-text').value = '';
-  }
-
   async function addTodo() {
     const input = document.getElementById('todo-input');
     const val = input.value.trim();
     if (!val) return;
-    await db.collection('todos').add({ text: val, done: false, addedBy: auth.currentUser.displayName || 'Depå', createdAt: firebase.firestore.FieldValue.serverTimestamp() });
-    input.value = '';
+    try {
+      await db.collection('todos').add({ 
+        text: val, 
+        done: false, 
+        addedBy: auth.currentUser.displayName || 'Depå',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+      input.value = '';
+    } catch (err) { alert(err.message); }
+  }
+
+  function toggleTodo(id, currentStatus) {
+    db.collection('todos').doc(id).update({ done: !currentStatus });
   }
 
   function loadTodos() {
     db.collection('todos').onSnapshot(snapshot => {
       const container = document.getElementById('todos-container');
       container.innerHTML = '';
-      snapshot.forEach(doc => {
-        const t = doc.data();
-        container.innerHTML += `<div class="todo-item ${t.done ? 'done' : ''}"><span>${t.text}</span></div>`;
+      if (snapshot.empty) {
+        container.innerHTML = '<p style="color: var(--cream-muted); font-size: 0.85rem; text-align: center; margin-top: 10px;">Inga punkter på listan än.</p>';
+        return;
+      }
+      const list = [];
+      snapshot.forEach(doc => list.push({ id: doc.id, ...doc.data() }));
+      list.sort((a, b) => (b.createdAt?.toMillis() || 0) - (a.createdAt?.toMillis() || 0));
+
+      list.forEach(t => {
+        container.innerHTML += `
+          <div class="todo-item ${t.done ? 'done' : ''}" onclick="toggleTodo('${t.id}', ${t.done})">
+            <input type="checkbox" ${t.done ? 'checked' : ''} style="cursor: pointer; accent-color: var(--rust-primary);">
+            <span style="flex: 1;">${t.text}</span>
+            <span class="todo-badge">${t.addedBy || 'Depå'}</span>
+            ${isAdmin ? `<button class="btn-delete" onclick="event.stopPropagation(); deleteDoc('todos', '${t.id}')">✕</button>` : ''}
+          </div>
+        `;
       });
     });
   }
 
-  function loadCars() {}
-  function loadCurrentBoardMessage() {}
-  function loadEvents() {}
-  function loadParts() {}
-  function loadGuests() {}
-  function loadAdminUsers() {}
-  function toggleAddCarForm() {}
-  function toggleAddEventForm() {}
-  function addCar() {}
-  function addEvent() {}
-  function addPart() {}
-  function addGuest() {}
-  function sendBoardMessage() {}
-  function clearBoardMessage() {}
-  function changeCalendarMonth() {}
-  function renderCalendarGrid() {}
+  /* KALKYLATORER */
+  function calcRpm() {
+    const kmh = parseFloat(document.getElementById('calc-speed').value) || 0;
+    const tire = parseFloat(document.getElementById('calc-tire').value) || 28;
+    const axle = parseFloat(document.getElementById('calc-axle').value) || 3.73;
+    const trans = parseFloat(document.getElementById('calc-trans').value) || 1.0;
+    const mph = kmh * 0.621371;
+    const rpm = Math.round((mph * axle * trans * 336) / tire);
+    const resEl = document.getElementById('res-rpm');
+    if (resEl) resEl.innerText = `${rpm} RPM`;
+  }
+
+  function calcCfm() {
+    const cid = parseFloat(document.getElementById('calc-cid').value) || 350;
+    const rpm = parseFloat(document.getElementById('calc-maxrpm').value) || 6000;
+    const ve = parseFloat(document.getElementById('calc-ve').value) || 0.85;
+    const cfm = Math.round((cid * rpm * ve) / 3456);
+    const resEl = document.getElementById('res-cfm');
+    if (resEl) resEl.innerText = `${cfm} CFM`;
+  }
+
+  function calcCR() {
+    const bore = parseFloat(document.getElementById('cr-bore').value) || 4.0;
+    const stroke = parseFloat(document.getElementById('cr-stroke').value) || 3.48;
+    const chamber = parseFloat(document.getElementById('cr-chamber').value) || 64.0;
+    const piston = parseFloat(document.getElementById('cr-piston').value) || 5.0;
+    const gThick = parseFloat(document.getElementById('cr-gasket-th').value) || 0.039;
+    const gBore = parseFloat(document.getElementById('cr-gasket-b').value) || 4.06;
+    const deck = parseFloat(document.getElementById('cr-deck').value) || 0.020;
+    const ivc = parseFloat(document.getElementById('cr-ivc').value) || 65;
+    const rod = parseFloat(document.getElementById('cr-rod').value) || 5.7;
+
+    const sweepVol = (Math.PI * Math.pow(bore / 2, 2) * stroke) * 16.387064;
+    const gasketVol = (Math.PI * Math.pow(gBore / 2, 2) * gThick) * 16.387064;
+    const deckVol = (Math.PI * Math.pow(bore / 2, 2) * deck) * 16.387064;
+    const clearanceVol = chamber + piston + gasketVol + deckVol;
+
+    const cr = (sweepVol + clearanceVol) / clearanceVol;
+
+    const radIVC = (ivc * Math.PI) / 180;
+    const crankRadius = stroke / 2;
+    const effPistonPos = crankRadius * (1 - Math.cos(radIVC)) + rod - Math.sqrt(Math.pow(rod, 2) - Math.pow(crankRadius * Math.sin(radIVC), 2));
+    const effectiveStroke = Math.max(0, stroke - effPistonPos);
+    const effSweepVol = (Math.PI * Math.pow(bore / 2, 2) * effectiveStroke) * 16.387064;
+    const dcr = (effSweepVol + clearanceVol) / clearanceVol;
+
+    const resCr = document.getElementById('res-cr');
+    const resDcr = document.getElementById('res-dcr');
+    if (resCr) resCr.innerText = `Statisk CR: ${cr.toFixed(2)}:1`;
+    if (resDcr) resDcr.innerText = `Dynamisk DCR: ${dcr.toFixed(2)}:1 (Effektivt slag: ${effectiveStroke.toFixed(2)}")`;
+  }
+
+  function calcPistonSpeed() {
+    const stroke = parseFloat(document.getElementById('ps-stroke').value) || 3.48;
+    const rpm = parseFloat(document.getElementById('ps-rpm').value) || 6000;
+    const ftmin = (2 * stroke * rpm) / 12;
+    const ms = ftmin * 0.00508;
+    const resEl = document.getElementById('res-pistonspeed');
+    if (resEl) resEl.innerText = `${ms.toFixed(2)} m/s (${Math.round(ftmin)} ft/min)`;
+  }
+
+  function calcTireMetric() {
+    const w = parseFloat(document.getElementById('tire-w').value) || 275;
+    const p = parseFloat(document.getElementById('tire-p').value) || 60;
+    const r = parseFloat(document.getElementById('tire-r').value) || 15;
+
+    const sidewallMm = w * (p / 100);
+    const diameterMm = (sidewallMm * 2) + (r * 25.4);
+    const diameterIn = diameterMm / 25.4;
+    const circCm = (diameterMm * Math.PI) / 10;
+
+    const resEl = document.getElementById('res-tire-calc');
+    if (resEl) resEl.innerText = `${diameterIn.toFixed(1)}" diameter (${circCm.toFixed(1)} cm omkrets)`;
+  }
+
+  function calcSpeedoError() {
+    const oldD = parseFloat(document.getElementById('old-tire').value) || 26;
+    const newD = parseFloat(document.getElementById('new-tire').value) || 28;
+    const factor = newD / oldD;
+    const actualSpeed = 100 * factor;
+    const diffPercent = ((factor - 1) * 100).toFixed(1);
+    const sign = diffPercent > 0 ? '+' : '';
+    const resEl = document.getElementById('res-speedo-error');
+    if (resEl) resEl.innerText = `${actualSpeed.toFixed(1)} km/h (${sign}${diffPercent} %)`;
+  }
+
+  function calcInjector() {
+    const hp = parseFloat(document.getElementById('inj-hp').value) || 450;
+    const count = parseFloat(document.getElementById('inj-count').value) || 8;
+    const bsfc = 0.50;
+    const dutyCycle = 0.85;
+
+    const lbs = (hp * bsfc) / (count * dutyCycle);
+    const cc = lbs * 10.5;
+    const resEl = document.getElementById('res-injector');
+    if (resEl) resEl.innerText = `${lbs.toFixed(1)} lbs/hr (${Math.round(cc)} cc/min)`;
+  }
+
+  function calcVdrop() {
+    const amp = parseFloat(document.getElementById('vdrop-amp').value) || 20;
+    const len = parseFloat(document.getElementById('vdrop-len').value) || 6.0;
+    const maxDrop = 0.38;
+    const reqArea = (amp * 0.0175 * len) / maxDrop;
+
+    let stdArea = 1.5;
+    if (reqArea > 1.5) stdArea = 2.5;
+    if (reqArea > 2.5) stdArea = 4.0;
+    if (reqArea > 4.0) stdArea = 6.0;
+    if (reqArea > 6.0) stdArea = 10.0;
+    if (reqArea > 10.0) stdArea = 16.0;
+    if (reqArea > 16.0) stdArea = 25.0;
+
+    const actualDrop = (amp * 0.0175 * len) / stdArea;
+    const resEl = document.getElementById('res-vdrop');
+    if (resEl) resEl.innerText = `Minst ${stdArea} mm² (Spänningsfall: ${actualDrop.toFixed(2)} V)`;
+  }
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
 </script>
 </body>
 </html>
