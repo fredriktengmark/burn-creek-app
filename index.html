@@ -11,6 +11,48 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Rye&family=Chakra+Petch:wght@500;700&family=Teko:wght@600;700&display=swap" rel="stylesheet">
   
+  <!-- OneSignal SDK v16 -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+  <script>
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.init({
+        appId: "2212ea0b-a94d-4069-8f5b-ac38b776c280",
+        safari_web_id: "web.onesignal.auto.165f55d2-2c2b-457d-b7b8-8b89270f4464",
+        notifyButton: {
+          enable: false,
+        },
+      });
+
+      updatePushButtonUI(OneSignal.User.PushSubscription.optedIn);
+      OneSignal.User.PushSubscription.addEventListener("change", function(event) {
+        updatePushButtonUI(event.current.optedIn);
+      });
+    });
+
+    function updatePushButtonUI(isSubscribed) {
+      const btn = document.getElementById('btn-push-subscribe');
+      if (!btn) return;
+      if (isSubscribed) {
+        btn.innerHTML = '<span>🔔</span> PUSH-NOTISER AKTIVERADE ✓';
+        btn.style.borderColor = 'var(--led-green)';
+        btn.style.color = 'var(--led-green)';
+      } else {
+        btn.innerHTML = '<span>🔕</span> AKTIVERA PUSH-NOTISER';
+        btn.style.borderColor = 'var(--rust-primary)';
+        btn.style.color = 'var(--cream-bg)';
+      }
+    }
+
+    function requestOneSignalPush() {
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.Notifications.requestPermission();
+        updatePushButtonUI(OneSignal.User.PushSubscription.optedIn);
+      });
+    }
+  </script>
+
   <style>
     :root {
       --rust-primary: #b34b1e;
@@ -455,6 +497,23 @@
       justify-content: center;
       gap: 6px;
     }
+    .btn-push-toggle {
+      background: #1a1411;
+      border: 1px solid var(--rust-primary);
+      color: var(--cream-bg);
+      padding: 9px;
+      border-radius: 4px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      margin-bottom: 12px;
+    }
     .btn-checkout {
       background: #2a110c;
       border: 1px solid #77261a;
@@ -721,7 +780,7 @@
           <div class="menu-card-icon">🏠</div>
           <div class="menu-card-content">
             <h3>STARTSKÄRM</h3>
-            <p>Logga, närvaroindikator och kaffeknapp.</p>
+            <p>Logga, närvaroindikator, kaffeknapp och push-notiser.</p>
           </div>
         </div>
 
@@ -801,8 +860,8 @@
 
     <!-- 0. STARTSKÄRM -->
     <div id="home-tab" class="view active">
-      <div style="display: flex; flex-direction: column; align-items: center; padding-top: 10px;">
-        <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 310px; width: 88%; height: auto; margin: 10px auto 22px auto; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.95); border: 4px solid var(--rust-primary); display: block;" onerror="this.style.display='none'">
+      <div style="display: flex; flex-direction: column; align-items: center; padding-top: 8px;">
+        <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 290px; width: 84%; height: auto; margin: 6px auto 18px auto; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.95); border: 4px solid var(--rust-primary); display: block;" onerror="this.style.display='none'">
 
         <div class="status-beacon">
           <div class="status-indicator-bar">
@@ -815,7 +874,11 @@
           </button>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 4px;">
+        <button id="btn-push-subscribe" class="btn-push-toggle" onclick="requestOneSignalPush()">
+          <span>🔔</span> AKTIVERA PUSH-NOTISER
+        </button>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%;">
           <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('feed', 'DEPÅLOGG & BILDER')">🏁 DEPÅLOGGEN</button>
           <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('cars', 'FORDONSREGISTER & REGNR')">🏎️ BILARNA</button>
         </div>
@@ -841,11 +904,13 @@
 
       <div class="post-creator">
         <textarea id="post-text" class="garage-input" placeholder="Rapport från garaget, mekstatus eller bytesdelar..."></textarea>
-        <div style="display: flex; gap: 8px; align-items: center;">
-          <input type="file" id="post-file" accept="image/*" style="display: none;" onchange="updateFileName()">
-          <button class="btn-speed btn-wrench" onclick="document.getElementById('post-file').click()" style="padding: 6px 14px; font-size: 0.9rem;">📷 BILD</button>
-          <span id="file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 130px;"></span>
-          <button id="btn-publish" class="btn-speed" style="margin-left: auto; padding: 6px 18px; font-size: 0.95rem;" onclick="publishPost()">BRÄNN AV</button>
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+          <input type="file" id="post-file" accept="image/*" style="display: none;" onchange="updateFileName('post-file', 'file-chosen')">
+          <input type="file" id="post-camera" accept="image/*" capture="environment" style="display: none;" onchange="updateFileName('post-camera', 'file-chosen')">
+          <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('post-camera').click()" style="padding: 6px 10px; font-size: 0.82rem;">📸 KAMERA</button>
+          <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('post-file').click()" style="padding: 6px 10px; font-size: 0.82rem;">🖼️ GALLERI</button>
+          <span id="file-chosen" style="font-size: 0.75rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 90px;"></span>
+          <button id="btn-publish" class="btn-speed" style="margin-left: auto; padding: 6px 14px; font-size: 0.9rem;" onclick="publishPost()">BRÄNN AV</button>
         </div>
       </div>
       <div id="posts-container">Laddar depåloggen...</div>
@@ -890,10 +955,12 @@
           </div>
           <textarea id="car-notes" class="garage-input" style="height: 60px; resize: none;" placeholder="Övrig spec (bultmönster, däckdimension, förgasarmunstycken, bakaxelutväxling)..."></textarea>
           
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <input type="file" id="car-file" accept="image/*" style="display: none;" onchange="updateCarFileName()">
-            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('car-file').click()" style="padding: 8px 14px; font-size: 0.85rem;">📷 BILD PÅ BILEN</button>
-            <span id="car-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px;"></span>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <input type="file" id="car-file" accept="image/*" style="display: none;" onchange="updateFileName('car-file', 'car-file-chosen')">
+            <input type="file" id="car-camera" accept="image/*" capture="environment" style="display: none;" onchange="updateFileName('car-camera', 'car-file-chosen')">
+            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('car-camera').click()" style="padding: 8px 12px; font-size: 0.82rem;">📸 TA FOTO</button>
+            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('car-file').click()" style="padding: 8px 12px; font-size: 0.82rem;">🖼️ GALLERI</button>
+            <span id="car-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;"></span>
           </div>
 
           <button id="btn-save-car" class="btn-speed" onclick="addCar()" style="padding: 10px; font-size: 0.95rem;">SPARA FORDON I REGISTRET</button>
@@ -971,10 +1038,12 @@
           <input type="text" id="part-price" class="garage-input" placeholder="Pris / Bytes / Skänkes mot fika">
           <textarea id="part-desc" class="garage-input" style="height: 60px; resize: none;" placeholder="Beskrivning, skick eller mått..."></textarea>
           
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <input type="file" id="part-file" accept="image/*" style="display: none;" onchange="updatePartFileName()">
-            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('part-file').click()" style="padding: 8px 14px; font-size: 0.85rem;">📷 BILD PÅ DELEN</button>
-            <span id="part-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 180px;"></span>
+          <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+            <input type="file" id="part-file" accept="image/*" style="display: none;" onchange="updateFileName('part-file', 'part-file-chosen')">
+            <input type="file" id="part-camera" accept="image/*" capture="environment" style="display: none;" onchange="updateFileName('part-camera', 'part-file-chosen')">
+            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('part-camera').click()" style="padding: 8px 12px; font-size: 0.82rem;">📸 TA FOTO</button>
+            <button type="button" class="btn-speed btn-wrench" onclick="document.getElementById('part-file').click()" style="padding: 8px 12px; font-size: 0.82rem;">🖼️ GALLERI</button>
+            <span id="part-file-chosen" style="font-size: 0.8rem; color: var(--cream-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 140px;"></span>
           </div>
 
           <button id="btn-save-part" class="btn-speed" onclick="addPart()" style="padding: 10px; font-size: 0.95rem;">LÄGG UPP DEL</button>
@@ -1527,6 +1596,30 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
+  const ONESIGNAL_APP_ID = "2212ea0b-a94d-4069-8f5b-ac38b776c280";
+  const ONESIGNAL_REST_KEY = "os_v2_app_eijouc5jjvagtd23vq4lo5wcqdqc34yp74ces2urrfth62ytkl6mtjqsjjtajgbsqep36oyg5od2dlupbzoiybmfsyqovggzp2a3doa";
+
+  async function sendPushNotification(title, message) {
+    try {
+      await fetch("https://onesignal.com/api/v1/notifications", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          "Authorization": "Key " + ONESIGNAL_REST_KEY
+        },
+        body: JSON.stringify({
+          app_id: ONESIGNAL_APP_ID,
+          included_segments: ["All"],
+          headings: { en: title, sv: title },
+          contents: { en: message, sv: message },
+          url: "https://fredriktengmark.github.io/burn-creek-app/"
+        })
+      });
+    } catch (e) {
+      console.log("Kunde inte skicka push-notis:", e);
+    }
+  }
+
   const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
   let isAdmin = false;
   let allCarsCache = [];
@@ -1567,10 +1660,6 @@
       if (isAdmin) {
         document.getElementById('admin-menu-card').style.display = 'flex';
         loadAdminUsers();
-      }
-      
-      if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
-        Notification.requestPermission();
       }
 
       loadFeed();
@@ -1657,9 +1746,15 @@
     toggleMenu();
   }
 
-  function updateFileName() {
-    const f = document.getElementById('post-file').files[0];
-    document.getElementById('file-chosen').innerText = f ? f.name : '';
+  function updateFileName(activeId, labelId) {
+    const f = document.getElementById(activeId).files[0];
+    document.getElementById(labelId).innerText = f ? f.name : '';
+    
+    const otherId = activeId.includes('camera') 
+      ? activeId.replace('camera', 'file') 
+      : activeId.replace('file', 'camera');
+    const otherEl = document.getElementById(otherId);
+    if (otherEl) otherEl.value = '';
   }
 
   async function deleteDoc(col, id) {
@@ -1685,11 +1780,6 @@
     }
   }
 
-  function updateCarFileName() {
-    const f = document.getElementById('car-file').files[0];
-    document.getElementById('car-file-chosen').innerText = f ? f.name : '';
-  }
-
   async function addCar() {
     const reg = document.getElementById('car-reg').value.trim().toUpperCase();
     const year = document.getElementById('car-year').value.trim();
@@ -1700,7 +1790,7 @@
     const timing = document.getElementById('car-timing').value.trim();
     const status = document.getElementById('car-status').value;
     const notes = document.getElementById('car-notes').value.trim();
-    const file = document.getElementById('car-file').files[0];
+    const file = document.getElementById('car-file').files[0] || document.getElementById('car-camera').files[0];
 
     if (!reg || !model) return alert('Ange minst regnr och bilmodell!');
 
@@ -1742,6 +1832,7 @@
       document.getElementById('car-timing').value = '';
       document.getElementById('car-notes').value = '';
       document.getElementById('car-file').value = '';
+      document.getElementById('car-camera').value = '';
       document.getElementById('car-file-chosen').innerText = '';
       toggleAddCarForm();
     } catch (err) {
@@ -2034,7 +2125,8 @@
     }
   }
 
-function compressImage(file, maxWidth = 900, quality = 0.65) {
+  /* BILDKOMPRIMERING MED AUTOMATISK LOGGA UPPE TILL HÖGER */
+  function compressImage(file, maxWidth = 900, quality = 0.65) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -2053,20 +2145,18 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           
-          // Rita upp själva fotot
           ctx.drawImage(img, 0, 0, width, height);
 
-          // Ladda in och rita ut Burn Creek-loggan uppe till höger
           const logo = new Image();
           logo.src = 'logo.png';
           logo.onload = () => {
-            const logoSize = Math.round(width * 0.14); // 14% av bildens bredd
-            const margin = Math.round(width * 0.025);  // Marginal från kanterna
+            const logoSize = Math.round(width * 0.14);
+            const margin = Math.round(width * 0.025);
             const x = width - logoSize - margin;
             const y = margin;
 
             ctx.save();
-            ctx.globalAlpha = 0.88; // Lätt genomskinlighet så den smälter in snyggt
+            ctx.globalAlpha = 0.88;
             ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
             ctx.shadowBlur = 8;
             ctx.shadowOffsetX = 2;
@@ -2077,7 +2167,6 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
             resolve(canvas.toDataURL('image/jpeg', quality));
           };
 
-          // Fallback om logo.png av någon anledning inte laddas
           logo.onerror = () => {
             resolve(canvas.toDataURL('image/jpeg', quality));
           };
@@ -2099,23 +2188,10 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
         checkedInAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      if ("Notification" in window && Notification.permission === "granted") {
-        const title = "☕ Burn Creek Speedshop";
-        const options = {
-          body: `${name} är i garaget! Kaffet är påslaget.`,
-          icon: "logo.png"
-        };
-        try {
-          if ('serviceWorker' in navigator) {
-            const reg = await navigator.serviceWorker.ready;
-            reg.showNotification(title, options);
-          } else {
-            new Notification(title, options);
-          }
-        } catch(e) {
-          console.log('Notis visades inte:', e);
-        }
-      }
+      await sendPushNotification(
+        "☕ Burn Creek Speedshop",
+        `${name} är i garaget! Kaffet är påslaget.`
+      );
     } catch (err) { 
       alert('Kunde inte checka in: ' + err.message); 
     }
@@ -2201,6 +2277,11 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
       document.getElementById('event-time').value = '';
       document.getElementById('event-desc').value = '';
       toggleAddEventForm();
+
+      await sendPushNotification(
+        "📅 Nytt i garagekalendern",
+        `${authorName} la in: ${title} (${date}${time ? ' kl ' + time : ''})`
+      );
     } catch (err) { alert(err.message); }
   }
 
@@ -2416,22 +2497,19 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
   }
 
   /* SKROTNISSE */
-  function updatePartFileName() {
-    const f = document.getElementById('part-file').files[0];
-    document.getElementById('part-file-chosen').innerText = f ? f.name : '';
-  }
-
   async function addPart() {
     const type = document.getElementById('part-type').value;
     const title = document.getElementById('part-title').value.trim();
     const price = document.getElementById('part-price').value.trim();
     const desc = document.getElementById('part-desc').value.trim();
-    const file = document.getElementById('part-file').files[0];
+    const file = document.getElementById('part-file').files[0] || document.getElementById('part-camera').files[0];
     if (!title) return alert('Ange vad för del/material!');
 
     const btn = document.getElementById('btn-save-part');
     btn.disabled = true;
     btn.innerText = 'LÄGGER UPP...';
+
+    const authorName = auth.currentUser.displayName || 'Depå';
 
     let imageUrl = '';
     try {
@@ -2441,14 +2519,20 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
 
       await db.collection('parts').add({
         type, title, price, desc, imageUrl,
-        author: auth.currentUser.displayName || 'Depå',
+        author: authorName,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       document.getElementById('part-title').value = '';
       document.getElementById('part-price').value = '';
       document.getElementById('part-desc').value = '';
       document.getElementById('part-file').value = '';
+      document.getElementById('part-camera').value = '';
       document.getElementById('part-file-chosen').innerText = '';
+
+      await sendPushNotification(
+        "📦 Skrotnisse-lagret",
+        `${authorName} la upp (${type}): ${title}`
+      );
     } catch (err) { 
       alert(err.message); 
     } finally {
@@ -2537,12 +2621,14 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
 
   async function publishPost() {
     const text = document.getElementById('post-text').value.trim();
-    const file = document.getElementById('post-file').files[0];
+    const file = document.getElementById('post-file').files[0] || document.getElementById('post-camera').files[0];
     if (!text && !file) return;
 
     const btn = document.getElementById('btn-publish');
     btn.disabled = true;
     btn.innerText = 'BRÄNNER...';
+
+    const authorName = auth.currentUser.displayName || auth.currentUser.email.split('@')[0];
 
     let imageUrl = '';
     try {
@@ -2553,13 +2639,19 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
       await db.collection('posts').add({
         text: text,
         imageUrl: imageUrl,
-        author: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
+        author: authorName,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       document.getElementById('post-text').value = '';
       document.getElementById('post-file').value = '';
+      document.getElementById('post-camera').value = '';
       document.getElementById('file-chosen').innerText = '';
+
+      await sendPushNotification(
+        `🏁 ${authorName} i Depåloggen`,
+        text ? text : "La upp en ny bild från garaget!"
+      );
     } catch (err) {
       alert('Kunde inte publicera: ' + err.message);
     } finally {
