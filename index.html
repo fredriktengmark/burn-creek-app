@@ -11,23 +11,34 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Rye&family=Chakra+Petch:wght@500;700&family=Teko:wght@600;700&display=swap" rel="stylesheet">
   
-  <!-- OneSignal SDK v16 -->
+ <!-- OneSignal SDK v16 -->
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
   <script>
     window.OneSignalDeferred = window.OneSignalDeferred || [];
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.init({
-        appId: "2212ea0b-a94d-4069-8f5b-ac38b776c280",
-        safari_web_id: "web.onesignal.auto.165f55d2-2c2b-457d-b7b8-8b89270f4464",
-        notifyButton: {
-          enable: false,
-        },
-      });
+    let oneSignalReady = false;
 
-      updatePushButtonUI(OneSignal.User.PushSubscription.optedIn);
-      OneSignal.User.PushSubscription.addEventListener("change", function(event) {
-        updatePushButtonUI(event.current.optedIn);
-      });
+    OneSignalDeferred.push(async function(OneSignal) {
+      try {
+        await OneSignal.init({
+          appId: "2212ea0b-a94d-4069-8f5b-ac38b776c280",
+          safari_web_id: "web.onesignal.auto.165f55d2-2c2b-457d-b7b8-8b89270f4464",
+          serviceWorkerParam: { scope: "/burn-creek-app/" },
+          serviceWorkerPath: "/burn-creek-app/OneSignalSDKWorker.js",
+          notifyButton: {
+            enable: false,
+          },
+        });
+        oneSignalReady = true;
+
+        updatePushButtonUI(OneSignal.User.PushSubscription.optedIn);
+        OneSignal.User.PushSubscription.addEventListener("change", function(event) {
+          updatePushButtonUI(event.current.optedIn);
+        });
+      } catch (err) {
+        console.error("OneSignal init-fel:", err);
+        const btn = document.getElementById('btn-push-subscribe');
+        if (btn) btn.innerHTML = '<span>⚠️</span> FEL VID INIT: ' + err.message;
+      }
     });
 
     function updatePushButtonUI(isSubscribed) {
@@ -44,11 +55,32 @@
       }
     }
 
-    function requestOneSignalPush() {
+    async function requestOneSignalPush() {
+      const btn = document.getElementById('btn-push-subscribe');
+      
+      // Kontrollera om webbläsaren stödjer notiser (t.ex. iOS utanför hemskärmen)
+      if (!("Notification" in window)) {
+        alert("Din webbläsare blockerar push-notiser. På iPhone måste du först trycka på Dela-ikonen och välja 'Lägg till på hemskärmen'.");
+        return;
+      }
+
+      if (Notification.permission === "denied") {
+        alert("Du har blockerat notiser för denna sida. Öppna webbläsarens webbplatsinställningar (hänglåset i adressfältet) och tillåt aviseringar.");
+        return;
+      }
+
+      if (btn) btn.innerHTML = '<span>⏳</span> AKTIVERAR...';
+
       window.OneSignalDeferred = window.OneSignalDeferred || [];
       OneSignalDeferred.push(async function(OneSignal) {
-        await OneSignal.Notifications.requestPermission();
-        updatePushButtonUI(OneSignal.User.PushSubscription.optedIn);
+        try {
+          await OneSignal.Notifications.requestPermission();
+          await OneSignal.User.PushSubscription.optIn();
+          updatePushButtonUI(OneSignal.User.PushSubscription.optedIn);
+        } catch (err) {
+          alert("Kunde inte aktivera notiser: " + err.message);
+          updatePushButtonUI(false);
+        }
       });
     }
   </script>
