@@ -55,6 +55,21 @@
       box-shadow: 0 0 40px rgba(0,0,0,0.95);
       position: relative;
     }
+
+    /* BURNOUT SKAK-EFFEKT (EASTER EGG) */
+    @keyframes v8-rumble {
+      0% { transform: translate(0, 0) rotate(0deg); }
+      15% { transform: translate(-4px, -2px) rotate(-0.8deg); }
+      30% { transform: translate(4px, 2px) rotate(0.8deg); }
+      45% { transform: translate(-3px, 3px) rotate(-0.5deg); }
+      60% { transform: translate(3px, -2px) rotate(0.5deg); }
+      75% { transform: translate(-2px, 2px) rotate(-0.5deg); }
+      90% { transform: translate(2px, -3px) rotate(0.5deg); }
+      100% { transform: translate(0, 0) rotate(0deg); }
+    }
+    .burnout-shake {
+      animation: v8-rumble 0.12s infinite;
+    }
     
     .checker-divider {
       height: 10px;
@@ -97,6 +112,7 @@
       border-radius: 50%;
       border: 2px solid var(--rust-primary);
       box-shadow: 0 0 8px rgba(0,0,0,0.8);
+      user-select: none;
     }
 
     .header-actions { display: flex; align-items: center; gap: 6px; }
@@ -662,15 +678,13 @@
 <div id="app-container">
   <div class="checker-divider"></div>
 
-  <!-- NYÅRSÖVERRASKNING MODAL -->
-  <div id="newyear-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 8, 7, 0.95); z-index: 300; justify-content: center; align-items: center; padding: 20px;">
-    <div style="background: var(--card-bg); border: 2px solid var(--rust-glow); border-radius: 8px; padding: 22px; max-width: 420px; width: 100%; box-shadow: 0 10px 40px rgba(217, 98, 43, 0.4); text-align: center; position: relative;">
-      <div style="font-size: 2.5rem; margin-bottom: 6px;">🏎️💥🥂</div>
-      <h2 style="font-family: 'Alfa Slab One', cursive; font-size: 1.2rem; color: var(--rust-glow); margin-bottom: 12px; text-transform: uppercase;">GOTT NYTT ÅR FRÅN BURN CREEK!</h2>
-      <p style="font-size: 0.88rem; line-height: 1.5; color: var(--cream-text); margin-bottom: 18px; text-align: left;">
-        Ett stort tack för ett legendariskt år i Brännehylte – från svetsloppor, 10 mm-hylsor som spårlöst försvunnit och kaffekokare på övertid, till klockrena provturer och gôtt häng. <br><br>Nu tömmer vi sista slurken kaffe, firar av året med värdighet och laddar för nya konverteringar, däckbyten och runda tider nästa år!<br><br><strong>Pelle i botten och Gott Nytt År, gänget! 🍻</strong>
-      </p>
-      <button class="btn-speed" onclick="closeNewYearModal()" style="width: 100%; padding: 10px; font-size: 0.95rem;">TÄND AV MOTORN & FIRA AV</button>
+  <!-- GEMENSAM PÅSKÄGGS- & ÖVERRASKNINGS-MODAL -->
+  <div id="surprise-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 8, 7, 0.95); z-index: 300; justify-content: center; align-items: center; padding: 20px;">
+    <div id="surprise-box" style="background: var(--card-bg); border: 2px solid var(--rust-glow); border-radius: 8px; padding: 22px; max-width: 420px; width: 100%; box-shadow: 0 10px 40px rgba(217, 98, 43, 0.4); text-align: center; position: relative;">
+      <div id="surprise-icon" style="font-size: 2.5rem; margin-bottom: 6px;">🏎️💥</div>
+      <h2 id="surprise-title" style="font-family: 'Alfa Slab One', cursive; font-size: 1.15rem; color: var(--rust-glow); margin-bottom: 12px; text-transform: uppercase;"></h2>
+      <p id="surprise-text" style="font-size: 0.88rem; line-height: 1.5; color: var(--cream-text); margin-bottom: 18px; text-align: left;"></p>
+      <button id="surprise-btn" class="btn-speed" onclick="closeSurpriseModal()" style="width: 100%; padding: 10px; font-size: 0.95rem;">FATTAT!</button>
     </div>
   </div>
 
@@ -704,9 +718,9 @@
   <div id="main-view" style="display: none; flex-direction: column; height: 100vh;">
     
     <header>
-      <div style="display: flex; align-items: center; gap: 8px; cursor: pointer;" onclick="switchToTab('home', 'STARTSKÄRM')">
-        <img src="logo.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
-        <div>
+      <div style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+        <img src="logo.png" alt="Logo" class="header-logo" onclick="handleLogoEasterEgg()" onerror="this.style.display='none'">
+        <div onclick="switchToTab('home', 'STARTSKÄRM')">
           <span class="brand-title">BURN CREEK <span>SPEEDSHOP</span></span>
         </div>
       </div>
@@ -1577,6 +1591,10 @@
   let calCurrentDate = new Date();
   let calSelectedDateStr = null;
 
+  /* VARIABLER FÖR PÅSKÄGG */
+  let logoClickCount = 0;
+  let logoClickTimer = null;
+
   /* ROSTIG JULKALENDER DATA */
   const garageCalendar = [
     { day: 1, type: "tip", title: "Lucka 1: Rostlösning", text: "WD-40 löser det mesta, men om bulten sitter som berget efter 35 år i saltslask gäller gassvets och våld. Våld är inte en genväg, det är det enda raka." },
@@ -1653,7 +1671,7 @@
       loadParts();
       loadGuests();
       checkAndToggleCalendarVisibility(); 
-      checkNewYearPopup(); // <-- Kontrollerar om det är nyårsafton och visar överraskningen
+      checkGarageSurprises(); // <-- Kontrollerar automatiska överraskningar
 
       calcRpm();
       calcCfm();
@@ -1745,44 +1763,150 @@
     }
   }
 
-  /* NYÅRSÖVERRASKNING LOGIK */
-  function checkNewYearPopup() {
+  /* ------------------- PÅSKÄGG & ÖVERRASKNINGSSYSTEM ------------------- */
+  function showSurpriseModal(icon, title, htmlText, btnLabel) {
+    document.getElementById('surprise-icon').innerText = icon;
+    document.getElementById('surprise-title').innerText = title;
+    document.getElementById('surprise-text').innerHTML = htmlText;
+    document.getElementById('surprise-btn').innerText = btnLabel || 'FATTAT!';
+    document.getElementById('surprise-modal').style.display = 'flex';
+  }
+
+  function closeSurpriseModal() {
+    document.getElementById('surprise-modal').style.display = 'none';
+  }
+
+  function checkGarageSurprises() {
     const now = new Date();
-    const currentMonth = now.getMonth() + 1; // 12 = december
-    const currentDate = now.getDate();
+    const year = now.getFullYear();
+    const month = now.getMonth() + 1; // 1 = jan, 12 = dec
+    const date = now.getDate();
+    const dayOfWeek = now.getDay(); // 5 = fredag
+    const hour = now.getHours();
+    const todayKey = `${year}-${month}-${date}`;
 
-    // Visas endast den 31 december
-    const isNewYearsEve = (currentMonth === 12 && currentDate === 31);
-    const shownKey = 'burn_creek_newyear_shown_' + now.getFullYear();
+    // 1. NYÅRSAFTON (31 december)
+    if (month === 12 && date === 31) {
+      const nyKey = 'bc_ny_' + year;
+      if (!localStorage.getItem(nyKey)) {
+        localStorage.setItem(nyKey, '1');
+        showSurpriseModal(
+          '🏎️💥🥂',
+          'GOTT NYTT ÅR FRÅN BURN CREEK!',
+          'Ett stort tack för ett legendariskt år i Brännehylte – från svetsloppor, 10 mm-hylsor som spårlöst försvunnit och kaffekokare på övertid, till klockrena provturer och gôtt häng.<br><br>Nu tömmer vi sista slurken kaffe, firar av året med värdighet och laddar för nya konverteringar, däckbyten och runda tider nästa år!<br><br><strong>Pelle i botten och Gott Nytt År, gänget! 🍻</strong>',
+          'TÄND AV MOTORN & FIRA AV'
+        );
+        return;
+      }
+    }
 
-    if (isNewYearsEve && !localStorage.getItem(shownKey)) {
-      document.getElementById('newyear-modal').style.display = 'flex';
-      localStorage.setItem(shownKey, 'true');
+    // 2. NYÅRSDAGEN: BAKFYLLE- & BULT-AKUTEN (1 januari)
+    if (month === 1 && date === 1) {
+      const nydKey = 'bc_nyd_' + year;
+      if (!localStorage.getItem(nydKey)) {
+        localStorage.setItem(nydKey, '1');
+        showSurpriseModal(
+          '🍕🤕🔧',
+          'LÅGT OLJETRYCK IDAG?',
+          'Välkommen till det nya året! Idag är vinkelslip, slagborr och öppna headers strikt förbjudna i garaget före kl. 15:00.<br><br><strong>Rekommenderad bränsleblandning idag:</strong> Kebabpizza, kall läsk och två Treo.',
+          'JAG LOVAR ATT SKRUVA TYST'
+        );
+        return;
+      }
+    }
+
+    // 3. VÅRSTART / ASFALTEN ÄR TORR (1 april)
+    if (month === 4 && date === 1) {
+      const springKey = 'bc_spring_' + year;
+      if (!localStorage.getItem(springKey)) {
+        localStorage.setItem(springKey, '1');
+        showSurpriseModal(
+          '☀️🛣️🏁',
+          'SOPBILARNA ÄR UTE!',
+          'Gruset är borta, tjälen släpper och det är hög tid att väcka V8:orna ur vinterdvalan!<br><br>Har du kollat oljan och dragit åt hjulbultarna, eller ska vi bogsera dig redan i första rondellen?',
+          'UT PÅ ASFALTEN!'
+        );
+        return;
+      }
+    }
+
+    // 4. SPÖKSKIFTET (Nattmek mellan kl. 01:00 och 04:30)
+    if (hour >= 1 && hour <= 4) {
+      const nightKey = 'bc_night_' + todayKey;
+      if (!localStorage.getItem(nightKey)) {
+        localStorage.setItem(nightKey, '1');
+        showSurpriseModal(
+          '🦉🔧⚠️',
+          'VARNING FÖR SPÖKSKIFTET!',
+          'Klockan är mitt i natten! Alla muttrar du drar åt efter kl. 02:00 sitter antingen helt löst eller dras av i blocket imorgon bitti.<br><br>Drick upp det brända kaffet, lägg ner spärrskaftet och åk hem och sov!',
+          'JAG SKA BARA DRA EN BULT TILL...'
+        );
+        return;
+      }
+    }
+
+    // 5. FREDAGSPEPPEN (Fredagar från kl. 16:00)
+    if (dayOfWeek === 5 && hour >= 16) {
+      const friKey = 'bc_fri_' + todayKey;
+      if (!localStorage.getItem(friKey)) {
+        localStorage.setItem(friKey, '1');
+        showSurpriseModal(
+          '🍻🏁🔧',
+          'VECKAN ÄR SLUT!',
+          'Arbetskläderna av, garagekängorna på! Det är fredag eftermiddag och helgen ligger helt öppen.<br><br><strong>Dagens rekommenderade däcktryck:</strong> Iskall pilsner eller nybryggt kaffe i Brännehylte!',
+          'SKÅL & PÅ MED KAFFET!'
+        );
+        return;
+      }
     }
   }
 
-  function closeNewYearModal() {
-    document.getElementById('newyear-modal').style.display = 'none';
+  /* HEMLIGT BURNOUT-LÄGE (5 SNABBA KLICK PÅ LOGGAN I HEADERN) */
+  function handleLogoEasterEgg() {
+    logoClickCount++;
+    if (logoClickTimer) clearTimeout(logoClickTimer);
+
+    if (logoClickCount >= 5) {
+      logoClickCount = 0;
+      const appContainer = document.getElementById('app-container');
+      appContainer.classList.add('burnout-shake');
+      setTimeout(() => {
+        appContainer.classList.remove('burnout-shake');
+      }, 3000);
+
+      showSurpriseModal(
+        '💨🔥🏁',
+        '400 HP UNLOCKED!',
+        'Du hittade garagets dolda lustgas-knapp! Hela verkstaden vibrerar på tomgång.<br><br>Luktar det bränt däckgummi här inne eller är det bara Håkans elsystem som ryker?',
+        'SLÄPP GASEN'
+      );
+    } else {
+      logoClickTimer = setTimeout(() => {
+        logoClickCount = 0;
+      }, 1800);
+    }
   }
 
   /* AUTOMATISK DÖLJNING AV JULKALENDERN EFTER ÅRSSKIFTET */
   function checkAndToggleCalendarVisibility() {
     const now = new Date();
-    const currentMonth = now.getMonth() + 1; // 1 = januari
-    const currentDate = now.getDate();
+    const currentMonth = now.getMonth() + 1; // 1 = januari, 12 = december
 
-    // Döljs automatiskt så fort det blir januari (eller efter den 31 december)
-    const shouldHide = (currentMonth === 1) || (currentMonth === 12 && currentDate > 31);
+    // Visas bara i november och december, döljs automatiskt så fort det blir januari!
+    const shouldHide = (currentMonth !== 11 && currentMonth !== 12);
 
     const menuCard = document.getElementById('menu-card-calendar');
-    const homeBtn = document.getElementById('home-calendar-btn-container');
+    const homeBtn = document.getElementById('home-cal-btn');
+    const homeContainer = document.getElementById('home-calendar-btn-container');
 
     if (shouldHide) {
       if (menuCard) menuCard.style.display = 'none';
       if (homeBtn) homeBtn.style.display = 'none';
+      if (homeContainer) homeContainer.style.gridTemplateColumns = '1fr';
     } else {
       if (menuCard) menuCard.style.display = 'flex';
-      if (homeBtn) homeBtn.style.display = 'grid';
+      if (homeBtn) homeBtn.style.display = 'block';
+      if (homeContainer) homeContainer.style.gridTemplateColumns = '1fr 1fr';
       renderCalendar();
     }
   }
@@ -1798,7 +1922,7 @@
 
     let html = '';
     garageCalendar.forEach(item => {
-      const isUnlocked = currentMonth > 12 || (currentMonth === 12 && currentDate >= item.day); 
+      const isUnlocked = (currentMonth === 12 && currentDate >= item.day); 
       
       html += `
         <div onclick="${isUnlocked ? `openCalendarModal(${item.day})` : `alert('Lucka ${item.day} öppnas den ${item.day} december!')`}" 
@@ -2243,6 +2367,21 @@
         name: name,
         checkedInAt: firebase.firestore.FieldValue.serverTimestamp()
       });
+
+      // KAFFE-ÖVERDOS-LARMET (om man trycker > 3 ggr på samma dag)
+      const now = new Date();
+      const coffeeKey = `bc_coffee_${now.getFullYear()}_${now.getMonth()}_${now.getDate()}`;
+      const count = parseInt(localStorage.getItem(coffeeKey) || '0', 10) + 1;
+      localStorage.setItem(coffeeKey, String(count));
+
+      if (count >= 4) {
+        showSurpriseModal(
+          '☕⚡🤯',
+          'HÖGT KOFFEINTRYCK I BRÄNNEHYLTE!',
+          'Bryggaren i hörnet glöder! Du har slagit på kaffeknappen ' + count + ' gånger idag.<br><br>Nu darrar ni så mycket på handen att det inte går att ställa ventilspel med bladmått längre!',
+          'BARA EN KOPP TILL!'
+        );
+      }
 
       if ("Notification" in window && Notification.permission === "granted") {
         const title = "☕ Burn Creek Speedshop";
