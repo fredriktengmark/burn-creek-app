@@ -1587,7 +1587,7 @@
     { day: 19, type: "tip", title: "Lucka 19: Däcktryck", text: "Kör inte med däck från stenåldern på träffarna bara för att mönstret ser fränt ut. Gummi åldras och blir hårt som bakelit." },
     { day: 20, type: "story", title: "Lucka 20: Julfesten", text: "Gänget diskuterade om julskinkan skulle griljeras i olja eller E85. En enig kår röstade på kaffe och köttbullar." },
     { day: 21, type: "tip", title: "Lucka 21: Kylvätska", text: "Kolla glykolen INNAN minusgraderna slår till. Ett sprucket frostplugg-block är en tråkig julklapp från minusgraderna." },
-    { day: 22, type: "story", title: "Lucka 22: Radiostyrning", text: "Pioneer-spelaren i garaget har aldrig spelat något annat än 90-tals country och gamla Elvis-rullar på högsta volym." },
+    { day: 22, type: "story", title: "Lucka 22: Radiostyrning", text: "Pioneer-spelaren i garaget har aldrig spelat annat än 90-tals country och gamla Elvis-rullar på högsta volym." },
     { day: 23, type: "story", title: "Lucka 23: Uppesittarkväll", text: "Uppesittarkväll i Burn Creek Speedshop: Bultar dras med känsla, kaffepannan kokartorrt och sista justeringen på hotrod-projektet görs kl 03:00." },
     { day: 24, type: "tip", title: "Lucka 24: Julafton!", text: "God Jul från Burn Creek! Släpp skiftnyckeln, unna dig en god middag och kom ihåg: Om det låter konstigt, höj stereon. Vi ses i garaget nästa år!" }
   ];
@@ -1731,7 +1731,7 @@
     }
   }
 
-  /* JULKALENDER FUNKTIONER */
+  /* JULKALENDER FUNKTIONER (MED AKTIVERAD DATUMSPÄRR) */
   function renderCalendar() {
     const grid = document.getElementById('calendar-grid');
     if (!grid) return;
@@ -1742,8 +1742,9 @@
 
     let html = '';
     garageCalendar.forEach(item => {
-      // Sätt till true i slutet om ni vill kunna provkika när som helst
-      const isUnlocked = currentMonth > 12 || (currentMonth === 12 && currentDate >= item.day) || true; 
+      // Datumspärr: Kräver att månaden är december (eller senare) och att dagens datum har nått luckans dag.
+      // (Vill du tjuvprova alla luckor igen under utveckling kan du ändra till: ... || true i slutet)
+      const isUnlocked = currentMonth > 12 || (currentMonth === 12 && currentDate >= item.day); 
       
       html += `
         <div onclick="${isUnlocked ? `openCalendarModal(${item.day})` : `alert('Lucka ${item.day} öppnas den ${item.day} december!')`}" 
