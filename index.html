@@ -725,6 +725,14 @@
           </div>
         </div>
 
+        <div class="menu-card" onclick="openModule('calendar-view', 'ROSTIG JULKALENDER')">
+          <div class="menu-card-icon">🎄</div>
+          <div class="menu-card-content">
+            <h3>ROSTIG JULKALENDER</h3>
+            <p>24 luckor med verkstadshumor, hårda sanningar och mektips för december.</p>
+          </div>
+        </div>
+
         <div class="menu-card" onclick="openModule('feed', 'DEPÅLOGG & BILDER')">
           <div class="menu-card-icon">🏁</div>
           <div class="menu-card-content">
@@ -816,8 +824,30 @@
         </div>
 
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 4px;">
+          <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('calendar-view', 'ROSTIG JULKALENDER')">🎄 JULKALENDER</button>
           <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('feed', 'DEPÅLOGG & BILDER')">🏁 DEPÅLOGGEN</button>
-          <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('cars', 'FORDONSREGISTER & REGNR')">🏎️ BILARNA</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROSTIG JULKALENDER -->
+    <div id="calendar-view-tab" class="view">
+      <div style="text-align: center; margin-bottom: 16px;">
+        <h2 style="font-family: 'Alfa Slab One', cursive; color: var(--rust-glow); font-size: 1.2rem; text-shadow: 1px 1px 2px #000;">ROSTIG JULKALENDER 🎅</h2>
+        <p style="font-size: 0.8rem; color: var(--cream-muted);">En lucka öppnas per dag i december fram till julafton.</p>
+      </div>
+
+      <div id="calendar-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px;">
+        <!-- Fylls dynamiskt av JS -->
+      </div>
+
+      <!-- Luck-modal / popup -->
+      <div id="calendar-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 8, 7, 0.92); z-index: 200; justify-content: center; align-items: center; padding: 20px;">
+        <div style="background: var(--card-bg); border: 2px solid var(--rust-primary); border-radius: 6px; padding: 20px; max-width: 400px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.9); position: relative;">
+          <div id="modal-day-badge" style="font-size: 0.75rem; color: var(--rust-glow); font-weight: 700; text-transform: uppercase; margin-bottom: 4px;"></div>
+          <h3 id="modal-title" style="font-family: 'Alfa Slab One', cursive; font-size: 1.1rem; color: var(--cream-bg); margin-bottom: 10px; border-bottom: 1px solid #3a2c24; padding-bottom: 6px;"></h3>
+          <p id="modal-text" style="font-size: 0.9rem; line-height: 1.5; color: var(--cream-text); margin-bottom: 16px;"></p>
+          <button class="btn-speed" onclick="closeCalendarModal()" style="width: 100%; padding: 8px; font-size: 0.9rem;">STÄNG LUCKA</button>
         </div>
       </div>
     </div>
@@ -1534,6 +1564,34 @@
   let calCurrentDate = new Date();
   let calSelectedDateStr = null;
 
+  /* ROSTIG JULKALENDER DATA */
+  const garageCalendar = [
+    { day: 1, type: "tip", title: "Lucka 1: Rostlösning", text: "WD-40 löser det mesta, men om bulten sitter som berget efter 35 år i saltslask gäller gassvets och våld. Våld är inte en genväg, det är det enda raka." },
+    { day: 2, type: "story", title: "Lucka 2: 10 mm-hylsan", text: "Vart tar alla 10 mm-hylsor vägen? Forskning visar att de transporteras till ett parallellt universum så fort man tappar dem på verkstadsgolvet." },
+    { day: 3, type: "tip", title: "Lucka 3: Bränsleslang", text: "Kör aldrig gamla spröda gummislangar på en V8 med mekanisk pump. Det brinner så dåligt i skägget när soppan sprutar på grenröret." },
+    { day: 4, type: "story", title: "Lucka 4: Torra fingrar", text: "Kenneth provade att tvätta händerna i Bräkleen istället för tvål. Huden blev ren, men handavtrycken på ratten satt kvar i tre veckor." },
+    { day: 5, type: "tip", title: "Lucka 5: Tändstiftsgap", text: "Knacka inte stift på känn med tumstocken. Använd bladmått – motorn går faktiskt lite bättre på åtta cylindrar än på sju." },
+    { day: 6, type: "story", title: "Lucka 6: Lucia", text: "Tony dök upp i garaget med ljuskrona på lussebullekvällen. Det såg festligt ut ända tills flanellskjortan fattade eld av kaffekokaren." },
+    { day: 7, type: "tip", title: "Lucka 7: Momentnyckeln", text: "Dra ALDRIG av bultar med momentnyckeln som om det våldsfördelas. Släpp alltid spänningen på klick-nyckeln när du är klar, annars visar den lika fel som väderleksrapporten." },
+    { day: 8, type: "story", title: "Lucka 8: Det mystiska knacket", text: "Håkan hörde ett konstigt tickande från Galaxien. Det visade sig vara klockan på instrumentbrädan som gick för fort." },
+    { day: 9, type: "tip", title: "Lucka 9: Elsystemet", text: "All el i gamla jänkare bygger på magisk rök. Om röken smiter ut ur kabelhärvan slutar grejerna att fungera. Släpp inte ut röken!" },
+    { day: 10, type: "story", title: "Lucka 10: Lackering", text: "Pierre skulle lacka en tank i garaget. Det blev perfekt – förutom att en fluga fastnade mitt på flammorna och fick permanent klarlack över sig." },
+    { day: 11, type: "tip", title: "Lucka 11: ZDDP i oljan", text: "Häll inte i modern snål-olja i en gammal flat-tappet-kam. Utan zink (ZDDP) äter kamaxeln upp sig själv snabbare än du hinner säga 'lyftare'." },
+    { day: 12, type: "story", title: "Lucka 12: Lucia-firande", text: "Halva December har gått och kaffebryggaren i hörnet har nu producerat mer slam än en kommunal reningsverk. Den lever på vilja." },
+    { day: 13, type: "tip", title: "Lucka 13: Stroboskopet", text: "Glöm inte att plugga vakuumslangen till fördelaren när du ställer tändningen. Annars står du där och stirrar på remskivan som en måstare." },
+    { day: 14, type: "story", title: "Lucka 14: Provturen", text: "Efter tre månaders nattarbete med v-8:an var det dags för provtur. Den lät som åskan själv – tills kardanaxeln bestämde sig för att lämna bilen i rondellen vid Gislaved." },
+    { day: 15, type: "tip", title: "Lucka 15: Bromsvätska", text: "Blanda aldrig silikon (DOT 5) med glykolbaserat (DOT 4). Om du gör det förvandlas bromsarna till ren frystorkad frustration." },
+    { day: 16, type: "story", title: "Lucka 16: Köptips", text: "Fredrik sa 'jag ska bara köpa ett litet projekt'. Två år senare står det tre husbilar, en van och en 34-fords pickup på gården." },
+    { day: 17, type: "tip", title: "Lucka 17: Batteriet", text: "Ett urladdat batteri i vintern väcks inte till liv av arga blickar. Sätt på laddaren och ta en extra kopp kaffe istället." },
+    { day: 18, type: "story", title: "Lucka 18: Skruvförrådet", text: "Muttersamlaren i hörnet innehåller 4 000 bultar, men exakt den som behövs till generatorfästet saknas naturligtvis." },
+    { day: 19, type: "tip", title: "Lucka 19: Däcktryck", text: "Kör inte med däck från stenåldern på träffarna bara för att mönstret ser fränt ut. Gummi åldras och blir hårt som bakelit." },
+    { day: 20, type: "story", title: "Lucka 20: Julfesten", text: "Gänget diskuterade om julskinkan skulle griljeras i olja eller E85. En enig kår röstade på kaffe och köttbullar." },
+    { day: 21, type: "tip", title: "Lucka 21: Kylvätska", text: "Kolla glykolen INNAN minusgraderna slår till. Ett sprucket frostplugg-block är en tråkig julklapp från minusgraderna." },
+    { day: 22, type: "story", title: "Lucka 22: Radiostyrning", text: "Pioneer-spelaren i garaget har aldrig spelat något annat än 90-tals country och gamla Elvis-rullar på högsta volym." },
+    { day: 23, type: "story", title: "Lucka 23: Uppesittarkväll", text: "Uppesittarkväll i Burn Creek Speedshop: Bultar dras med känsla, kaffepannan kokartorrt och sista justeringen på hotrod-projektet görs kl 03:00." },
+    { day: 24, type: "tip", title: "Lucka 24: Julafton!", text: "God Jul från Burn Creek! Släpp skiftnyckeln, unna dig en god middag och kom ihåg: Om det låter konstigt, höj stereon. Vi ses i garaget nästa år!" }
+  ];
+
   auth.onAuthStateChanged(async user => {
     if (user) {
       const email = user.email.toLowerCase();
@@ -1581,6 +1639,7 @@
       loadEvents();
       loadParts();
       loadGuests();
+      renderCalendar(); // <-- Ritar ut julkalendern
 
       calcRpm();
       calcCfm();
@@ -1644,7 +1703,7 @@
   }
 
   function switchToTab(tabId, title) {
-    const tabs = ['home', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
+    const tabs = ['home', 'calendar-view', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
@@ -1670,6 +1729,49 @@
         alert('Fel vid radering: ' + err.message);
       }
     }
+  }
+
+  /* JULKALENDER FUNKTIONER */
+  function renderCalendar() {
+    const grid = document.getElementById('calendar-grid');
+    if (!grid) return;
+
+    const now = new Date();
+    const currentMonth = now.getMonth() + 1; // 12 = december
+    const currentDate = now.getDate();
+
+    let html = '';
+    garageCalendar.forEach(item => {
+      // Sätt till true i slutet om ni vill kunna provkika när som helst
+      const isUnlocked = currentMonth > 12 || (currentMonth === 12 && currentDate >= item.day) || true; 
+      
+      html += `
+        <div onclick="${isUnlocked ? `openCalendarModal(${item.day})` : `alert('Lucka ${item.day} öppnas den ${item.day} december!')`}" 
+             style="background: ${isUnlocked ? 'linear-gradient(180deg, #221a15 0%, #16110e 100%)' : '#0e0b0a'}; 
+                    border: 1px solid ${isUnlocked ? 'var(--rust-primary)' : '#251b15'}; 
+                    border-radius: 6px; height: 65px; display: flex; flex-direction: column; 
+                    align-items: center; justify-content: center; cursor: pointer; 
+                    box-shadow: 0 4px 8px rgba(0,0,0,0.5); position: relative;">
+          <span style="font-family: 'Alfa Slab One', cursive; font-size: 1.2rem; color: ${isUnlocked ? 'var(--rust-glow)' : '#554438'};">${item.day}</span>
+          <span style="font-size: 0.65rem; color: ${isUnlocked ? 'var(--cream-muted)' : '#443328'}; text-transform: uppercase;">${isUnlocked ? 'ÖPPEN' : 'LÅST'}</span>
+        </div>
+      `;
+    });
+    grid.innerHTML = html;
+  }
+
+  function openCalendarModal(dayNum) {
+    const item = garageCalendar.find(i => i.day === dayNum);
+    if (!item) return;
+
+    document.getElementById('modal-day-badge').innerText = `LUCKA ${item.day} DECEMBER`;
+    document.getElementById('modal-title').innerText = item.title;
+    document.getElementById('modal-text').innerText = item.text;
+    document.getElementById('calendar-modal').style.display = 'flex';
+  }
+
+  function closeCalendarModal() {
+    document.getElementById('calendar-modal').style.display = 'none';
   }
 
   /* ------------------- FORDONSREGISTER & REGNR-SNABBKOLL ------------------- */
@@ -1718,16 +1820,7 @@
       }
 
       await db.collection('cars').add({
-        reg,
-        year,
-        model,
-        engine,
-        oil,
-        plugs,
-        timing,
-        status,
-        notes,
-        imageUrl,
+        reg, year, model, engine, oil, plugs, timing, status, notes, imageUrl,
         owner: ownerName,
         ownerUid: user ? user.uid : '',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
@@ -2034,7 +2127,7 @@
     }
   }
 
-function compressImage(file, maxWidth = 900, quality = 0.65) {
+  function compressImage(file, maxWidth = 900, quality = 0.65) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
@@ -2053,20 +2146,18 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
           canvas.height = height;
           const ctx = canvas.getContext('2d');
           
-          // Rita upp själva fotot
           ctx.drawImage(img, 0, 0, width, height);
 
-          // Ladda in och rita ut Burn Creek-loggan uppe till höger
           const logo = new Image();
           logo.src = 'logo.png';
           logo.onload = () => {
-            const logoSize = Math.round(width * 0.14); // 14% av bildens bredd
-            const margin = Math.round(width * 0.025);  // Marginal från kanterna
+            const logoSize = Math.round(width * 0.14);
+            const margin = Math.round(width * 0.025); 
             const x = width - logoSize - margin;
             const y = margin;
 
             ctx.save();
-            ctx.globalAlpha = 0.88; // Lätt genomskinlighet så den smälter in snyggt
+            ctx.globalAlpha = 0.88; 
             ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
             ctx.shadowBlur = 8;
             ctx.shadowOffsetX = 2;
@@ -2077,7 +2168,6 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
             resolve(canvas.toDataURL('image/jpeg', quality));
           };
 
-          // Fallback om logo.png av någon anledning inte laddas
           logo.onerror = () => {
             resolve(canvas.toDataURL('image/jpeg', quality));
           };
@@ -2187,11 +2277,7 @@ function compressImage(file, maxWidth = 900, quality = 0.65) {
 
     try {
       await db.collection('events').add({
-        category,
-        title,
-        date,
-        time,
-        desc,
+        category, title, date, time, desc,
         attendees: [authorName],
         author: authorName,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
