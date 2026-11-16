@@ -929,7 +929,7 @@
         <div id="add-car-form" style="display: none; flex-direction: column; gap: 8px; margin-top: 10px;">
           <div style="display: flex; gap: 8px;">
             <input type="text" id="car-reg" class="garage-input" placeholder="Regnr (t.ex. NHK817)" style="flex: 1; text-transform: uppercase;">
-            <input type="text" id="car-year" class="garage-input" placeholder="Årsmodell (t.ex. 1991)" style="flex: 1;">
+            <input type="text" id="car-year" class="garage-input" placeholder="Årsmodell" style="flex: 1;">
           </div>
           <input type="text" id="car-model" class="garage-input" placeholder="Märke & Modell (t.ex. Pontiac Firebird Formula)">
           <input type="text" id="car-engine" class="garage-input" placeholder="Motor & Växellåda (t.ex. Chevy 350 V8 / TH400)">
@@ -999,7 +999,7 @@
             <option value="grill">🍔 Grillkväll & Fest</option>
             <option value="stad">🧹 Städ & Underhåll</option>
           </select>
-          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Kvällsskruv på 34:an, Street Week)">
+          <input type="text" id="event-title" class="garage-input" placeholder="Titel (t.ex. Kvällsskruv, Street Week)">
           <div style="display: flex; gap: 8px;">
             <input type="date" id="event-date" class="garage-input" style="flex: 1;">
             <input type="text" id="event-time" class="garage-input" placeholder="Tid (t.ex. 18:00)" style="flex: 1;">
@@ -1059,7 +1059,7 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: 8px;">
           <input type="text" id="guest-name" class="garage-input" placeholder="Gästens namn">
-          <input type="text" id="guest-car" class="garage-input" placeholder="Fordon & arbete (t.ex. Impala -65, bromsbyte)">
+          <input type="text" id="guest-car" class="garage-input" placeholder="Fordon & arbete (t.ex. Impala, bromsbyte)">
           <input type="date" id="guest-date" class="garage-input">
           <button class="btn-speed" onclick="addGuest()" style="padding: 10px; font-size: 0.95rem;">REGISTRERA GÄSTPASS</button>
         </div>
@@ -1155,7 +1155,7 @@
         <table class="spec-table">
           <tr><th>Märke / Modell</th><th>Tum</th><th>Metriskt</th><th>Navhål</th></tr>
           <tr><td><strong>Chevy Pass (Camaro, Chevelle, Nova)</strong></td><td>5x4.75"</td><td>5x120.65 mm</td><td>70.3 mm</td></tr>
-          <tr><td><strong>Chevy Fullsize (-70) / C10 Truck</strong></td><td>5x5.0"</td><td>5x127 mm</td><td>78.3 mm</td></tr>
+          <tr><td><strong>Chevy Fullsize / C10 Truck</strong></td><td>5x5.0"</td><td>5x127 mm</td><td>78.3 mm</td></tr>
           <tr><td><strong>Ford Pass (Mustang, Fairlane, Galaxie)</strong></td><td>5x4.5"</td><td>5x114.3 mm</td><td>70.5 mm</td></tr>
           <tr><td><strong>Ford F-100 / F-150 Truck</strong></td><td>5x5.5"</td><td>5x139.7 mm</td><td>87.1 mm</td></tr>
           <tr><td><strong>Mopar A-Body (Tidig Dart, Valiant)</strong></td><td>5x4.0"</td><td>5x101.6 mm</td><td>–</td></tr>
@@ -1595,7 +1595,7 @@
   let logoClickCount = 0;
   let logoClickTimer = null;
 
-  /* ROSTIG JULKALENDER DATA */
+  /* ROSTIG JULKALENDER DATA (UTAN ÅRTAL PÅ FORDON) */
   const garageCalendar = [
     { day: 1, type: "tip", title: "Lucka 1: Rostlösning", text: "WD-40 löser det mesta, men om bulten sitter som berget efter 35 år i saltslask gäller gassvets och våld. Våld är inte en genväg, det är det enda raka." },
     { day: 2, type: "story", title: "Lucka 2: 10 mm-hylsan", text: "Vart tar alla 10 mm-hylsor vägen? Forskning visar att de transporteras till ett parallellt universum så fort man tappar dem på verkstadsgolvet." },
@@ -1612,7 +1612,7 @@
     { day: 13, type: "tip", title: "Lucka 13: Stroboskopet", text: "Glöm inte att plugga vakuumslangen till fördelaren när du ställer tändningen. Annars står du där och stirrar på remskivan som en måstare." },
     { day: 14, type: "story", title: "Lucka 14: Provturen", text: "Efter tre månaders nattarbete med v-8:an var det dags för provtur. Den lät som åskan själv – tills kardanaxeln bestämde sig för att lämna bilen i rondellen vid Gislaved." },
     { day: 15, type: "tip", title: "Lucka 15: Bromsvätska", text: "Blanda aldrig silikon (DOT 5) med glykolbaserat (DOT 4). Om du gör det förvandlas bromsarna till ren frystorkad frustration." },
-    { day: 16, type: "story", title: "Lucka 16: Köptips", text: "Fredrik sa 'jag ska bara köpa ett litet projekt'. Två år senare står det tre husbilar, en van och en 34-fords pickup på gården." },
+    { day: 16, type: "story", title: "Lucka 16: Köptips", text: "Fredrik sa 'jag ska bara köpa ett litet projekt'. Två år senare står det tre husbilar, en van och en Ford-pickup på gården." },
     { day: 17, type: "tip", title: "Lucka 17: Batteriet", text: "Ett urladdat batteri i vintern väcks inte till liv av arga blickar. Sätt på laddaren och ta en extra kopp kaffe istället." },
     { day: 18, type: "story", title: "Lucka 18: Skruvförrådet", text: "Muttersamlaren i hörnet innehåller 4 000 bultar, men exakt den som behövs till generatorfästet saknas naturligtvis." },
     { day: 19, type: "tip", title: "Lucka 19: Däcktryck", text: "Kör inte med däck från stenåldern på träffarna bara för att mönstret ser fränt ut. Gummi åldras och blir hårt som bakelit." },
@@ -1671,7 +1671,9 @@
       loadParts();
       loadGuests();
       checkAndToggleCalendarVisibility(); 
-      checkGarageSurprises(); // <-- Kontrollerar automatiska överraskningar
+      
+      const currentName = userData.name || user.displayName || email.split('@')[0];
+      checkGarageSurprises(currentName, email);
 
       calcRpm();
       calcCfm();
@@ -1763,7 +1765,7 @@
     }
   }
 
-  /* ------------------- PÅSKÄGG & ÖVERRASKNINGSSYSTEM ------------------- */
+  /* ------------------- PÅSKÄGG, FÖDELSEDAGAR, DATUM- & PERSONLIGA POPUPS ------------------- */
   function showSurpriseModal(icon, title, htmlText, btnLabel) {
     document.getElementById('surprise-icon').innerText = icon;
     document.getElementById('surprise-title').innerText = title;
@@ -1776,7 +1778,7 @@
     document.getElementById('surprise-modal').style.display = 'none';
   }
 
-  function checkGarageSurprises() {
+  function checkGarageSurprises(userName, userEmail) {
     const now = new Date();
     const year = now.getFullYear();
     const month = now.getMonth() + 1; // 1 = jan, 12 = dec
@@ -1785,7 +1787,86 @@
     const hour = now.getHours();
     const todayKey = `${year}-${month}-${date}`;
 
-    // 1. NYÅRSAFTON (31 december)
+    const n = (userName || '').toLowerCase();
+    const e = (userEmail || '').toLowerCase();
+
+    // 0. PERSONLIGA FÖDELSEDAGAR (Högsta prioritet - visas bara på rätt dag och bara för rätt person!)
+    // Tony: 16 februari
+    if (month === 2 && date === 16 && (n.includes('tony') || e.includes('tony'))) {
+      const bdayKey = `bc_bday_tony_${year}`;
+      if (!localStorage.getItem(bdayKey)) {
+        localStorage.setItem(bdayKey, '1');
+        showSurpriseModal(
+          '🎂🎩🥃',
+          'STORT GRATTIS PÅ FÖDELSEDAGEN, TONY!',
+          'Hela Burn Creek Speedshop lyfter på hatten och gratulerar Buick-baronen på bemärkelsedagen!<br><br>Idag blir det garanterat fint muller i LeSabren och extra starkt kaffe i koppen. Ha en grym födelsedag!',
+          'TACKAR! PÅ MED KAFFET!'
+        );
+        return;
+      }
+    }
+
+    // Håkan: 9 mars
+    if (month === 3 && date === 9 && (n.includes('håkan') || n.includes('hakan') || e.includes('hakan'))) {
+      const bdayKey = `bc_bday_hakan_${year}`;
+      if (!localStorage.getItem(bdayKey)) {
+        localStorage.setItem(bdayKey, '1');
+        showSurpriseModal(
+          '🎂🕶️🚘',
+          'STORT GRATTIS PÅ FÖDELSEDAGEN, HÅKAN!',
+          'Ett fyrfaldigt V8-leve för Galaxie-glidaren idag!<br><br>Hoppas du får en helt suverän födelsedag med gött häng, noll elstrul och raka rör hela dagen!',
+          'TACKAR! NU FIRAR VI!'
+        );
+        return;
+      }
+    }
+
+    // Pierre: 24 december
+    if (month === 12 && date === 24 && (n.includes('pierre') || e.includes('pierre'))) {
+      const bdayKey = `bc_bday_pierre_${year}`;
+      if (!localStorage.getItem(bdayKey)) {
+        localStorage.setItem(bdayKey, '1');
+        showSurpriseModal(
+          '🎂🏍️🎄',
+          'STORT GRATTIS PÅ FÖDELSEDAGEN, PIERRE!',
+          'Dubbelt firande idag! Stort grattis på födelsedagen (och God Jul) till garagets tvåhjuls- och lackmästare!<br><br>Hoppas dagen bjuder på hårda paket, blank klarlack och riktigt bra käk!',
+          'TACKAR & GOD JUL!'
+        );
+        return;
+      }
+    }
+
+    // Fredrik: 28 december
+    if (month === 12 && date === 28 && (n.includes('fredrik') || e.includes('fredrik'))) {
+      const bdayKey = `bc_bday_fredrik_${year}`;
+      if (!localStorage.getItem(bdayKey)) {
+        localStorage.setItem(bdayKey, '1');
+        showSurpriseModal(
+          '🎂👑🔥',
+          'STORT GRATTIS PÅ FÖDELSEDAGEN, FREDRIK!',
+          'Stort grattis på dagen, garagechefen!<br><br>Idag får du lägga skiftnyckeln åt sidan en stund, luta dig tillbaka i Stetson-hatten och njuta av vrålet från både Ford-pickupen och GMC-vanen!',
+          'TACKAR! PELLE I BOTTEN!'
+        );
+        return;
+      }
+    }
+
+    // Kenneth: 31 december
+    if (month === 12 && date === 31 && (n.includes('kenneth') || e.includes('kenneth'))) {
+      const bdayKey = `bc_bday_kenneth_${year}`;
+      if (!localStorage.getItem(bdayKey)) {
+        localStorage.setItem(bdayKey, '1');
+        showSurpriseModal(
+          '🎂🛻🥂',
+          'STORT GRATTIS PÅ FÖDELSEDAGEN, KENNETH!',
+          'Ranchero-kungen fyller år på självaste nyårsafton! Stort grattis på födelsedagen önskar hela gänget i Brännehylte!<br><br>Idag firar vi dig med däckrök, raketer och strikt förbud mot Bräkleen!',
+          'TACKAR & GOTT NYTT ÅR!'
+        );
+        return;
+      }
+    }
+
+    // 1. NYÅRSAFTON (31 december - för alla andra, eller för Kenneth andra gången han öppnar appen)
     if (month === 12 && date === 31) {
       const nyKey = 'bc_ny_' + year;
       if (!localStorage.getItem(nyKey)) {
@@ -1858,6 +1939,62 @@
         );
         return;
       }
+    }
+
+    // 6. PERSONLIGA INLOGGNINGS-POPUPS FÖR GÄNGET (Utan årtal på fordonen, max 1 gång/vecka)
+    checkPersonalMemberPopup(userName, userEmail);
+  }
+
+  function checkPersonalMemberPopup(userName, userEmail) {
+    const n = (userName || '').toLowerCase();
+    const e = (userEmail || '').toLowerCase();
+
+    const now = new Date();
+    const weekNumber = Math.floor(now.getTime() / (1000 * 60 * 60 * 24 * 7));
+    const userPopupKey = `bc_vip_popup_${n}_${weekNumber}`;
+
+    if (localStorage.getItem(userPopupKey)) return;
+
+    if (n.includes('fredrik') || e.includes('fredrik')) {
+      localStorage.setItem(userPopupKey, '1');
+      showSurpriseModal(
+        '👑🚐🔥',
+        'GARAGECHEFEN ÄR INLOGGAD!',
+        'Välkommen in i värmen, Fredrik! Ford-pickupen och GMC-vanen står och väntar på dig.<br><br>Har du kommit ihåg att låsa in 10 mm-hylsorna, eller ska du bara köpa <em>"ett litet projekt till"</em> på Blocket idag?',
+        'ÖPPNA VERKSTAN!'
+      );
+    } else if (n.includes('tony') || e.includes('tony')) {
+      localStorage.setItem(userPopupKey, '1');
+      showSurpriseModal(
+        '🎩🚗🔥',
+        'BUICK-BARONEN PÅ PLATS!',
+        'Tjena Tony! Hoppas LeSabren mår som en kung.<br><br><strong>Dagens säkerhetsbulletin i garaget:</strong> Håll flanellskjortan och eventuella ljuskronor på minst en armlängds avstånd från kaffebryggaren idag!',
+        'JAG HAR BRANDSLÄCKAREN REDO!'
+      );
+    } else if (n.includes('kenneth') || e.includes('kenneth')) {
+      localStorage.setItem(userPopupKey, '1');
+      showSurpriseModal(
+        '🛻🧴🔧',
+        'RANCHERO-KUNGEN!',
+        'Välkommen in, Kenneth! Får Rancheron lite kärlek idag?<br><br><strong>Vänlig påminnelse från skyddsombudet:</strong> Det finns riktig handtvål vid vasken nu, så du behöver inte tvätta nävarna i ren Bräkleen efter skruvandet!',
+        'BRÄKLEEN RENSAR BÄST!'
+      );
+    } else if (n.includes('håkan') || n.includes('hakan') || e.includes('hakan')) {
+      localStorage.setItem(userPopupKey, '1');
+      showSurpriseModal(
+        '🕶️🕰️🚘',
+        'GALAXIE-GLIDAREN!',
+        'Tjena Håkan! Är suffletten nere på Galaxien?<br><br>Vi hörde att det tickade mystiskt i garaget igår – men lugn, det är inte ventillyftarna, det är bara klockan i din instrumentbräda som går i överljudsfart!',
+        'DEN TICKAR OCH GÅR!'
+      );
+    } else if (n.includes('pierre') || e.includes('pierre')) {
+      localStorage.setItem(userPopupKey, '1');
+      showSurpriseModal(
+        '🏍️💨🎨',
+        'TVÅHJULS-EXPERTEN!',
+        'Tjena Pierre! Välkommen in bland alla tunga gjutjärns-V8:or.<br><br>Ska det skruvas hoj eller läggas lack idag? Om du tar fram färgsprutan – se till att jaga ut alla flugor ur garaget innan klarlacken åker på!',
+        'INGA FLUGOR I LACKEN IDAG!'
+      );
     }
   }
 
