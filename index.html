@@ -369,6 +369,7 @@
       padding: 14px;
       margin-bottom: 16px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      width: 100%;
     }
     .spec-title {
       font-family: 'Alfa Slab One', cursive;
@@ -671,6 +672,35 @@
       font-weight: 700;
       cursor: pointer;
     }
+
+    /* SOUNDBOARD KNAPPAR */
+    .sound-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .btn-sound {
+      background: linear-gradient(180deg, #28201b 0%, #15100d 100%);
+      border: 1px solid var(--rust-primary);
+      color: var(--cream-bg);
+      padding: 10px 8px;
+      border-radius: 4px;
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 3px 0 #0d0a08;
+    }
+    .btn-sound:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #0d0a08;
+      border-color: var(--rust-glow);
+    }
   </style>
 </head>
 <body>
@@ -747,7 +777,7 @@
           <div class="menu-card-icon">🏠</div>
           <div class="menu-card-content">
             <h3>STARTSKÄRM</h3>
-            <p>Logga, närvaroindikator och kaffeknapp.</p>
+            <p>Logga, närvaro, kaffe-roulette, horoskop & soundboard.</p>
           </div>
         </div>
 
@@ -788,7 +818,7 @@
           <div class="menu-card-icon">📐</div>
           <div class="menu-card-content">
             <h3>MEK-DATA & KALKYLER</h3>
-            <p>Tändföljder, tändgrader, moment, bultmönster, kompression & elguider.</p>
+            <p>Bortförklarings-generator, tändföljder, moment, bultmönster & kompression.</p>
           </div>
         </div>
 
@@ -837,7 +867,7 @@
     <!-- 0. STARTSKÄRM -->
     <div id="home-tab" class="view active">
       <div style="display: flex; flex-direction: column; align-items: center; padding-top: 10px;">
-        <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 310px; width: 88%; height: auto; margin: 10px auto 22px auto; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.95); border: 4px solid var(--rust-primary); display: block;" onerror="this.style.display='none'">
+        <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 280px; width: 82%; height: auto; margin: 6px auto 18px auto; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.95); border: 4px solid var(--rust-primary); display: block;" onerror="this.style.display='none'">
 
         <div class="status-beacon">
           <div class="status-indicator-bar">
@@ -850,10 +880,54 @@
           </button>
         </div>
 
-        <div id="home-calendar-btn-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-top: 4px;">
+        <div id="home-calendar-btn-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; margin-bottom: 16px;">
           <button id="home-cal-btn" class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('calendar-view', 'ROSTIG JULKALENDER')">🎄 JULKALENDER</button>
           <button class="btn-speed btn-wrench" style="padding: 12px 8px; font-size: 0.85rem;" onclick="switchToTab('feed', 'DEPÅLOGG & BILDER')">🏁 DEPÅLOGGEN</button>
         </div>
+
+        <!-- 1. DAGENS MEK-HOROSKOP -->
+        <div class="spec-card" style="border-top-color: var(--rust-glow);">
+          <div class="spec-title">
+            <span>🔮 DAGENS MEK-HOROSKOP</span>
+            <span class="spec-badge" id="horoscope-user-badge">STJÄRNSTOPP</span>
+          </div>
+          <p id="daily-horoscope-text" style="font-size: 0.85rem; line-height: 1.5; color: var(--cream-text); font-style: italic;">
+            Laddar stjärnornas position över Brännehylte...
+          </p>
+        </div>
+
+        <!-- 2. "VEM SÄTTER PÅ KAFFET?" – LYCKOHJULET -->
+        <div class="spec-card">
+          <div class="spec-title">
+            <span>🎡 VEM SÄTTER PÅ KAFFET?</span>
+            <span class="spec-badge">ROULETTE</span>
+          </div>
+          <p style="font-size: 0.78rem; color: var(--cream-muted); margin-bottom: 8px;">
+            Snurra vevaxeln! Slumpar bland incheckade i garaget (eller hela gänget om ingen är incheckad).
+          </p>
+          <div class="calc-box" style="margin-bottom: 10px;">
+            <span style="font-size: 0.72rem; color: var(--cream-muted); text-transform: uppercase;">Bryggar-ansvarig:</span>
+            <span class="calc-val" id="coffee-wheel-result" style="font-size: 1.15rem;">TRYCK FÖR ATT SNURRA</span>
+          </div>
+          <button id="btn-spin-coffee" class="btn-speed" style="width: 100%; padding: 10px; font-size: 0.9rem;" onclick="spinCoffeeWheel()">
+            ⚙️ SNURRA VEVAXELN
+          </button>
+        </div>
+
+        <!-- 3. GARAGETS SOUNDBOARD -->
+        <div class="spec-card">
+          <div class="spec-title">
+            <span>🔊 GARAGETS SOUNDBOARD</span>
+            <span class="spec-badge">LJUDEFFEKTER</span>
+          </div>
+          <div class="sound-grid">
+            <button class="btn-sound" onclick="playGarageSound('trombone')">🎺 Gängpaj (Trombon)</button>
+            <button class="btn-sound" onclick="playGarageSound('dixie')">📯 Kaffet klart (Tuta)</button>
+            <button class="btn-sound" onclick="playGarageSound('v8')">🏎️ V8 Tomgång</button>
+            <button class="btn-sound" onclick="playGarageSound('socket')">🔩 10mm i golvet</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -1078,6 +1152,25 @@
 
     <!-- 7. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
+
+      <!-- 4. BORTFÖRKLARINGS-GENERATORN -->
+      <div class="spec-card" style="border-top-color: var(--rust-glow);">
+        <div class="spec-title">
+          <span>🎰 BORTFÖRKLARINGS-GENERATOR</span>
+          <span class="spec-badge">NÖDVERKTYG</span>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--cream-muted); margin-bottom: 8px;">
+          Ryker det blått, knackar i bottendelen eller vägrar den starta? Slumpa fram en tekniskt vattentät ursäkt:
+        </p>
+        <div class="calc-box" style="margin-bottom: 10px;">
+          <span id="excuse-text" style="font-size: 0.92rem; font-weight: 700; color: var(--cream-bg); line-height: 1.4; display: block;">
+            "Det är inget fel på tändningen, det är bara hög luftfuktighet i Småland som kyler ner gnistan."
+          </span>
+        </div>
+        <button class="btn-speed" style="width: 100%; padding: 10px; font-size: 0.9rem;" onclick="generateExcuse()">
+          🎲 SLUMPA NY BORTFÖRKLARING
+        </button>
+      </div>
 
       <!-- KALKYL: RPM & FART -->
       <div class="spec-card">
@@ -1588,6 +1681,7 @@
   let isAdmin = false;
   let allCarsCache = [];
   let allEventsCache = [];
+  let activeCheckedInNames = [];
   let calCurrentDate = new Date();
   let calSelectedDateStr = null;
 
@@ -1662,6 +1756,8 @@
         Notification.requestPermission();
       }
 
+      const currentName = userData.name || user.displayName || email.split('@')[0];
+
       loadFeed();
       loadCars();
       loadTodos();
@@ -1671,8 +1767,7 @@
       loadParts();
       loadGuests();
       checkAndToggleCalendarVisibility(); 
-      
-      const currentName = userData.name || user.displayName || email.split('@')[0];
+      renderDailyHoroscope(currentName);
       checkGarageSurprises(currentName, email);
 
       calcRpm();
@@ -1763,6 +1858,185 @@
         alert('Fel vid radering: ' + err.message);
       }
     }
+  }
+
+  /* ------------------- NYA FUNKTIONER: HOROSKOP, KAFFE-HJUL, SOUNDBOARD & BORTFÖRKLARINGAR ------------------- */
+  const garageHoroscopes = [
+    "Stjärnorna står i linje med din bakaxel idag. Undvik tum-verktyg på metriska bultar efter kl. 19:00, annars väntar runddragna skallar.",
+    "Merkurius är i retrograd över Brännehylte. Rör absolut inte fördelaren idag om motorn redan startar!",
+    "En mystisk kraft drar dig mot kaffebryggaren. Dagens lyckotal är 10 (mm) – håll hårt i hylsan innan den rullar in under arbetsbänken.",
+    "Jupiter lovar högt oljetryck och jämn tomgång, men varnar för billiga kinesiska reläer och strömtjuvar i elsystemet.",
+    "Ditt mekaniska karma är på topp! En fastrostad bult i grenröret kommer att släppa på första försöket utan gassvets.",
+    "Varning för låg koffeinnivå i eftermiddag. Stjärnorna rekommenderar minst två koppar mörkrostat innan du tar fram vinkelslipen.",
+    "Venus står i zenit över verkstadsgolvet. Om det låter konstigt från motorn idag – höj bara volymen på stereon så löser det sig.",
+    "En oväntad doft av Bräkleen och bränt gummi kommer att skänka dig inre frid och harmoni under kvällens skruvande."
+  ];
+
+  function renderDailyHoroscope(userName) {
+    const el = document.getElementById('daily-horoscope-text');
+    const badge = document.getElementById('horoscope-user-badge');
+    if (!el) return;
+
+    const cleanName = (userName || 'Mekare').split(' ')[0];
+    if (badge) badge.innerText = cleanName.toUpperCase();
+
+    const now = new Date();
+    const daySeed = now.getFullYear() * 1000 + (now.getMonth() + 1) * 40 + now.getDate() + cleanName.length;
+    const idx = daySeed % garageHoroscopes.length;
+    el.innerText = `"${garageHoroscopes[idx]}"`;
+  }
+
+  function spinCoffeeWheel() {
+    const resEl = document.getElementById('coffee-wheel-result');
+    const btn = document.getElementById('btn-spin-coffee');
+    if (!resEl || !btn) return;
+
+    const defaultCrew = ['Fredrik', 'Tony', 'Kenneth', 'Håkan', 'Pierre'];
+    const pool = activeCheckedInNames.length > 0 ? activeCheckedInNames : defaultCrew;
+
+    btn.disabled = true;
+    let ticks = 0;
+    const totalTicks = 18 + Math.floor(Math.random() * 8);
+
+    const interval = setInterval(() => {
+      const tempName = pool[ticks % pool.length];
+      resEl.innerText = `🎲 ${tempName.toUpperCase()}...`;
+      playTickSound();
+      ticks++;
+
+      if (ticks >= totalTicks) {
+        clearInterval(interval);
+        const winner = pool[Math.floor(Math.random() * pool.length)];
+        resEl.innerText = `☕ ${winner.toUpperCase()} SÄTTER PÅ KAFFET!`;
+        playGarageSound('dixie');
+        btn.disabled = false;
+      }
+    }, 95);
+  }
+
+  const garageExcuses = [
+    "Det är inget fel på tändningen, det är bara hög luftfuktighet i Småland som kyler ner gnistan.",
+    "Den läcker inte alls olja, den markerar bara revir och rostskyddar verkstadsgolvet.",
+    "Det där knacket i motorn är bara rullkammen som masserar kolvtopparna lite kärleksfullt.",
+    "Att den ryker blått beror på att jag kör med extra tvåtakts-tillsats för att smörja avgasventilerna.",
+    "Den gick inte varm, kylaren ville bara släppa ut lite övertryck så inte slangarna sväller.",
+    "Förgasaren flödar inte alls över, den för-tvättar bara insugskanalerna med ren bensin.",
+    "Att den misständer beror på att tändstiften är allergiska mot dagens moderna bensin.",
+    "Växellådan slirar inte, det är en inbyggd momentbegränsare så jag inte vrider av kardanaxeln direkt!",
+    "Elsystemet glappar inte – det är ett gammalt amerikanskt stöldskydd som bara jag förstår mig på."
+  ];
+
+  function generateExcuse() {
+    const el = document.getElementById('excuse-text');
+    if (!el) return;
+    const idx = Math.floor(Math.random() * garageExcuses.length);
+    el.innerText = `"${garageExcuses[idx]}"`;
+    playTickSound();
+  }
+
+  let audioCtx = null;
+  function getAudioCtx() {
+    if (!audioCtx) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      audioCtx = new AudioContext();
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
+  function playTickSound() {
+    try {
+      const ctx = getAudioCtx();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(650, ctx.currentTime);
+      gain.gain.setValueAtTime(0.08, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.04);
+    } catch (e) {}
+  }
+
+  function playGarageSound(type) {
+    try {
+      const ctx = getAudioCtx();
+      const now = ctx.currentTime;
+
+      if (type === 'trombone') {
+        const notes = [
+          { f: 293.66, d: 0.32, t: 0 },
+          { f: 277.18, d: 0.32, t: 0.35 },
+          { f: 261.63, d: 0.32, t: 0.70 },
+          { f: 246.94, d: 0.85, t: 1.05 }
+        ];
+        notes.forEach((n, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(n.f, now + n.t);
+          if (i === 3) {
+            osc.frequency.linearRampToValueAtTime(195, now + n.t + n.d);
+          }
+          gain.gain.setValueAtTime(0.15, now + n.t);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + n.t);
+          osc.stop(now + n.t + n.d);
+        });
+      } else if (type === 'dixie') {
+        const notes = [
+          { f: 523.25, d: 0.14, t: 0 },
+          { f: 659.25, d: 0.14, t: 0.16 },
+          { f: 783.99, d: 0.14, t: 0.32 },
+          { f: 1046.50, d: 0.45, t: 0.48 }
+        ];
+        notes.forEach(n => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(n.f, now + n.t);
+          gain.gain.setValueAtTime(0.12, now + n.t);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + n.t);
+          osc.stop(now + n.t + n.d);
+        });
+      } else if (type === 'v8') {
+        for (let i = 0; i < 12; i++) {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sawtooth';
+          const startT = now + i * 0.11;
+          osc.frequency.setValueAtTime(52 + (i % 2) * 14, startT);
+          osc.frequency.exponentialRampToValueAtTime(36, startT + 0.09);
+          gain.gain.setValueAtTime(0.22, startT);
+          gain.gain.exponentialRampToValueAtTime(0.01, startT + 0.10);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(startT);
+          osc.stop(startT + 0.10);
+        }
+      } else if (type === 'socket') {
+        const bounces = [0, 0.18, 0.31, 0.40, 0.46, 0.50];
+        bounces.forEach((b, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(2400 + i * 120, now + b);
+          gain.gain.setValueAtTime(0.15 / (i + 1), now + b);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + b + 0.06);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now + b);
+          osc.stop(now + b + 0.06);
+        });
+      }
+    } catch (e) {}
   }
 
   /* ------------------- PÅSKÄGG, FÖDELSEDAGAR, DATUM- & PERSONLIGA POPUPS ------------------- */
@@ -2007,6 +2281,7 @@
       logoClickCount = 0;
       const appContainer = document.getElementById('app-container');
       appContainer.classList.add('burnout-shake');
+      playGarageSound('v8');
       setTimeout(() => {
         appContainer.classList.remove('burnout-shake');
       }, 3000);
@@ -2559,6 +2834,8 @@
       const text = document.getElementById('garage-status-text');
       const leaveBtn = document.getElementById('garage-leave-btn');
       
+      activeCheckedInNames = [];
+
       if (snapshot.empty) {
         led.classList.remove('online');
         text.innerText = 'Garaget är tomt just nu.';
@@ -2567,16 +2844,15 @@
       }
 
       led.classList.add('online');
-      const names = [];
       let amICheckedIn = false;
 
       snapshot.forEach(doc => {
         const d = doc.data();
-        names.push(d.name);
+        activeCheckedInNames.push(d.name);
         if (user && doc.id === user.uid) amICheckedIn = true;
       });
 
-      text.innerHTML = `<span style="color: var(--led-green);">${names.join(', ')}</span> är på plats! ☕`;
+      text.innerHTML = `<span style="color: var(--led-green);">${activeCheckedInNames.join(', ')}</span> är på plats! ☕`;
       if (leaveBtn) leaveBtn.style.display = amICheckedIn ? 'block' : 'none';
     });
   }
