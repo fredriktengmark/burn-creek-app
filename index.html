@@ -908,7 +908,7 @@
           </p>
         </div>
 
-        <!-- NY: FREDAGSFRÄCKISEN -->
+        <!-- FREDAGSFRÄCKISEN -->
         <div class="spec-card" style="border-top-color: #e67e22;">
           <div class="spec-title">
             <span>🔞 FREDAGSFRÄCKISEN</span>
@@ -956,7 +956,7 @@
           </div>
         </div>
 
-        <!-- NY: FYLLEKÖP-SPÄRREN (BLOCKET-LÅSET) -->
+        <!-- FYLLEKÖP-SPÄRREN (BLOCKET-LÅSET) -->
         <div class="spec-card" style="border-top-color: var(--warn-red);">
           <div class="spec-title">
             <span>🛑 FYLLEKÖP-SPÄRREN</span>
@@ -1195,7 +1195,7 @@
     <!-- 7. MEK-DATA, KALKYLER & VERKSTADSTIPS -->
     <div id="tips-tab" class="view">
 
-      <!-- NY: ÖL- & KOFFEINKALKYLATORN -->
+      <!-- ÖL- & KOFFEINKALKYLATORN -->
       <div class="spec-card" style="border-top-color: var(--rust-glow);">
         <div class="spec-title">
           <span>🍺☕ ÖL- & KOFFEINKALKYLATOR</span>
@@ -2141,6 +2141,18 @@
         resEl.innerText = `☕ ${winner.toUpperCase()} SÄTTER PÅ KAFFET!`;
         playGarageSound('dixie');
         btn.disabled = false;
+
+        // Skicka vinnaren till TV-dashboarden i realtid
+        if (typeof db !== 'undefined') {
+          const currentUser = auth.currentUser;
+          const spunByName = currentUser ? (currentUser.displayName || currentUser.email.split('@')[0]) : 'Crew';
+          db.collection('coffee_lottery').doc('latest').set({
+            winner: winner,
+            spunBy: spunByName,
+            spunAt: firebase.firestore.FieldValue.serverTimestamp(),
+            clientTime: Date.now()
+          }).catch(err => console.warn('Kunde inte skicka kaffelotteri till TV:', err));
+        }
       }
     }, 95);
   }
