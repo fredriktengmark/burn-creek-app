@@ -811,19 +811,11 @@
           </div>
         </div>
 
-        <div class="menu-card" onclick="openExcelLink('kassa')">
+        <div class="menu-card" onclick="openModule('economy', 'EKONOMI')">
           <div class="menu-card-icon">💰</div>
           <div class="menu-card-content">
-            <h3>VERKSTADSKASSA</h3>
-            <p>Öppna kalkylarket för verkstadskassan (läsläge för crew, redigering för admin).</p>
-          </div>
-        </div>
-
-        <div class="menu-card" onclick="openExcelLink('hyra')">
-          <div class="menu-card-icon">🏠</div>
-          <div class="menu-card-content">
-            <h3>VERKSTADSHYRA</h3>
-            <p>Öppna kalkylarket för verkstadshyran (läsläge för crew, redigering för admin).</p>
+            <h3>EKONOMI</h3>
+            <p>Verkstadskassa och verkstadshyra (Google Kalkylark).</p>
           </div>
         </div>
 
@@ -1039,6 +1031,35 @@
         </div>
       </div>
       <div id="posts-container">Laddar depåloggen...</div>
+    </div>
+
+    <!-- EKONOMI (LÄNKAR TILL GOOGLE KALKYLARK) -->
+    <div id="economy-tab" class="view">
+      <div class="spec-card" style="border-top-color: var(--rust-glow);">
+        <div class="spec-title">
+          <span>💰 VERKSTADSKASSA</span>
+          <span class="spec-badge">KALKYLARK</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--cream-muted); margin-bottom: 12px; line-height: 1.4;">
+          Kassaflöde, inköp och saldo i verkstadskassan. Öppnas i Google Kalkylark (läsläge för crew, redigering för admin).
+        </p>
+        <button class="btn-speed" style="width: 100%; padding: 12px; font-size: 0.95rem;" onclick="openExcelLink('kassa')">
+          💰 ÖPPNA VERKSTADSKASSA
+        </button>
+      </div>
+
+      <div class="spec-card" style="border-top-color: var(--rust-primary);">
+        <div class="spec-title">
+          <span>🏠 VERKSTADSHYRA</span>
+          <span class="spec-badge">KALKYLARK</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--cream-muted); margin-bottom: 12px; line-height: 1.4;">
+          Hyresinbetalningar och fördelning per månad. Öppnas i Google Kalkylark (läsläge för crew, redigering för admin).
+        </p>
+        <button class="btn-speed" style="width: 100%; padding: 12px; font-size: 0.95rem;" onclick="openExcelLink('hyra')">
+          🏠 ÖPPNA VERKSTADSHYRA
+        </button>
+      </div>
     </div>
 
     <!-- 2. FORDONSREGISTER & REGNR-SNABBKOLL -->
@@ -1933,7 +1954,7 @@
   }
 
   function switchToTab(tabId, title) {
-    const tabs = ['home', 'calendar-view', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
+    const tabs = ['home', 'calendar-view', 'feed', 'economy', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
@@ -1953,7 +1974,6 @@
       alert("Länk saknas i koden!");
       return;
     }
-    toggleMenu();
     window.open(targetUrl, "_blank", "noopener,noreferrer");
   }
 
