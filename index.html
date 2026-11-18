@@ -811,11 +811,19 @@
           </div>
         </div>
 
-        <div class="menu-card" onclick="openExcelLink()">
-          <div class="menu-card-icon">📊</div>
+        <div class="menu-card" onclick="openExcelLink('kassa')">
+          <div class="menu-card-icon">💰</div>
           <div class="menu-card-content">
             <h3>VERKSTADSKASSA</h3>
             <p>Öppna kalkylarket för verkstadskassan (läsläge för crew, redigering för admin).</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openExcelLink('hyra')">
+          <div class="menu-card-icon">🏠</div>
+          <div class="menu-card-content">
+            <h3>VERKSTADSHYRA</h3>
+            <p>Öppna kalkylarket för verkstadshyran (läsläge för crew, redigering för admin).</p>
           </div>
         </div>
 
@@ -1763,8 +1771,9 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // KLISTRA IN DELNINGSLÄNKEN TILL ERT GOOGLE KALKYLARK / EXCEL-FIL HÄR NEDAN:
-  const EXCEL_SHEET_URL = "https://docs.google.com/spreadsheets/d/12xSOQppIOb2kOKTYiFSaonyceFI0Gk-KTwPwlwL2BzU/edit?usp=sharing";
+  // DELNINGSLÄNKAR TILL GOOGLE KALKYLARK (VERKSTADSKASSA & VERKSTADSHYRA):
+  const KASSA_SHEET_URL = "https://docs.google.com/spreadsheets/d/12xSOQppIOb2kOKTYiFSaonyceFI0Gk-KTwPwlwL2BzU/edit?usp=sharing";
+  const HYRA_SHEET_URL = "https://docs.google.com/spreadsheets/d/1rmTNc2J4Lt5dcrXSV1vWoWxVYI2rmvOG/edit?usp=sharing&ouid=108645817693139796382&rtpof=true&sd=true";
 
   const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
   let isAdmin = false;
@@ -1937,14 +1946,15 @@
     toggleMenu();
   }
 
-  /* ------------------- LÄNK TILL VERKSTADSKASSA ------------------- */
-  function openExcelLink() {
-    if (!EXCEL_SHEET_URL || EXCEL_SHEET_URL === "DIN_LÄNK_TILL_KALKYLARKET_HÄR") {
-      alert("Klistra in länken till kalkylarket vid EXCEL_SHEET_URL i koden först!");
+  /* ------------------- LÄNKAR TILL VERKSTADSKASSA & VERKSTADSHYRA ------------------- */
+  function openExcelLink(type) {
+    const targetUrl = (type === 'hyra') ? HYRA_SHEET_URL : KASSA_SHEET_URL;
+    if (!targetUrl) {
+      alert("Länk saknas i koden!");
       return;
     }
     toggleMenu();
-    window.open(EXCEL_SHEET_URL, "_blank", "noopener,noreferrer");
+    window.open(targetUrl, "_blank", "noopener,noreferrer");
   }
 
   function updateFileName() {
