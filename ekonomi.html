@@ -1,1 +1,257 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burn Creek Speedshop - Kassa & Hyra</title>
+  <style>
+    body {
+      background-color: #141414;
+      color: #f0f0f0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+    h1, h2 {
+      color: #e67e22;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #333;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #e67e22;
+      color: #141414;
+      border: none;
+      padding: 10px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    button:hover {
+      background-color: #d35400;
+    }
+    .admin-panel {
+      display: none; /* Dold för vanliga läsare */
+      background-color: #1f1f1f;
+      border: 1px solid #e67e22;
+      padding: 20px;
+      border-radius: 6px;
+      margin-bottom: 25px;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    label {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 0.9em;
+      color: #bbb;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      background-color: #2b2b2b;
+      border: 1px solid #444;
+      color: #fff;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background-color: #1c1c1c;
+    }
+    th, td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      background-color: #262626;
+      color: #e67e22;
+    }
+    .status-msg {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
 
+<div class="container">
+  <div class="header-bar">
+    <h1>Burn Creek Ekonomi</h1>
+    <button onclick="toggleAdmin()">🔒 Admin-läge</button>
+  </div>
+
+  <!-- DOLT ADMIN-FORMULÄR (Bara för dig) -->
+  <div id="adminPanel" class="admin-panel">
+    <h2>Lägg till ny rad</h2>
+    <div class="form-group">
+      <label>Din Admin PIN-kod</label>
+      <input type="password" id="adminPin" placeholder="Ange din hemliga kod">
+    </div>
+    <div class="form-group">
+      <label>Välj flik</label>
+      <select id="sheetSelect">
+        <option value="verkstadskassa">Verkstadskassa</option>
+        <option value="hyra">Hyra</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Datum</label>
+      <input type="date" id="inputDate">
+    </div>
+    <div class="form-group">
+      <label>Beskrivning / Namn</label>
+      <input type="text" id="inputDesc" placeholder="T.ex. Inköp bromsrengöring eller Hyra Nov">
+    </div>
+    <div class="form-group">
+      <label>Belopp (SEK)</label>
+      <input type="number" id="inputAmount" placeholder="T.ex. -250 eller 1500">
+    </div>
+    <button onclick="saveRow()">Spara till kalkylark</button>
+    <div id="statusMsg" class="status-msg"></div>
+  </div>
+
+  <!-- LÄS-TABELLER (Synliga för alla) -->
+  <h2>Verkstadskassa</h2>
+  <table id="kassaTable">
+    <thead><tr id="kassaHead"></tr></thead>
+    <tbody id="kassaBody"><tr><td>Laddar data...</td></tr></tbody>
+  </table>
+
+  <h2>Hyra</h2>
+  <table id="hyraTable">
+    <thead><tr id="hyraHead"></tr></thead>
+    <tbody id="hyraBody"><tr><td>Laddar data...</td></tr></tbody>
+  </table>
+</div>
+
+<script>
+  // KLISTRA IN DIN WEBBAPP-URL FRÅN APPS SCRIPT HÄR:
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcyqlNG1KSoV0rTSwo_JJurWyPtNTJon-nDdtn_rTrqZTEWW1EK75_63aSj1eUpZ-s/exec";
+
+  // Sätt dagens datum som standard i formuläret
+  document.getElementById('inputDate').valueAsDate = new Date();
+
+  function toggleAdmin() {
+    const panel = document.getElementById('adminPanel');
+    panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+  }
+
+  // Hämta och visa data från Google Sheet (Read-only för alla)
+  async function loadData() {
+    try {
+      const res = await fetch(SCRIPT_URL);
+      const data = await res.json();
+
+      renderTable(data.verkstadskassa, 'kassaHead', 'kassaBody');
+      renderTable(data.hyra, 'hyraHead', 'hyraBody');
+    } catch (err) {
+      console.error("Fel vid hämtning:", err);
+    }
+  }
+
+  function renderTable(rows, headId, bodyId) {
+    const thead = document.getElementById(headId);
+    const tbody = document.getElementById(bodyId);
+    thead.innerHTML = "";
+    tbody.innerHTML = "";
+
+    if (!rows || rows.length === 0) {
+      tbody.innerHTML = "<tr><td>Ingen data hittades.</td></tr>";
+      return;
+    }
+
+    // Första raden = rubriker
+    rows[0].forEach(col => {
+      const th = document.createElement('th');
+      th.textContent = col;
+      thead.appendChild(th);
+    });
+
+    // Övriga rader = innehåll
+    for (let i = 1; i < rows.length; i++) {
+      const tr = document.createElement('tr');
+      rows[i].forEach(cell => {
+        const td = document.createElement('td');
+        // Formatera datum snyggt om det kommer som ISO-sträng
+        if (typeof cell === 'string' && cell.includes('T') && !isNaN(Date.parse(cell))) {
+          td.textContent = cell.split('T')[0];
+        } else {
+          td.textContent = cell;
+        }
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  // Skicka ny rad (Kräver rätt PIN)
+  async function saveRow() {
+    const pin = document.getElementById('adminPin').value;
+    const sheet = document.getElementById('sheetSelect').value;
+    const date = document.getElementById('inputDate').value;
+    const desc = document.getElementById('inputDesc').value;
+    const amount = Number(document.getElementById('inputAmount').value);
+    const statusMsg = document.getElementById('statusMsg');
+
+    if (!pin || !desc || !amount) {
+      statusMsg.style.color = "#e74c3c";
+      statusMsg.textContent = "Fyll i PIN-kod, beskrivning och belopp.";
+      return;
+    }
+
+    statusMsg.style.color = "#f1c40f";
+    statusMsg.textContent = "Sparar...";
+
+    // Anpassa ordningen i rowData så den matchar era kolumner i Excel!
+    const payload = {
+      pin: pin,
+      sheet: sheet,
+      rowData: [date, desc, amount]
+    };
+
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+
+      if (result.status === "success") {
+        statusMsg.style.color = "#2ecc71";
+        statusMsg.textContent = result.message;
+        document.getElementById('inputDesc').value = "";
+        document.getElementById('inputAmount').value = "";
+        loadData(); // Ladda om tabellerna direkt
+      } else {
+        statusMsg.style.color = "#e74c3c";
+        statusMsg.textContent = result.message;
+      }
+    } catch (err) {
+      statusMsg.style.color = "#e74c3c";
+      statusMsg.textContent = "Nätverksfel vid sparning.";
+    }
+  }
+
+  // Kör hämtning när sidan laddas
+  loadData();
+</script>
+
+</body>
+</html>
