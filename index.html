@@ -814,8 +814,8 @@
         <div class="menu-card" onclick="openExcelLink()">
           <div class="menu-card-icon">📊</div>
           <div class="menu-card-content">
-            <h3>VERKSTADSKASSA & HYRA</h3>
-            <p>Öppna kalkylarket för verkstadskassa & hyra (läsläge för crew, redigering för admin).</p>
+            <h3>VERKSTADSKASSA</h3>
+            <p>Öppna kalkylarket för verkstadskassan (läsläge för crew, redigering för admin).</p>
           </div>
         </div>
 
@@ -1764,7 +1764,7 @@
   const db = firebase.firestore();
 
   // KLISTRA IN DELNINGSLÄNKEN TILL ERT GOOGLE KALKYLARK / EXCEL-FIL HÄR NEDAN:
-  const EXCEL_SHEET_URL = "DIN_LÄNK_TILL_KALKYLARKET_HÄR";
+  const EXCEL_SHEET_URL = "https://script.google.com/macros/s/AKfycbxcyqlNG1KSoV0rTSwo_JJurWyPtNTJon-nDdtn_rTrqZTEWW1EK75_63aSj1eUpZ-s/exec";
 
   const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
   let isAdmin = false;
@@ -1937,7 +1937,7 @@
     toggleMenu();
   }
 
-  /* ------------------- LÄNK TILL VERKSTADSKASSA & HYRA ------------------- */
+  /* ------------------- LÄNK TILL VERKSTADSKASSA ------------------- */
   function openExcelLink() {
     if (!EXCEL_SHEET_URL || EXCEL_SHEET_URL === "DIN_LÄNK_TILL_KALKYLARKET_HÄR") {
       alert("Klistra in länken till kalkylarket vid EXCEL_SHEET_URL i koden först!");
