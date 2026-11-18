@@ -701,6 +701,36 @@
       box-shadow: 0 1px 0 #0d0a08;
       border-color: var(--rust-glow);
     }
+
+    /* VERKSTADSKASSA & HYRA TABELL */
+    .finance-table-wrap {
+      overflow-x: auto;
+      margin-top: 6px;
+      border: 1px solid #2e241e;
+      border-radius: 4px;
+      background: #140f0c;
+    }
+    .finance-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      white-space: nowrap;
+    }
+    .finance-table th, .finance-table td {
+      padding: 7px 8px;
+      text-align: left;
+      border-bottom: 1px solid #29201a;
+    }
+    .finance-table th {
+      background: #1f1814;
+      color: var(--rust-glow);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+    }
+    .finance-table tr:last-child td {
+      border-bottom: none;
+    }
   </style>
 </head>
 <body>
@@ -807,6 +837,14 @@
           <div class="menu-card-content">
             <h3>DEPÅLOGGEN</h3>
             <p>Anslagstavla, depåfoton och mekrapporter.</p>
+          </div>
+        </div>
+
+        <div class="menu-card" onclick="openModule('finance', 'VERKSTADSKASSA & HYRA')">
+          <div class="menu-card-icon">💰</div>
+          <div class="menu-card-content">
+            <h3>VERKSTADSKASSA & HYRA</h3>
+            <p>Saldo i kassan, hyresinbetalningar och utlägg (kopplat till Google Sheets).</p>
           </div>
         </div>
 
@@ -1022,6 +1060,76 @@
         </div>
       </div>
       <div id="posts-container">Laddar depåloggen...</div>
+    </div>
+
+    <!-- VERKSTADSKASSA & HYRA (GOOGLE SHEETS) -->
+    <div id="finance-tab" class="view">
+      
+      <!-- ADMIN-PANEL: SYNS BARA FÖR FREDRIK (ADMIN) -->
+      <div id="finance-admin-box" class="spec-card" style="display: none; border-top-color: var(--led-green);">
+        <div class="spec-title" style="cursor: pointer;" onclick="toggleFinanceForm()">
+          <span style="color: var(--led-green);">➕ BOKFÖR NY POST (ADMIN)</span>
+          <span class="spec-badge" id="finance-form-toggle" style="background: var(--led-green); color: #000;">VISA FORMULÄR ▼</span>
+        </div>
+        <div id="finance-add-form" style="display: none; flex-direction: column; gap: 8px; margin-top: 10px;">
+          <div>
+            <label style="font-size: 0.7rem; color: var(--cream-muted);">ADMIN PIN-KOD (FRÅN APPS SCRIPT)</label>
+            <input type="password" id="fin-pin" class="garage-input" placeholder="Ange din hemliga PIN-kod">
+          </div>
+          <div>
+            <label style="font-size: 0.7rem; color: var(--cream-muted);">VÄLJ FLIK I KALKYLARKET</label>
+            <select id="fin-sheet" class="garage-input">
+              <option value="verkstadskassa">💰 Verkstadskassa</option>
+              <option value="hyra">🏠 Hyra</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <div style="flex: 1;">
+              <label style="font-size: 0.7rem; color: var(--cream-muted);">DATUM</label>
+              <input type="date" id="fin-date" class="garage-input">
+            </div>
+            <div style="flex: 1;">
+              <label style="font-size: 0.7rem; color: var(--cream-muted);">BELOPP (SEK)</label>
+              <input type="number" id="fin-amount" class="garage-input" placeholder="T.ex. -250 eller 1500">
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 0.7rem; color: var(--cream-muted);">BESKRIVNING / NAMN</label>
+            <input type="text" id="fin-desc" class="garage-input" placeholder="T.ex. Inköp kapskivor eller Hyra Nov">
+          </div>
+          <button id="btn-save-finance" class="btn-speed" onclick="saveFinanceRow()" style="padding: 10px; font-size: 0.9rem;">SPARA TILL KALKYLARKET</button>
+          <div id="fin-status-msg" style="font-size: 0.8rem; font-weight: 700; text-align: center;"></div>
+        </div>
+      </div>
+
+      <!-- FLIK 1: VERKSTADSKASSA -->
+      <div class="spec-card" style="border-top-color: var(--rust-glow);">
+        <div class="spec-title">
+          <span>💰 VERKSTADSKASSA</span>
+          <button class="btn-quick-menu" onclick="loadFinanceData()" style="color: var(--rust-glow);">↻ Uppdatera</button>
+        </div>
+        <div class="finance-table-wrap">
+          <table class="finance-table">
+            <thead><tr id="kassa-head"></tr></thead>
+            <tbody id="kassa-body"><tr><td>Laddar verkstadskassan...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- FLIK 2: HYRA -->
+      <div class="spec-card" style="border-top-color: var(--rust-primary);">
+        <div class="spec-title">
+          <span>🏠 HYRESÖVERSIKT</span>
+          <span class="spec-badge">LÄSLÄGE</span>
+        </div>
+        <div class="finance-table-wrap">
+          <table class="finance-table">
+            <thead><tr id="hyra-head"></tr></thead>
+            <tbody id="hyra-body"><tr><td>Laddar hyreslistan...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
 
     <!-- 2. FORDONSREGISTER & REGNR-SNABBKOLL -->
@@ -1754,6 +1862,9 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
+  // KLISTRA IN DIN GOOGLE APPS SCRIPT WEBBAPP-URL HÄR NEDAN:
+  const FINANCE_SCRIPT_URL = "DIN_APPS_SCRIPT_URL_HÄR";
+
   const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
   let isAdmin = false;
   let allCarsCache = [];
@@ -1827,6 +1938,10 @@
 
       if (isAdmin) {
         document.getElementById('admin-menu-card').style.display = 'flex';
+        const finAdminBox = document.getElementById('finance-admin-box');
+        if (finAdminBox) finAdminBox.style.display = 'block';
+        const finDateInput = document.getElementById('fin-date');
+        if (finDateInput) finDateInput.valueAsDate = new Date();
         loadAdminUsers();
       }
       
@@ -1837,6 +1952,7 @@
       const currentName = userData.name || user.displayName || email.split('@')[0];
 
       loadFeed();
+      loadFinanceData();
       loadCars();
       loadTodos();
       loadGarageStatus();
@@ -1912,7 +2028,7 @@
   }
 
   function switchToTab(tabId, title) {
-    const tabs = ['home', 'calendar-view', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
+    const tabs = ['home', 'calendar-view', 'feed', 'finance', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
@@ -1923,6 +2039,133 @@
   function openModule(tabId, title) {
     switchToTab(tabId, title);
     toggleMenu();
+  }
+
+  /* ------------------- VERKSTADSKASSA & HYRA (GOOGLE SHEETS) ------------------- */
+  function toggleFinanceForm() {
+    const form = document.getElementById('finance-add-form');
+    const toggleText = document.getElementById('finance-form-toggle');
+    if (form.style.display === 'none' || form.style.display === '') {
+      form.style.display = 'flex';
+      toggleText.innerText = 'DÖLJ FORMULÄR ▲';
+    } else {
+      form.style.display = 'none';
+      toggleText.innerText = 'VISA FORMULÄR ▼';
+    }
+  }
+
+  async function loadFinanceData() {
+    const kassaBody = document.getElementById('kassa-body');
+    const hyraBody = document.getElementById('hyra-body');
+    if (!kassaBody || !hyraBody) return;
+
+    if (!FINANCE_SCRIPT_URL || FINANCE_SCRIPT_URL === "DIN_APPS_SCRIPT_URL_HÄR") {
+      kassaBody.innerHTML = '<tr><td style="color: var(--rust-glow);">Klistra in din Apps Script-URL vid FINANCE_SCRIPT_URL i koden först.</td></tr>';
+      hyraBody.innerHTML = '<tr><td style="color: var(--rust-glow);">Väntar på Apps Script-URL...</td></tr>';
+      return;
+    }
+
+    try {
+      const res = await fetch(FINANCE_SCRIPT_URL);
+      const data = await res.json();
+      renderFinanceTable(data.verkstadskassa, 'kassa-head', 'kassa-body');
+      renderFinanceTable(data.hyra, 'hyra-head', 'hyra-body');
+    } catch (err) {
+      kassaBody.innerHTML = '<tr><td style="color: #e74c3c;">Kunde inte hämta data från Google Sheets.</td></tr>';
+      hyraBody.innerHTML = '<tr><td style="color: #e74c3c;">Kunde inte hämta data från Google Sheets.</td></tr>';
+    }
+  }
+
+  function renderFinanceTable(rows, headId, bodyId) {
+    const thead = document.getElementById(headId);
+    const tbody = document.getElementById(bodyId);
+    if (!thead || !tbody) return;
+
+    thead.innerHTML = '';
+    tbody.innerHTML = '';
+
+    if (!rows || rows.length === 0) {
+      tbody.innerHTML = '<tr><td style="color: var(--cream-muted);">Inga rader i denna flik än.</td></tr>';
+      return;
+    }
+
+    rows[0].forEach(col => {
+      const th = document.createElement('th');
+      th.textContent = col;
+      thead.appendChild(th);
+    });
+
+    for (let i = 1; i < rows.length; i++) {
+      const tr = document.createElement('tr');
+      rows[i].forEach(cell => {
+        const td = document.createElement('td');
+        if (typeof cell === 'string' && cell.includes('T') && !isNaN(Date.parse(cell))) {
+          td.textContent = cell.split('T')[0];
+        } else {
+          td.textContent = cell;
+        }
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    }
+  }
+
+  async function saveFinanceRow() {
+    if (!isAdmin) return alert('Endast administratör kan lägga till poster.');
+
+    const pin = document.getElementById('fin-pin').value.trim();
+    const sheet = document.getElementById('fin-sheet').value;
+    const date = document.getElementById('fin-date').value;
+    const desc = document.getElementById('fin-desc').value.trim();
+    const amountRaw = document.getElementById('fin-amount').value;
+    const statusMsg = document.getElementById('fin-status-msg');
+    const btn = document.getElementById('btn-save-finance');
+
+    if (!pin || !desc || amountRaw === '') {
+      statusMsg.style.color = '#e74c3c';
+      statusMsg.innerText = 'Fyll i PIN-kod, beskrivning och belopp!';
+      return;
+    }
+
+    if (!FINANCE_SCRIPT_URL || FINANCE_SCRIPT_URL === "DIN_APPS_SCRIPT_URL_HÄR") {
+      statusMsg.style.color = '#e74c3c';
+      statusMsg.innerText = 'Apps Script-URL saknas i koden!';
+      return;
+    }
+
+    btn.disabled = true;
+    statusMsg.style.color = '#f1c40f';
+    statusMsg.innerText = 'Sparar i Google Kalkylark...';
+
+    const payload = {
+      pin: pin,
+      sheet: sheet,
+      rowData: [date, desc, Number(amountRaw)]
+    };
+
+    try {
+      const response = await fetch(FINANCE_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload)
+      });
+      const result = await response.json();
+
+      if (result.status === 'success') {
+        statusMsg.style.color = '#2ecc71';
+        statusMsg.innerText = '✓ ' + result.message;
+        document.getElementById('fin-desc').value = '';
+        document.getElementById('fin-amount').value = '';
+        loadFinanceData();
+      } else {
+        statusMsg.style.color = '#e74c3c';
+        statusMsg.innerText = '✕ ' + result.message;
+      }
+    } catch (err) {
+      statusMsg.style.color = '#e74c3c';
+      statusMsg.innerText = 'Nätverksfel vid sparning till kalkylarket.';
+    } finally {
+      btn.disabled = false;
+    }
   }
 
   function updateFileName() {
