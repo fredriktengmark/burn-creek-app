@@ -54,6 +54,7 @@
       border-right: 3px double var(--rust-primary);
       box-shadow: 0 0 40px rgba(0,0,0,0.95);
       position: relative;
+      overflow-x: hidden;
     }
 
     /* BURNOUT SKAK-EFFEKT (EASTER EGG) */
@@ -69,6 +70,29 @@
     }
     .burnout-shake {
       animation: v8-rumble 0.12s infinite;
+    }
+
+    /* KOLVKALLE PEEKER (UTAN TEXTRUTA) */
+    @keyframes kalle-wobble {
+      0%, 100% { transform: rotate(-4deg); }
+      50% { transform: rotate(5deg); }
+    }
+    .kolvkalle-peeker {
+      position: fixed;
+      bottom: -150px;
+      right: 16px;
+      width: 95px;
+      height: 135px;
+      z-index: 250;
+      pointer-events: none;
+      transition: bottom 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+      filter: drop-shadow(0 6px 14px rgba(0,0,0,0.9));
+    }
+    .kolvkalle-peeker.show {
+      bottom: -10px;
+    }
+    .kolvkalle-peeker.show svg {
+      animation: kalle-wobble 0.7s ease-in-out infinite;
     }
     
     .checker-divider {
@@ -701,13 +725,44 @@
       box-shadow: 0 1px 0 #0d0a08;
       border-color: var(--rust-glow);
     }
-
   </style>
 </head>
 <body>
 
 <div id="app-container">
   <div class="checker-divider"></div>
+
+  <!-- KOLVKALLE (POPPAR UPP DÅ OCH DÅ UTAN TEXTRUTA) -->
+  <div id="kolvkalle-peeker" class="kolvkalle-peeker">
+    <svg viewBox="0 0 120 170" xmlns="http://www.w3.org/2000/svg">
+      <!-- Vevstake -->
+      <rect x="49" y="88" width="22" height="82" rx="4" fill="#63686e" stroke="#1a1715" stroke-width="3"/>
+      <rect x="55" y="96" width="10" height="60" rx="2" fill="#3a3d42"/>
+      <!-- Kolvbult -->
+      <circle cx="60" cy="76" r="11" fill="#888e96" stroke="#1a1715" stroke-width="3"/>
+      <!-- Kolvkropp -->
+      <rect x="22" y="28" width="76" height="64" rx="10" fill="#c2c7ce" stroke="#1a1715" stroke-width="3.5"/>
+      <!-- Kolvringar -->
+      <line x1="22" y1="40" x2="98" y2="40" stroke="#2a2d30" stroke-width="3"/>
+      <line x1="22" y1="48" x2="98" y2="48" stroke="#2a2d30" stroke-width="3"/>
+      <line x1="22" y1="56" x2="98" y2="56" stroke="#2a2d30" stroke-width="2.5" stroke-dasharray="6,3"/>
+      <!-- Keps -->
+      <path d="M 24 28 C 24 10, 96 10, 96 28 Z" fill="#b34b1e" stroke="#1a1715" stroke-width="3"/>
+      <path d="M 75 24 L 114 27 C 114 31, 90 32, 72 29 Z" fill="#74290a" stroke="#1a1715" stroke-width="2.5"/>
+      <!-- Ögon -->
+      <ellipse cx="46" cy="64" rx="8" ry="10" fill="#ffffff" stroke="#1a1715" stroke-width="2.5"/>
+      <ellipse cx="74" cy="64" rx="8" ry="10" fill="#ffffff" stroke="#1a1715" stroke-width="2.5"/>
+      <circle cx="48" cy="65" r="3.5" fill="#111111"/>
+      <circle cx="72" cy="65" r="3.5" fill="#111111"/>
+      <!-- Flin -->
+      <path d="M 42 78 Q 60 90 78 78" fill="none" stroke="#1a1715" stroke-width="3" stroke-linecap="round"/>
+      <!-- Vinkande hand med skiftnyckel -->
+      <g transform="translate(86, 52) rotate(-25)">
+        <rect x="0" y="10" width="12" height="32" rx="4" fill="#888e96" stroke="#1a1715" stroke-width="2.5"/>
+        <path d="M -4 12 C -4 0, 16 0, 16 12 L 11 12 L 11 6 L 1 6 L 1 12 Z" fill="#a0a7b0" stroke="#1a1715" stroke-width="2.5"/>
+      </g>
+    </svg>
+  </div>
 
   <!-- GEMENSAM PÅSKÄGGS- & ÖVERRASKNINGS-MODAL -->
   <div id="surprise-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 8, 7, 0.95); z-index: 300; justify-content: center; align-items: center; padding: 20px;">
@@ -808,14 +863,6 @@
           <div class="menu-card-content">
             <h3>DEPÅLOGGEN</h3>
             <p>Anslagstavla, depåfoton och mekrapporter.</p>
-          </div>
-        </div>
-
-        <div class="menu-card" onclick="openModule('economy', 'EKONOMI')">
-          <div class="menu-card-icon">💰</div>
-          <div class="menu-card-content">
-            <h3>EKONOMI</h3>
-            <p>Verkstadskassa och verkstadshyra (Google Kalkylark).</p>
           </div>
         </div>
 
@@ -1031,35 +1078,6 @@
         </div>
       </div>
       <div id="posts-container">Laddar depåloggen...</div>
-    </div>
-
-    <!-- EKONOMI (LÄNKAR TILL GOOGLE KALKYLARK) -->
-    <div id="economy-tab" class="view">
-      <div class="spec-card" style="border-top-color: var(--rust-glow);">
-        <div class="spec-title">
-          <span>💰 VERKSTADSKASSA</span>
-          <span class="spec-badge">KALKYLARK</span>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--cream-muted); margin-bottom: 12px; line-height: 1.4;">
-          Kassaflöde, inköp och saldo i verkstadskassan. Öppnas i Google Kalkylark (läsläge för crew, redigering för admin).
-        </p>
-        <button class="btn-speed" style="width: 100%; padding: 12px; font-size: 0.95rem;" onclick="openExcelLink('kassa')">
-          💰 ÖPPNA VERKSTADSKASSA
-        </button>
-      </div>
-
-      <div class="spec-card" style="border-top-color: var(--rust-primary);">
-        <div class="spec-title">
-          <span>🏠 VERKSTADSHYRA</span>
-          <span class="spec-badge">KALKYLARK</span>
-        </div>
-        <p style="font-size: 0.85rem; color: var(--cream-muted); margin-bottom: 12px; line-height: 1.4;">
-          Hyresinbetalningar och fördelning per månad. Öppnas i Google Kalkylark (läsläge för crew, redigering för admin).
-        </p>
-        <button class="btn-speed" style="width: 100%; padding: 12px; font-size: 0.95rem;" onclick="openExcelLink('hyra')">
-          🏠 ÖPPNA VERKSTADSHYRA
-        </button>
-      </div>
     </div>
 
     <!-- 2. FORDONSREGISTER & REGNR-SNABBKOLL -->
@@ -1792,10 +1810,6 @@
   const auth = firebase.auth();
   const db = firebase.firestore();
 
-  // DELNINGSLÄNKAR TILL GOOGLE KALKYLARK (VERKSTADSKASSA & VERKSTADSHYRA):
-  const KASSA_SHEET_URL = "https://docs.google.com/spreadsheets/d/12xSOQppIOb2kOKTYiFSaonyceFI0Gk-KTwPwlwL2BzU/edit?usp=sharing";
-  const HYRA_SHEET_URL = "https://docs.google.com/spreadsheets/d/1rmTNc2J4Lt5dcrXSV1vWoWxVYI2rmvOG/edit?usp=sharing&ouid=108645817693139796382&rtpof=true&sd=true";
-
   const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
   let isAdmin = false;
   let allCarsCache = [];
@@ -1804,10 +1818,11 @@
   let calCurrentDate = new Date();
   let calSelectedDateStr = null;
 
-  /* VARIABLER FÖR PÅSKÄGG */
+  /* VARIABLER FÖR PÅSKÄGG & KOLVKALLE */
   let logoClickCount = 0;
   let logoClickTimer = null;
   let currentFrackisIndex = 0;
+  let kolvkalleInterval = null;
 
   /* ROSTIG JULKALENDER DATA (UTAN ÅRTAL PÅ FORDON) */
   const garageCalendar = [
@@ -1890,6 +1905,7 @@
       renderDailyHoroscope(currentName);
       initFridayJoke();
       checkGarageSurprises(currentName, email);
+      startKolvkalleScheduler();
 
       calcMechanicFuel();
       calcRpm();
@@ -1904,8 +1920,34 @@
       document.getElementById('auth-view').style.display = 'block';
       document.getElementById('pending-view').style.display = 'none';
       document.getElementById('main-view').style.display = 'none';
+      if (kolvkalleInterval) clearInterval(kolvkalleInterval);
     }
   });
+
+  /* KOLVKALLE SOM POPPAR UPP DÅ OCH DÅ UTAN TEXTRUTA */
+  function triggerKolvkalle() {
+    const kalle = document.getElementById('kolvkalle-peeker');
+    if (!kalle) return;
+
+    if (Math.random() > 0.5) {
+      kalle.style.left = 'auto';
+      kalle.style.right = '16px';
+    } else {
+      kalle.style.right = 'auto';
+      kalle.style.left = '16px';
+    }
+
+    kalle.classList.add('show');
+    setTimeout(() => {
+      kalle.classList.remove('show');
+    }, 4500);
+  }
+
+  function startKolvkalleScheduler() {
+    if (kolvkalleInterval) clearInterval(kolvkalleInterval);
+    setTimeout(triggerKolvkalle, 12000);
+    kolvkalleInterval = setInterval(triggerKolvkalle, 120000);
+  }
 
   async function register() {
     const name = document.getElementById('auth-name').value.trim();
@@ -1954,7 +1996,7 @@
   }
 
   function switchToTab(tabId, title) {
-    const tabs = ['home', 'calendar-view', 'feed', 'economy', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
+    const tabs = ['home', 'calendar-view', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
@@ -1965,16 +2007,6 @@
   function openModule(tabId, title) {
     switchToTab(tabId, title);
     toggleMenu();
-  }
-
-  /* ------------------- LÄNKAR TILL VERKSTADSKASSA & VERKSTADSHYRA ------------------- */
-  function openExcelLink(type) {
-    const targetUrl = (type === 'hyra') ? HYRA_SHEET_URL : KASSA_SHEET_URL;
-    if (!targetUrl) {
-      alert("Länk saknas i koden!");
-      return;
-    }
-    window.open(targetUrl, "_blank", "noopener,noreferrer");
   }
 
   function updateFileName() {
