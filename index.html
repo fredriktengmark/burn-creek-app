@@ -27,6 +27,54 @@
       --warn-red: #c0392b;
     }
 
+    /* HEMLIGT RAT ROD / PATINA-TEMA */
+    body.theme-ratrod {
+      --rust-primary: #2a7b76;
+      --rust-glow: #45b3ab;
+      --rust-deep: #184a47;
+      --cream-bg: #e6dcc8;
+      --cream-text: #dfd3bc;
+      --cream-muted: #8f9e98;
+      --cast-iron: #121514;
+      --panel-dark: #181d1b;
+      --card-bg: #1c2220;
+      --border-rivet: #3a4a46;
+      background-color: #090b0a;
+      background-image:
+        radial-gradient(rgba(179, 75, 30, 0.22) 15%, transparent 16%),
+        radial-gradient(rgba(42, 123, 118, 0.2) 15%, transparent 16%);
+    }
+    body.theme-ratrod #app-container {
+      border-left: 3px dashed #b34b1e;
+      border-right: 3px dashed #2a7b76;
+      background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(179, 75, 30, 0.03) 0px,
+        rgba(179, 75, 30, 0.03) 12px,
+        rgba(42, 123, 118, 0.03) 12px,
+        rgba(42, 123, 118, 0.03) 24px
+      );
+    }
+    body.theme-ratrod .post-card,
+    body.theme-ratrod .spec-card {
+      border-left-color: #b34b1e;
+      border-top-color: #45b3ab;
+    }
+
+    /* NATTMEK / STEALTH-TEMA */
+    body.theme-night {
+      --rust-primary: #8a2be2;
+      --rust-glow: #b366ff;
+      --rust-deep: #4b1380;
+      --cream-bg: #e2e2e8;
+      --cream-text: #d0d0dc;
+      --cream-muted: #7a7a8c;
+      --cast-iron: #09090c;
+      --panel-dark: #101016;
+      --card-bg: #14141c;
+      --border-rivet: #262636;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
     body { 
@@ -107,6 +155,7 @@
       background-color: var(--cream-bg);
       width: 100%;
       border-bottom: 2px solid var(--rust-primary);
+      cursor: pointer;
     }
 
     header { 
@@ -298,6 +347,9 @@
       cursor: pointer; 
       box-shadow: 0 4px 0 #3d1404;
       text-shadow: 1px 1px 2px #000;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
     }
     .btn-speed:active { transform: translateY(2px); box-shadow: 0 2px 0 #3d1404; }
     .btn-wrench { background: #28201b; border: 1px solid var(--border-rivet); color: var(--cream-muted); box-shadow: 0 4px 0 #18120e; }
@@ -725,12 +777,60 @@
       box-shadow: 0 1px 0 #0d0a08;
       border-color: var(--rust-glow);
     }
+
+    /* INSTÄLLNINGAR & ADMIN GUIDE */
+    .theme-option-btn {
+      width: 100%;
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid var(--border-rivet);
+      background: #140f0c;
+      color: var(--cream-text);
+      font-family: 'Chakra Petch', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .theme-option-btn.active-theme {
+      border: 2px solid var(--rust-glow);
+      background: #231914;
+      color: var(--cream-bg);
+    }
+    .toggle-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px dashed #332720;
+      font-size: 0.88rem;
+    }
+    .toggle-row:last-child { border-bottom: none; }
+    .admin-guide-item {
+      background: #140f0c;
+      border-left: 3px solid var(--rust-glow);
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      border-radius: 3px;
+      font-size: 0.8rem;
+      line-height: 1.45;
+    }
+    .code-tag {
+      background: #2b1f18;
+      color: var(--rust-glow);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
 
 <div id="app-container">
-  <div class="checker-divider"></div>
+  <div class="checker-divider" onclick="handleCheckerEasterEgg()" title="Burn Creek Speedshop"></div>
 
   <!-- KOLVKALLE (POPPAR UPP DÅ OCH DÅ UTAN TEXTRUTA) -->
   <div id="kolvkalle-peeker" class="kolvkalle-peeker">
@@ -823,6 +923,7 @@
         </div>
       </div>
       <div class="header-actions">
+        <button class="btn-nav-trigger" onclick="switchToTab('settings', 'INSTÄLLNINGAR')" title="Inställningar & Tema">⚙️</button>
         <button class="btn-nav-trigger" onclick="toggleMenu()">☰ VERKTYG</button>
         <button class="btn-killswitch" onclick="logout()">KILL</button>
       </div>
@@ -882,6 +983,14 @@
           </div>
         </div>
 
+        <div class="menu-card" onclick="openModule('economy', 'EKONOMI & KASSA')">
+          <div class="menu-card-icon">💰</div>
+          <div class="menu-card-content">
+            <h3>EKONOMI</h3>
+            <p>Direktlänkar till Verkstadskassa, Verkstadshyra och gästmek-avgifter.</p>
+          </div>
+        </div>
+
         <div class="menu-card" onclick="openModule('tips', 'MEK-DATA & KALKYLER')">
           <div class="menu-card-icon">📐</div>
           <div class="menu-card-content">
@@ -922,11 +1031,19 @@
           </div>
         </div>
 
+        <div class="menu-card" onclick="openModule('settings', 'INSTÄLLNINGAR & TEMA')">
+          <div class="menu-card-icon">⚙️</div>
+          <div class="menu-card-content">
+            <h3>INSTÄLLNINGAR</h3>
+            <p>Byt tema (Original / Rat Rod Patina / Nattmek), ljud & personlig profil.</p>
+          </div>
+        </div>
+
         <div id="admin-menu-card" class="menu-card" style="display: none; border-left-color: var(--led-green);" onclick="openModule('admin', 'ADMIN / GODKÄNNANDE')">
           <div class="menu-card-icon">🛡️</div>
           <div class="menu-card-content">
             <h3 style="color: var(--led-green);">ADMINPANEL</h3>
-            <p>Godkänn och hantera medlemmar i verkstadsappen.</p>
+            <p>Godkänn medlemmar & komplett fusklapp över appens hemligheter.</p>
           </div>
         </div>
       </div>
@@ -1182,6 +1299,41 @@
       </div>
 
       <div id="events-container">Laddar kalendern...</div>
+    </div>
+
+    <!-- EKONOMI & KASSA -->
+    <div id="economy-tab" class="view">
+      <div class="spec-card" style="border-top-color: var(--led-green);">
+        <div class="spec-title">
+          <span>💰 GEMENSAM EKONOMI</span>
+          <span class="spec-badge" style="background: var(--led-green); color: #000;">GOOGLE SHEETS</span>
+        </div>
+        <p style="font-size: 0.85rem; line-height: 1.5; color: var(--cream-text); margin-bottom: 14px;">
+          Här når du direkt till gängets gemensamma kalkylark för verkstadskassan och den månatliga hyresfördelningen.
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <a href="https://docs.google.com/spreadsheets/d/12xSOQppIOb2kOKTYiFSaonyceFI0Gk-KTwPwlwL2BzU/edit?usp=sharing" target="_blank" rel="noopener noreferrer" class="btn-speed" style="width: 100%; padding: 14px; font-size: 0.95rem;">
+            📊 ÖPPNA VERKSTADSKASSA
+          </a>
+
+          <a href="https://docs.google.com/spreadsheets/d/1rmTNc2J4Lt5dcrXSV1vWoWxVYI2rmvOG/edit?usp=sharing&ouid=108645817693139796382&rtpof=true&sd=true" target="_blank" rel="noopener noreferrer" class="btn-speed btn-wrench" style="width: 100%; padding: 14px; font-size: 0.95rem; border-color: var(--rust-primary); color: var(--cream-bg);">
+            🏠 ÖPPNA VERKSTADSHYRA
+          </a>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>📌 REGLER FÖR KASSA & AVGIFTER</span>
+          <span class="spec-badge">INFO</span>
+        </div>
+        <ul style="font-size: 0.82rem; padding-left: 18px; line-height: 1.55; color: var(--cream-text);">
+          <li><strong>Verkstadshyra:</strong> Betalas in i förskott inför månadsskifte till gemensamt Revolut-konto.</li>
+          <li><strong>Gästmek-avgift:</strong> 150 kr/dag per gäst går direkt in i verkstadskassan (förbrukningsmaterial, kaffe, el).</li>
+          <li><strong>Inköp till garaget:</strong> Spara kvitto och fota/skriv upp i Verkstadskassan innan uttag.</li>
+        </ul>
+      </div>
     </div>
 
     <!-- 4. SKROTNISSE-LAGRET -->
@@ -1770,7 +1922,71 @@
       </div>
     </div>
 
-    <!-- 9. ADMINPANEL -->
+    <!-- INSTÄLLNINGAR & PERSONIFIERING -->
+    <div id="settings-tab" class="view">
+      <div class="spec-card" style="border-top-color: var(--rust-glow);">
+        <div class="spec-title">
+          <span>🎨 GARAGETS UTSEENDE & TEMA</span>
+          <span class="spec-badge" id="current-theme-badge">CAST IRON</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 10px;">
+          Välj stil för appen på din telefon. Sparas lokalt på din enhet.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <button id="theme-btn-default" class="theme-option-btn active-theme" onclick="setAppTheme('default')">
+            <span>🔥 Original Cast Iron & Rost</span>
+            <span>STANDARD</span>
+          </button>
+          <button id="theme-btn-ratrod" class="theme-option-btn" onclick="setAppTheme('ratrod')">
+            <span>🛻 Rat Rod / Patina (Ärgad Koppar)</span>
+            <span>HEMLIGT TEMA</span>
+          </button>
+          <button id="theme-btn-night" class="theme-option-btn" onclick="setAppTheme('night')">
+            <span>🌙 Nattmek / Stealth Mode</span>
+            <span>MÖRKT</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="spec-card">
+        <div class="spec-title">
+          <span>🛠️ PERSONLIG ANPASSNING</span>
+          <span class="spec-badge">PROFIL</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div>
+            <label style="font-size: 0.75rem; color: var(--cream-muted);">EGET SMEKNAMN / MEKAR-TITEL (VISAS I HOROSKOP)</label>
+            <input type="text" id="setting-nickname" class="garage-input" placeholder="T.ex. Cheva-Kungen, Turbo-Tony..." oninput="saveCustomSettings()">
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <strong>🔩 Kolvkalle-maskot</strong>
+              <div style="font-size: 0.75rem; color: var(--cream-muted);">Låt Kolvkalle kika fram i hörnet ibland</div>
+            </div>
+            <input type="checkbox" id="setting-kolvkalle" checked onchange="saveCustomSettings()" style="width: 20px; height: 20px; accent-color: var(--rust-primary);">
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <strong>🔊 Ljudeffekter & Tut</strong>
+              <div style="font-size: 0.75rem; color: var(--cream-muted);">Ljud vid kaffelotteri, soundboard och trigger-ord</div>
+            </div>
+            <input type="checkbox" id="setting-sound" checked onchange="saveCustomSettings()" style="width: 20px; height: 20px; accent-color: var(--rust-primary);">
+          </div>
+
+          <div class="toggle-row">
+            <div>
+              <strong>🎯 Slumpad Garage-utmaning</strong>
+              <div style="font-size: 0.75rem; color: var(--cream-muted);">Få ett slumpat uppdrag när du checkar in</div>
+            </div>
+            <input type="checkbox" id="setting-challenges" checked onchange="saveCustomSettings()" style="width: 20px; height: 20px; accent-color: var(--rust-primary);">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. ADMINPANEL & SPECIAL-INSTRUKTIONER -->
     <div id="admin-tab" class="view">
       <div class="spec-card">
         <div class="spec-title">
@@ -1785,6 +2001,53 @@
         </div>
 
         <div id="admin-users-list">Laddar användare...</div>
+      </div>
+
+      <!-- INSTRUKTION FÖR ALLA SPECIALSAKER & TRIGGER-ORD -->
+      <div class="spec-card" style="border-top-color: var(--rust-glow);">
+        <div class="spec-title">
+          <span>📖 ADMIN-MANUAL: SPECIALFUNKTIONER</span>
+          <span class="spec-badge">FUSKLAPP</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--cream-muted); margin-bottom: 10px;">
+          Här är en komplett översikt över alla dolda funktioner, trigger-ord och påskägg i appen:
+        </p>
+
+        <div class="admin-guide-item">
+          <strong>1. Hemliga Trigger-ord i Depåloggen:</strong><br>
+          När någon skriver ett inlägg i Depåloggen som innehåller följande ord utlöses en specialeffekt direkt vid publicering:<br>
+          • <span class="code-tag">burnout</span> / <span class="code-tag">däckrök</span> / <span class="code-tag">lakrits</span> → Skakar hela skärmen + V8-muller + rök-popup.<br>
+          • <span class="code-tag">10mm</span> / <span class="code-tag">10 mm</span> / <span class="code-tag">hylsa</span> → Ljudet av en hylsa som studsar i betonggolvet + efterlysnings-popup.<br>
+          • <span class="code-tag">kaffe</span> / <span class="code-tag">fikabröd</span> / <span class="code-tag">bulle</span> → Spelar kaffetutan + hyllnings-popup.<br>
+          • <span class="code-tag">öl</span> / <span class="code-tag">pilsner</span> / <span class="code-tag">skål</span> → Kalla pilsner-varning & skål-popup.<br>
+          • <span class="code-tag">skrot</span> / <span class="code-tag">projekt</span> / <span class="code-tag">fynd</span> → Spelar trombon-ljudet + varning för nya projekt på gården.
+        </div>
+
+        <div class="admin-guide-item">
+          <strong>2. Dolda klick & Genvägar:</strong><br>
+          • <strong>5 snabba klick på runda loggan</strong> i headern → Låser upp <em>400 HP Burnout-läget</em> (skakar skärmen + V8-ljud).<br>
+          • <strong>3 snabba klick på målflagge-randen</strong> allra högst upp → Växlar direkt till hemliga <em>Rat Rod / Patina-temat</em> (finns även under ⚙️ Inställningar).<br>
+          • <strong>Tryck på Kaffeknappen ≥ 4 ggr samma dag</strong> → Utlöser <em>Högt koffeintryck-larmet</em>. Vid 1–3 tryck får man en <em>Slumpad Garage-utmaning</em>.
+        </div>
+
+        <div class="admin-guide-item">
+          <strong>3. Födelsedagar & Datumstyrda Popups:</strong><br>
+          • <strong>Födelsedagar (visas automatiskt för rätt person på rätt dag):</strong><br>
+            Tony (<span class="code-tag">16 feb</span>), Håkan (<span class="code-tag">9 mars</span>), Pierre (<span class="code-tag">24 dec</span>), Fredrik (<span class="code-tag">28 dec</span>), Kenneth (<span class="code-tag">31 dec</span>).<br>
+          • <strong>Övriga automatiska händelser:</strong><br>
+            – <span class="code-tag">Nov–Dec</span>: Rostig Julkalender visas (döljs automatiskt 1 jan).<br>
+            – <span class="code-tag">31 dec</span>: Gott Nytt År-hälsning.<br>
+            – <span class="code-tag">1 jan</span>: Bakfylle- & Bult-akuten (förbud mot vinkelslip före kl 15).<br>
+            – <span class="code-tag">1 april</span>: Vårstart / Sopbilarna är ute.<br>
+            – <span class="code-tag">Fredagar</span>: Fredagsfräckisen låses upp hela dagen; från kl 16:00 poppar "Veckan är slut"-rutan upp.<br>
+            – <span class="code-tag">Kl 01:00–04:30</span>: Varning för Spökskiftet vid nattmek.
+        </div>
+
+        <div class="admin-guide-item" style="margin-bottom: 0;">
+          <strong>4. Övriga moduler:</strong><br>
+          • <strong>Kolvkalle:</strong> Kikar fram tyst i nedre hörnet 12 sek efter inloggning och därefter varannan minut (kan stängas av under ⚙️ Inställningar).<br>
+          • <strong>Kaffelotteriet:</strong> När någon snurrar vevaxeln skickas vinnaren i realtid till <span class="code-tag">coffee_lottery/latest</span> så TV-tavlan i garaget visar vem som brygger.
+        </div>
       </div>
     </div>
 
@@ -1818,11 +2081,103 @@
   let calCurrentDate = new Date();
   let calSelectedDateStr = null;
 
-  /* VARIABLER FÖR PÅSKÄGG & KOLVKALLE */
+  /* VARIABLER FÖR PÅSKÄGG, INSTÄLLNINGAR & KOLVKALLE */
   let logoClickCount = 0;
   let logoClickTimer = null;
+  let checkerClickCount = 0;
+  let checkerClickTimer = null;
   let currentFrackisIndex = 0;
   let kolvkalleInterval = null;
+  let loggedInDisplayName = '';
+
+  /* LADDAR SPARADE INSTÄLLNINGAR DIREKT VID SIDLADDNING */
+  function loadSavedSettings() {
+    const savedTheme = localStorage.getItem('bc_theme') || 'default';
+    applyThemeClass(savedTheme);
+
+    const kalleEnabled = localStorage.getItem('bc_setting_kalle') !== '0';
+    const soundEnabled = localStorage.getItem('bc_setting_sound') !== '0';
+    const challEnabled = localStorage.getItem('bc_setting_challenges') !== '0';
+    const savedNick = localStorage.getItem('bc_setting_nick') || '';
+
+    const kalleEl = document.getElementById('setting-kolvkalle');
+    const soundEl = document.getElementById('setting-sound');
+    const challEl = document.getElementById('setting-challenges');
+    const nickEl = document.getElementById('setting-nickname');
+
+    if (kalleEl) kalleEl.checked = kalleEnabled;
+    if (soundEl) soundEl.checked = soundEnabled;
+    if (challEl) challEl.checked = challEnabled;
+    if (nickEl) nickEl.value = savedNick;
+  }
+
+  function applyThemeClass(themeName) {
+    document.body.classList.remove('theme-ratrod', 'theme-night');
+    if (themeName === 'ratrod') {
+      document.body.classList.add('theme-ratrod');
+    } else if (themeName === 'night') {
+      document.body.classList.add('theme-night');
+    }
+
+    const badge = document.getElementById('current-theme-badge');
+    if (badge) {
+      if (themeName === 'ratrod') badge.innerText = 'RAT ROD / PATINA';
+      else if (themeName === 'night') badge.innerText = 'NATTMEK';
+      else badge.innerText = 'CAST IRON';
+    }
+
+    ['default', 'ratrod', 'night'].forEach(t => {
+      const btn = document.getElementById(`theme-btn-${t}`);
+      if (btn) btn.classList.toggle('active-theme', t === themeName);
+    });
+  }
+
+  function setAppTheme(themeName) {
+    localStorage.setItem('bc_theme', themeName);
+    applyThemeClass(themeName);
+    playTickSound();
+  }
+
+  function saveCustomSettings() {
+    const kalleEl = document.getElementById('setting-kolvkalle');
+    const soundEl = document.getElementById('setting-sound');
+    const challEl = document.getElementById('setting-challenges');
+    const nickEl = document.getElementById('setting-nickname');
+
+    if (kalleEl) localStorage.setItem('bc_setting_kalle', kalleEl.checked ? '1' : '0');
+    if (soundEl) localStorage.setItem('bc_setting_sound', soundEl.checked ? '1' : '0');
+    if (challEl) localStorage.setItem('bc_setting_challenges', challEl.checked ? '1' : '0');
+    if (nickEl) {
+      const val = nickEl.value.trim();
+      localStorage.setItem('bc_setting_nick', val);
+      renderDailyHoroscope(val || loggedInDisplayName);
+    }
+  }
+
+  /* HEMLIG GENSVÄG TILL RAT ROD-TEMAT (3 SNABBA KLICK PÅ MÅLFLAGGAN HÖGST UPP) */
+  function handleCheckerEasterEgg() {
+    checkerClickCount++;
+    if (checkerClickTimer) clearTimeout(checkerClickTimer);
+
+    if (checkerClickCount >= 3) {
+      checkerClickCount = 0;
+      const current = localStorage.getItem('bc_theme') || 'default';
+      const nextTheme = current === 'ratrod' ? 'default' : 'ratrod';
+      setAppTheme(nextTheme);
+      if (nextTheme === 'ratrod') {
+        showSurpriseModal(
+          '🛻🦀🎨',
+          'RAT ROD / PATINA-LÄGE AKTIVERAT!',
+          'Du hittade genvägen till garagets ärgade patina-tema! Sliten koppar, turkos oxidering och rått stål.<br><br>Du kan när som helst byta tillbaka under <strong>⚙️ Inställningar</strong> i menyn.',
+          'GÖTT MOS!'
+        );
+      }
+    } else {
+      checkerClickTimer = setTimeout(() => {
+        checkerClickCount = 0;
+      }, 1500);
+    }
+  }
 
   /* ROSTIG JULKALENDER DATA (UTAN ÅRTAL PÅ FORDON) */
   const garageCalendar = [
@@ -1851,6 +2206,8 @@
     { day: 23, type: "story", title: "Lucka 23: Uppesittarkväll", text: "Uppesittarkväll i Burn Creek Speedshop: Bultar dras med känsla, kaffepannan kokartorrt och sista justeringen på hotrod-projektet görs kl 03:00." },
     { day: 24, type: "tip", title: "Lucka 24: Julafton!", text: "God Jul från Burn Creek! Släpp skiftnyckeln, unna dig en god middag och kom ihåg: Om det låter konstigt, höj stereon. Vi ses i garaget nästa år!" }
   ];
+
+  loadSavedSettings();
 
   auth.onAuthStateChanged(async user => {
     if (user) {
@@ -1892,6 +2249,8 @@
       }
 
       const currentName = userData.name || user.displayName || email.split('@')[0];
+      loggedInDisplayName = currentName;
+      const customNick = localStorage.getItem('bc_setting_nick') || '';
 
       loadFeed();
       loadCars();
@@ -1902,7 +2261,7 @@
       loadParts();
       loadGuests();
       checkAndToggleCalendarVisibility(); 
-      renderDailyHoroscope(currentName);
+      renderDailyHoroscope(customNick || currentName);
       initFridayJoke();
       checkGarageSurprises(currentName, email);
       startKolvkalleScheduler();
@@ -1926,6 +2285,7 @@
 
   /* KOLVKALLE SOM POPPAR UPP DÅ OCH DÅ UTAN TEXTRUTA */
   function triggerKolvkalle() {
+    if (localStorage.getItem('bc_setting_kalle') === '0') return;
     const kalle = document.getElementById('kolvkalle-peeker');
     if (!kalle) return;
 
@@ -1996,7 +2356,7 @@
   }
 
   function switchToTab(tabId, title) {
-    const tabs = ['home', 'calendar-view', 'feed', 'cars', 'board', 'market', 'guests', 'todo', 'tips', 'contacts', 'admin'];
+    const tabs = ['home', 'calendar-view', 'feed', 'cars', 'board', 'economy', 'market', 'guests', 'todo', 'tips', 'contacts', 'settings', 'admin'];
     tabs.forEach(t => {
       const el = document.getElementById(`${t}-tab`);
       if (el) el.classList.toggle('active', t === tabId);
@@ -2278,6 +2638,7 @@
   }
 
   function playTickSound() {
+    if (localStorage.getItem('bc_setting_sound') === '0') return;
     try {
       const ctx = getAudioCtx();
       const osc = ctx.createOscillator();
@@ -2294,6 +2655,7 @@
   }
 
   function playGarageSound(type) {
+    if (localStorage.getItem('bc_setting_sound') === '0') return;
     try {
       const ctx = getAudioCtx();
       const now = ctx.currentTime;
@@ -3102,6 +3464,18 @@
     });
   }
 
+  /* SLUMPAD GARAGE-UTMANING VID INCHECKNING */
+  const garageChallenges = [
+    "☕ <strong>Kaffemästaren:</strong> Se till att kaffekannan är nybryggd och att det finns diskade muggar framme!",
+    "🔩 <strong>10 mm-jakten:</strong> Hitta minst en borttappad 10 mm-hylsa eller skruvmejsel och lägg tillbaka den på tavlan.",
+    "🧹 <strong>Sopkvast-patrullen:</strong> Sopa av 2 kvadratmeter verkstadsgolv runt arbetsbänken innan du åker hem.",
+    "🎵 <strong>DJ Brännehylte:</strong> Sätt på riktig 80/90-tals country eller rockabilly på verkstadsstereon!",
+    "🗑️ <strong>Burk- & Skrotkoll:</strong> Töm en överfull papperskorg eller plocka undan tomburkar vid plåtbaren.",
+    "🔧 <strong>Moment-polisen:</strong> Kolla så att ingen momentnyckel ligger uppspänd i verktygsvagnen!",
+    "📸 <strong>Depå-reportern:</strong> Ta en bild på kvällens skruvande och lägg upp i Depåloggen!",
+    "🧯 <strong>Säkerhetsrundan:</strong> Släng ett öga på brandsläckaren och se till att inga trasor med Bräkleen/olja ligger framme."
+  ];
+
   async function checkInGarage() {
     const user = auth.currentUser;
     if (!user) return alert('Du måste vara inloggad!');
@@ -3113,7 +3487,7 @@
         checkedInAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
-      // KAFFE-ÖVERDOS-LARMET (om man trycker > 3 ggr på samma dag)
+      // KAFFE-ÖVERDOS-LARMET (om man trycker >= 4 ggr på samma dag)
       const now = new Date();
       const coffeeKey = `bc_coffee_${now.getFullYear()}_${now.getMonth()}_${now.getDate()}`;
       const count = parseInt(localStorage.getItem(coffeeKey) || '0', 10) + 1;
@@ -3125,6 +3499,15 @@
           'HÖGT KOFFEINTRYCK I BRÄNNEHYLTE!',
           'Bryggaren i hörnet glöder! Du har slagit på kaffeknappen ' + count + ' gånger idag.<br><br>Nu darrar ni så mycket på handen att det inte går att ställa ventilspel med bladmått längre!',
           'BARA EN KOPP TILL!'
+        );
+      } else if (localStorage.getItem('bc_setting_challenges') !== '0') {
+        const challenge = garageChallenges[Math.floor(Math.random() * garageChallenges.length)];
+        playGarageSound('dixie');
+        showSurpriseModal(
+          '🎯🔧☕',
+          `VÄLKOMMEN IN, ${name.toUpperCase()}!`,
+          `Du är nu incheckad i garaget och kaffet är påslaget.<br><br><strong>Dagens slumpade garage-utmaning:</strong><br>${challenge}`,
+          'ANTAR UTMANINGEN!'
         );
       }
 
@@ -3561,6 +3944,57 @@
     });
   }
 
+  /* HEMLIGA TRIGGER-ORD I DEPÅLOGGEN */
+  function checkFeedSecretWords(postText) {
+    if (!postText) return;
+    const t = postText.toLowerCase();
+
+    if (t.includes('burnout') || t.includes('däckrök') || t.includes('lakrits')) {
+      const appContainer = document.getElementById('app-container');
+      appContainer.classList.add('burnout-shake');
+      playGarageSound('v8');
+      setTimeout(() => appContainer.classList.remove('burnout-shake'), 2500);
+      showSurpriseModal(
+        '💨🔥🏁',
+        'TRIGGER-ORD: DÄCKRÖK DETEKTERAD!',
+        'Det luktar bränt gummi ända in i mobilen! Brandvarnaren i Brännehylte gick precis upp i varv.',
+        'SLÄPP LINELOCKEN!'
+      );
+    } else if (t.includes('10mm') || t.includes('10 mm') || t.includes('hylsa')) {
+      playGarageSound('socket');
+      showSurpriseModal(
+        '🔩🌀⚠️',
+        'TRIGGER-ORD: 10 MM-VARNING!',
+        'Ett pling i betonggolvet! En 10 mm-hylsa har precis försvunnit in i fjärde dimensionen under arbetsbänken.',
+        'JAG TAR FRAM MAGNETPENNAN'
+      );
+    } else if (t.includes('kaffe') || t.includes('fikabröd') || t.includes('bulle')) {
+      playGarageSound('dixie');
+      showSurpriseModal(
+        '☕🍩📯',
+        'TRIGGER-ORD: FIKALARM!',
+        'Tut-tuuut! Ryktet om nybryggt kaffe och fikabröd sprider sig snabbare än en Top Fuel-repa!',
+        'SKÅL I KAFFE!'
+      );
+    } else if (t.includes('öl') || t.includes('pilsner') || t.includes('skål')) {
+      playGarageSound('dixie');
+      showSurpriseModal(
+        '🍺🍻🧊',
+        'TRIGGER-ORD: KALL PILSNER!',
+        'Skål på er! Kom ihåg att ställa ifrån er vinkelslipen innan första burken knäpps!',
+        'GÖTT MOS!'
+      );
+    } else if (t.includes('skrot') || t.includes('projekt') || t.includes('fynd')) {
+      playGarageSound('trombone');
+      showSurpriseModal(
+        '🛻💸😅',
+        'TRIGGER-ORD: ETT PROJEKT TILL?!',
+        '<em>"Jag ska bara kolla lite..."</em> – Berömda sista ord innan det står en till rostig jänkare på släpet!',
+        'DEN VAR BILLIG!'
+      );
+    }
+  }
+
   async function publishPost() {
     const text = document.getElementById('post-text').value.trim();
     const file = document.getElementById('post-file').files[0];
@@ -3586,6 +4020,8 @@
       document.getElementById('post-text').value = '';
       document.getElementById('post-file').value = '';
       document.getElementById('file-chosen').innerText = '';
+
+      checkFeedSecretWords(text);
     } catch (err) {
       alert('Kunde inte publicera: ' + err.message);
     } finally {
