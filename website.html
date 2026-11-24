@@ -3,29 +3,45 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Burn Creek Speedshop – Brännehylte • Est. 2026</title>
+  <title>Burn Creek Speedshop – Street & Strip • Brännehylte</title>
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; scroll-behavior: smooth; }
     body {
       margin: 0;
-      background-color: #0c0c0e;
-      color: #f2f2f5;
+      background-color: #09090b;
+      /* Kolfiber / Asfaltsmönster */
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.16), transparent 60%),
+        linear-gradient(27deg, #111115 5px, transparent 5px),
+        linear-gradient(207deg, #111115 5px, transparent 5px),
+        linear-gradient(27deg, #16161b 5px, transparent 5px),
+        linear-gradient(207deg, #16161b 5px, transparent 5px);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 0, 10px 0, 0 10px, 10px 10px;
+      color: #f4f4f6;
       line-height: 1.6;
     }
 
-    /* Racing-bård */
+    /* Rutig målflagga */
     .checkered-bar {
       width: 100%;
-      height: 14px;
+      height: 16px;
       background-image:
         linear-gradient(45deg, #fff 25%, transparent 25%),
         linear-gradient(-45deg, #fff 25%, transparent 25%),
         linear-gradient(45deg, transparent 75%, #fff 75%),
         linear-gradient(-45deg, transparent 75%, #fff 75%);
-      background-size: 14px 14px;
-      background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
       background-color: #111;
-      border-bottom: 2px solid #ff6f00;
+      border-bottom: 3px solid #ff5722;
+    }
+
+    /* Racing-stripes avdelare */
+    .race-stripe {
+      height: 8px;
+      width: 100%;
+      background: linear-gradient(90deg, #d32f2f 0%, #d32f2f 33%, #ff6f00 33%, #ff6f00 66%, #fbc02d 66%, #fbc02d 100%);
     }
 
     /* Navigation */
@@ -33,53 +49,73 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(14, 14, 17, 0.94);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid #26262e;
-      padding: 12px 20px;
+      background: rgba(10, 10, 13, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid #26262e;
+      padding: 12px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
     .nav-brand {
       font-weight: 900;
-      font-size: 1.1rem;
-      letter-spacing: 1px;
+      font-size: 1.15rem;
+      font-style: italic;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: #ff8f00;
+      color: #fff;
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .nav-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .nav-brand span { color: #ff6f00; }
+    .nav-links { display: flex; gap: 18px; flex-wrap: wrap; }
     .nav-links a {
       color: #ddd;
       text-decoration: none;
-      font-weight: 700;
-      font-size: 0.88rem;
+      font-weight: 800;
+      font-size: 0.85rem;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
       transition: color 0.2s;
     }
-    .nav-links a:hover { color: #ff8f00; }
+    .nav-links a:hover { color: #ff6f00; }
 
-    /* Hero */
+    /* Hero – Street Week känsla */
     .hero {
+      position: relative;
       text-align: center;
-      padding: 55px 20px 60px;
-      background: 
-        radial-gradient(circle at center, rgba(255, 111, 0, 0.18) 0%, rgba(12, 12, 14, 0.95) 70%),
-        repeating-linear-gradient(45deg, #141418 0, #141418 12px, #101013 12px, #101013 24px);
-      border-bottom: 1px solid #26262e;
+      padding: 50px 20px 60px;
+      background: radial-gradient(circle at center, rgba(255, 87, 34, 0.22) 0%, rgba(9, 9, 11, 0.92) 72%);
+      overflow: hidden;
     }
+
+    /* Dragracing-gran (Christmas Tree) indikator */
+    .christmas-tree {
+      display: inline-flex;
+      gap: 8px;
+      background: #141418;
+      border: 2px solid #333;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+    }
+    .bulb { width: 12px; height: 12px; border-radius: 50%; background: #2a2a30; }
+    .bulb.amber { background: #ffb300; box-shadow: 0 0 10px #ffb300; }
+    .bulb.green { background: #00e676; box-shadow: 0 0 12px #00e676; }
+
     .hero-logo {
-      width: 210px;
-      height: 210px;
+      width: 215px;
+      height: 215px;
       margin: 0 auto 20px;
       border-radius: 50%;
       padding: 5px;
-      background: linear-gradient(135deg, #ff6f00, #d32f2f);
-      box-shadow: 0 0 35px rgba(255, 111, 0, 0.45);
+      background: linear-gradient(135deg, #fbc02d, #ff5722, #d32f2f);
+      box-shadow: 0 0 40px rgba(255, 87, 34, 0.5);
     }
     .hero-logo img {
       width: 100%;
@@ -90,255 +126,471 @@
     }
     .hero h1 {
       margin: 0 0 8px;
-      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-size: clamp(2.1rem, 6vw, 3.6rem);
       font-weight: 900;
+      font-style: italic;
       letter-spacing: 2px;
       text-transform: uppercase;
       color: #fff;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+      text-shadow: 3px 3px 0px #d32f2f, 0 6px 20px rgba(0,0,0,0.9);
     }
-    .hero .subtitle {
-      font-size: 1.1rem;
-      color: #ff9800;
-      font-weight: 800;
-      letter-spacing: 2px;
+    .hero-tag {
+      display: inline-block;
+      background: #ff5722;
+      color: #111;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 0.9rem;
+      padding: 5px 18px;
+      transform: skew(-12deg);
+      letter-spacing: 1.5px;
       text-transform: uppercase;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
+    .hero-tag span { display: inline-block; transform: skew(12deg); }
+
     .hero p {
-      max-width: 640px;
-      margin: 0 auto 28px;
-      color: #ccc;
-      font-size: 1.05rem;
+      max-width: 660px;
+      margin: 0 auto 30px;
+      color: #d4d4dc;
+      font-size: 1.06rem;
     }
     .hero-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
     .btn {
-      padding: 13px 24px;
-      border-radius: 8px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      text-decoration: none;
-      font-size: 0.92rem;
-      transition: transform 0.15s;
-    }
-    .btn:hover { transform: translateY(-2px); }
-    .btn-primary { background: linear-gradient(90deg, #ff6f00, #ff8f00); color: #111; }
-    .btn-secondary { background: #1e1e24; color: #fff; border: 1px solid #3c3c46; }
-
-    /* Sektioner */
-    .section { max-width: 1040px; margin: 0 auto; padding: 55px 20px; }
-    .section-title {
-      font-size: 1.7rem;
+      padding: 14px 26px;
       font-weight: 900;
+      font-style: italic;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin: 0 0 10px;
+      text-decoration: none;
+      font-size: 0.92rem;
+      transform: skew(-10deg);
+      transition: transform 0.15s, box-shadow 0.2s;
+      display: inline-block;
+    }
+    .btn span { display: inline-block; transform: skew(10deg); }
+    .btn:hover { transform: skew(-10deg) translateY(-3px); }
+    .btn-primary {
+      background: linear-gradient(90deg, #ff5722, #ff9800);
+      color: #111;
+      box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4);
+    }
+    .btn-secondary {
+      background: #18181f;
       color: #fff;
-      border-left: 5px solid #ff6f00;
-      padding-left: 14px;
+      border: 2px solid #ff6f00;
     }
-    .section-lead { color: #aaa; margin: 0 0 30px; max-width: 700px; }
 
-    /* Om oss / Stats */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-top: 24px;
+    /* Sektioner */
+    .section { max-width: 1080px; margin: 0 auto; padding: 55px 20px; }
+    .section-header { margin-bottom: 28px; }
+    .section-title {
+      font-size: 1.85rem;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin: 0 0 6px;
+      color: #fff;
+      display: inline-block;
+      border-bottom: 4px solid #ff5722;
+      padding-bottom: 4px;
     }
-    .stat-box {
-      background: #17171c;
-      border: 1px solid #282832;
-      border-top: 3px solid #ff6f00;
+    .section-lead { color: #a8a8b3; margin: 8px 0 0; max-width: 720px; font-size: 0.98rem; }
+
+    /* Tidtagningstavla / Stats */
+    .timing-board {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      background: #111115;
+      border: 2px solid #2c2c35;
       border-radius: 12px;
       padding: 20px;
+      box-shadow: inset 0 0 25px rgba(0,0,0,0.8);
+    }
+    .timing-cell {
+      background: #0a0a0d;
+      border: 1px solid #24242c;
+      border-left: 4px solid #fbc02d;
+      padding: 16px;
+      border-radius: 8px;
       text-align: center;
     }
-    .stat-box strong { display: block; font-size: 1.8rem; color: #ff8f00; font-weight: 900; }
-    .stat-box span { font-size: 0.85rem; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+    .timing-cell strong {
+      display: block;
+      font-family: 'Courier New', monospace;
+      font-size: 2rem;
+      color: #ff5722;
+      font-weight: 900;
+      text-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+    }
+    .timing-cell span {
+      font-size: 0.8rem;
+      color: #aaa;
+      text-transform: uppercase;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+    }
 
-    /* Crew & Fordon */
+    /* Crew & Fordon – Startnummer-stil */
     .crew-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
     }
     .crew-card {
-      background: #17171c;
-      border: 1px solid #282832;
-      border-left: 4px solid #e53935;
+      position: relative;
+      background: linear-gradient(145deg, #18181f 0%, #121217 100%);
+      border: 1px solid #2e2e38;
+      border-top: 4px solid #ff5722;
       border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+      padding: 22px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
     }
-    .crew-card h3 { margin: 0 0 4px; font-size: 1.2rem; color: #fff; }
-    .crew-card .ride-tag {
+    .car-number {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #fff;
+      color: #111;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 0.95rem;
+      padding: 2px 10px;
+      border-radius: 4px;
+      border: 2px solid #ff5722;
+    }
+    .crew-card h3 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .ride-badge {
       display: inline-block;
-      background: rgba(255, 111, 0, 0.15);
-      color: #ff9800;
-      border: 1px solid rgba(255, 111, 0, 0.4);
+      background: #ff5722;
+      color: #111;
       padding: 3px 10px;
-      border-radius: 6px;
-      font-size: 0.82rem;
-      font-weight: 800;
-      margin: 6px 0 10px;
+      font-size: 0.8rem;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      border-radius: 4px;
+      margin-bottom: 12px;
     }
-    .crew-card p { margin: 0; font-size: 0.9rem; color: #bbb; }
+    .crew-card p { margin: 0; font-size: 0.92rem; color: #c4c4ce; }
+
+    /* Depåregler – Pit Lane Board */
+    .rules-box {
+      background: #141419;
+      border: 2px solid #d32f2f;
+      border-radius: 14px;
+      padding: 26px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+    }
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .rule-item {
+      background: #0d0d11;
+      border: 1px solid #262630;
+      border-left: 4px solid #fbc02d;
+      padding: 14px 16px;
+      border-radius: 8px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .rule-num {
+      background: #d32f2f;
+      color: #fff;
+      font-weight: 900;
+      font-size: 0.85rem;
+      padding: 3px 8px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+    .rule-text { font-size: 0.92rem; color: #e2e2ea; }
+    .rule-text strong { color: #fff; display: block; margin-bottom: 2px; }
 
     /* Galleri */
     .gallery-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 18px;
     }
     .gallery-item {
-      background: #17171c;
-      border: 1px solid #282832;
+      background: #15151b;
+      border: 1px solid #2c2c36;
       border-radius: 12px;
       overflow: hidden;
+      transition: transform 0.2s;
     }
-    .gallery-item img {
+    .gallery-item:hover { transform: translateY(-4px); border-color: #ff6f00; }
+    .gallery-img-wrap {
       width: 100%;
-      height: 220px;
+      height: 230px;
+      background: #0d0d10;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .gallery-img-wrap img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
       display: block;
-      background: #111;
     }
-    .gallery-caption { padding: 12px 14px; font-size: 0.88rem; color: #ccc; font-weight: 600; }
+    .placeholder-text {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      font-weight: 800;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    .gallery-caption {
+      padding: 13px 16px;
+      font-size: 0.9rem;
+      color: #eee;
+      font-weight: 700;
+      border-top: 2px solid #ff5722;
+      background: #181820;
+    }
 
     /* Footer */
     footer {
-      background: #08080a;
-      border-top: 1px solid #222;
+      background: #070709;
+      border-top: 2px solid #222;
       text-align: center;
-      padding: 30px 20px;
-      color: #777;
-      font-size: 0.88rem;
+      padding: 34px 20px;
+      color: #888;
+      font-size: 0.9rem;
     }
-    footer strong { color: #ff8f00; }
+    footer strong { color: #ff6f00; }
   </style>
 </head>
 <body>
   <div class="checkered-bar"></div>
+  <div class="race-stripe"></div>
 
   <nav>
-    <a href="#" class="nav-brand">🏁 Burn Creek Speedshop</a>
+    <a href="#" class="nav-brand">🏁 Burn Creek <span>Speedshop</span></a>
     <div class="nav-links">
-      <a href="#om-oss">Verkstaden</a>
+      <a href="#depan">Depån</a>
       <a href="#crew">Crew & Åk</a>
+      <a href="#regler">Depåregler</a>
       <a href="#galleri">Bilder</a>
-      <a href="guest.html">Gästdepå & Gästbok</a>
+      <a href="guest.html">Gästbok</a>
     </div>
   </nav>
 
   <!-- HERO -->
   <header class="hero">
+    <div class="christmas-tree" title="Stage • Pre-Stage • Go!">
+      <div class="bulb amber"></div>
+      <div class="bulb amber"></div>
+      <div class="bulb amber"></div>
+      <div class="bulb green"></div>
+    </div>
+
     <div class="hero-logo">
       <img src="logo.png" alt="Burn Creek Speedshop Logo">
     </div>
+
     <h1>Burn Creek Speedshop</h1>
-    <div class="subtitle">Brännehylte • Est. 2026</div>
+    <div class="hero-tag"><span>Street & Strip • Brännehylte • Est. 2026</span></div>
+
     <p>
-      En privat mekgemenskap i småländska Brännehylte där fem likasinnade skruvar V8, 
-      bygger dragracing-hot rods, håller liv i klassiska jänkare och dricker alldeles för mycket kaffe.
+      Från gatan till strippen och tillbaka. I småländska Brännehylte samlas fem biltokiga polare 
+      för att bygga V8-hot rods för Street Week, hålla liv i klassiskt amerikanskt stål och dricka starkt depåkaffe.
     </p>
+
     <div class="hero-btns">
-      <a href="#crew" class="btn btn-primary">🔧 Möt Crewet & Byggena</a>
-      <a href="guest.html" class="btn btn-secondary">✍️ Signera Gästboken</a>
+      <a href="#crew" class="btn btn-primary"><span>🔥 Se Crewet & Byggena</span></a>
+      <a href="guest.html" class="btn btn-secondary"><span>✍️ Signera Gästboken</span></a>
     </div>
   </header>
 
-  <!-- OM VERKSTADEN -->
-  <section id="om-oss" class="section">
-    <h2 class="section-title">Om Burn Creek Speedshop</h2>
-    <p class="section-lead">
-      Hösten 2026 slog vi upp portarna till vår drygt 200 kvadratmeter stora lokal i Brännehylte. 
-      Här samsas tunga V8-projekt, svetsloppor, specialbyggda arbetsbänkar och en egen depåbar byggd av lastpallar och korrugerad plåt.
-    </p>
+  <div class="race-stripe"></div>
 
-    <div class="stats-grid">
-      <div class="stat-box">
+  <!-- DEPÅN / TIDTAGNINGSTAVLA -->
+  <section id="depan" class="section">
+    <div class="section-header">
+      <h2 class="section-title">Depån i Brännehylte</h2>
+      <p class="section-lead">
+        Hösten 2026 slog vi upp portarna till vår ~200 m² stora verkstad. Här samsas tunga V8-projekt, 
+        svetsloppor, specialbyggda bänkar och vår egen depåbar byggd av lastpallar och korrugerad plåt.
+      </p>
+    </div>
+
+    <div class="timing-board">
+      <div class="timing-cell">
         <strong>~200 m²</strong>
-        <span>Verkstadsyta i Brännehylte</span>
+        <span>Verkstadsyta</span>
       </div>
-      <div class="stat-box">
-        <strong>5 st</strong>
-        <span>Hängivna garagepolare</span>
+      <div class="timing-cell">
+        <strong>5 MEKAR</strong>
+        <span>Burn Creek Crew</span>
       </div>
-      <div class="stat-box">
-        <strong>V8 & 2-Hjul</strong>
-        <span>Jänkare, Hot Rods & Hojar</span>
+      <div class="timing-cell">
+        <strong>E85 & V8</strong>
+        <span>Street & Strip Fokus</span>
       </div>
-      <div class="stat-box">
-        <strong>100 %</strong>
-        <span>Kaffe, plåt & garagestämning</span>
+      <div class="timing-cell">
+        <strong>402 M</strong>
+        <span>Målet för '34:an</span>
       </div>
     </div>
   </section>
 
   <!-- CREW & BYGGEN -->
   <section id="crew" class="section" style="padding-top: 10px;">
-    <h2 class="section-title">Burn Creek Crew & Fordon</h2>
-    <p class="section-lead">Gänget bakom nycklarna och vad som rullar in och ut genom portarna:</p>
+    <div class="section-header">
+      <h2 class="section-title">Startfältet – Crew & Fordon</h2>
+      <p class="section-lead">Gänget bakom nycklarna och maskinerna som rullar i Burn Creek:</p>
+    </div>
 
     <div class="crew-grid">
       <div class="crew-card">
+        <div class="car-number">#34</div>
         <h3>Fredrik Tengmark</h3>
-        <span class="ride-tag">Ford Hot Rod • GMC Vandura</span>
-        <p>Bygger en kompromisslös '34 Ford Pickup rat rod med etanoldriven Chevy 350 V8, Powerglide och Moser-bakaxel för Street Week, och rullar på träffar i en Hi-Top Vandura.</p>
+        <div class="ride-badge">Ford Hot Rod • GMC Vandura</div>
+        <p>Bygger en kompromisslös '34 Ford Pickup rat rod med etanoldriven Chevy 350 V8, Powerglide och Moser-bakaxel siktar mot Street Week – samt rullar på träffar i en Hi-Top Vandura.</p>
       </div>
 
       <div class="crew-card">
+        <div class="car-number">#65</div>
         <h3>Tony Olsson</h3>
-        <span class="ride-tag">Buick LeSabre</span>
-        <p>Håller fanan högt med sin klassiska Buick LeSabre och ser till att kromet glänser och kaffet aldrig tar slut i depån.</p>
+        <div class="ride-badge">Buick LeSabre</div>
+        <p>Håller fanan högt med sin klassiska Buick LeSabre och ser till att kromet glänser och kaffebryggaren går varm i depån.</p>
       </div>
 
       <div class="crew-card">
+        <div class="car-number">#71</div>
         <h3>Kenneth Eklund</h3>
-        <span class="ride-tag">Ford Ranchero</span>
-        <p>Delar mekhörna med Håkan och rattar en rå Ford Ranchero – den perfekta kombon av muskelbil och flak.</p>
+        <div class="ride-badge">Ford Ranchero</div>
+        <p>Delar mekhörna med Håkan och rattar en rå Ford Ranchero – den perfekta kombon av amerikansk muskelbil och flak.</p>
       </div>
 
       <div class="crew-card">
+        <div class="car-number">#68</div>
         <h3>Håkan Gustafsson</h3>
-        <span class="ride-tag">Ford Galaxie 500 Cab</span>
+        <div class="ride-badge">Ford Galaxie 500 Cab</div>
         <p>Cruisar öppet i en fullsize Ford Galaxie 500 cabriolet när sommarkvällarna i Småland bjuder på fint väder.</p>
       </div>
 
       <div class="crew-card">
+        <div class="car-number">#02</div>
         <h3>Pierre Danhall</h3>
-        <span class="ride-tag">Motorcyklar</span>
-        <p>Står för tvåhjulingsavdelningen i speedshopen med tre hojar i stallet och ständig puts på prylarna.</p>
+        <div class="ride-badge">Motorcyklar</div>
+        <p>Står för tvåhjulingsavdelningen i speedshopen med hojar i stallet och ständig puts på prylarna.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPÅREGLER -->
+  <section id="regler" class="section" style="padding-top: 10px;">
+    <div class="rules-box">
+      <h2 class="section-title" style="border-bottom-color: #d32f2f;">⚠️ Depåregler i Garaget</h2>
+      <p class="section-lead" style="margin-bottom: 18px;">Välkommen in i värmen! För allas trevnad och lackens överlevnad gäller följande i Burn Creek:</p>
+
+      <div class="rules-grid">
+        <div class="rule-item">
+          <div class="rule-num">01</div>
+          <div class="rule-text">
+            <strong>Rör inte verktygstavlorna</strong>
+            Fråga alltid innan du lånar – varje nyckel och hylsa har sin bestämda plats.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">02</div>
+          <div class="rule-text">
+            <strong>Inga burkar eller bälten på bilarna</strong>
+            Ställ aldrig ölburkar, kaffemuggar eller luta dig med nitar/bälten mot huvar och skärmar.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">03</div>
+          <div class="rule-text">
+            <strong>Fråga innan du fotar byggen</strong>
+            Pågående race- och motorprojekt stannar i garaget tills ägaren ger klartecken för sociala medier.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">04</div>
+          <div class="rule-text">
+            <strong>Håll golvet rent</strong>
+            Lämna inga skruvar, brickor eller skräp på verkstadsgolvet – magnetstaven är inte din betjänt.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">05</div>
+          <div class="rule-text">
+            <strong>Kaffet är heligt</strong>
+            Tar du sista koppen ur kannan är det din skyldighet att sätta på en ny panna direkt.
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- GALLERI -->
   <section id="galleri" class="section" style="padding-top: 10px;">
-    <h2 class="section-title">Från verkstadsgolvet</h2>
-    <p class="section-lead">Glimtar från bygget av lokalen, bänkarna, depåbaren och kvällsmeket i Brännehylte.</p>
+    <div class="section-header">
+      <h2 class="section-title">Depåbilder & Bygglogg</h2>
+      <p class="section-lead">Färska bilder från lokalen, bänkarna, bilarna och kvällsmeket i Brännehylte.</p>
+    </div>
 
     <div class="gallery-grid">
       <div class="gallery-item">
-        <img src="garage1.jpg" alt="Verkstadsgolvet i Burn Creek Speedshop" onerror="this.src='logo.png'; this.style.objectFit='contain';">
-        <div class="gallery-caption">Lokalen i Brännehylte tar form</div>
+        <div class="gallery-img-wrap">
+          <img src="bild1.jpg" alt="Burn Creek Speedshop lokal" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div class="placeholder-text" style="display:none;">📸 Plats för bild1.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp bild1.jpg på GitHub</span></div>
+        </div>
+        <div class="gallery-caption">🏁 Verkstadsgolvet i Brännehylte</div>
       </div>
+
       <div class="gallery-item">
-        <img src="garage2.jpg" alt="Arbetsbänk och verktyg" onerror="this.src='logo.png'; this.style.objectFit='contain';">
-        <div class="gallery-caption">Mekplatser, verktygstavlor & V8-skruv</div>
+        <div class="gallery-img-wrap">
+          <img src="bild2.jpg" alt="Hot rod och V8-projekt" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div class="placeholder-text" style="display:none;">📸 Plats för bild2.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp bild2.jpg på GitHub</span></div>
+        </div>
+        <div class="gallery-caption">🔥 '34 Ford Pickup & V8-skruv</div>
       </div>
+
       <div class="gallery-item">
-        <img src="garage3.jpg" alt="Depåbaren i Burn Creek" onerror="this.src='logo.png'; this.style.objectFit='contain';">
-        <div class="gallery-caption">Depåbaren & hänghörnan vid 42-tummaren</div>
+        <div class="gallery-img-wrap">
+          <img src="bild3.jpg" alt="Depåbaren" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div class="placeholder-text" style="display:none;">📸 Plats för bild3.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp bild3.jpg på GitHub</span></div>
+        </div>
+        <div class="gallery-caption">🍺 Depåbaren & 42-tummaren</div>
+      </div>
+
+      <div class="gallery-item">
+        <div class="gallery-img-wrap">
+          <img src="bild4.jpg" alt="Crewets jänkare" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <div class="placeholder-text" style="display:none;">📸 Plats för bild4.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp bild4.jpg på GitHub</span></div>
+        </div>
+        <div class="gallery-caption">🇺🇸 Klassiskt amerikanskt stål</div>
       </div>
     </div>
   </section>
 
   <footer>
-    <strong>Burn Creek Speedshop</strong> • Brännehylte, Småland • Est. 2026<br>
-    Har du hälsat på i garaget? <a href="guest.html" style="color:#ff9800;">Skriv en rad i vår digitala gästbok!</a>
+    <strong>Burn Creek Speedshop</strong> • Street & Strip • Brännehylte • Est. 2026<br>
+    Varit på besök i depån? <a href="guest.html" style="color:#ff6f00; font-weight:bold;">Signera vår digitala gästbok här!</a>
   </footer>
 </body>
 </html>
