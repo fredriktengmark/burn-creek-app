@@ -3,124 +3,323 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Burn Creek Speedshop – Gästinfo</title>
+  <title>Burn Creek Speedshop – Gästdepå</title>
   <style>
-    * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; }
     body {
-      margin: 0; padding: 20px;
-      background: #141414; color: #f2f2f2;
-      display: flex; flex-direction: column; align-items: center;
+      margin: 0;
+      padding: 0 0 32px;
+      background-color: #0e0e10;
+      background-image: 
+        radial-gradient(circle at top, rgba(255, 111, 0, 0.14), transparent 55%),
+        repeating-linear-gradient(45deg, #131316 0, #131316 10px, #101013 10px, #101013 20px);
+      color: #f4f4f6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
-    .container { max-width: 440px; width: 100%; }
-    .header { text-align: center; margin-bottom: 20px; }
-    .header img { width: 110px; height: 110px; object-fit: contain; }
-    .header h1 { margin: 8px 0 2px; font-size: 1.5rem; letter-spacing: 1px; color: #ff9800; text-transform: uppercase; }
-    .header p { margin: 0; color: #aaa; font-size: 0.9rem; }
 
+    /* Racing målflagga-bård högst upp */
+    .checkered-bar {
+      width: 100%;
+      height: 14px;
+      background-image:
+        linear-gradient(45deg, #fff 25%, transparent 25%),
+        linear-gradient(-45deg, #fff 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #fff 75%),
+        linear-gradient(-45deg, transparent 75%, #fff 75%);
+      background-size: 14px 14px;
+      background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+      background-color: #111;
+      border-bottom: 2px solid #ff6f00;
+    }
+
+    .container { max-width: 460px; width: 100%; padding: 18px 16px 0; }
+
+    /* Header & Stor tydlig logga */
+    .header {
+      text-align: center;
+      margin-bottom: 22px;
+      background: linear-gradient(180deg, #1b1b20 0%, #121215 100%);
+      border: 1px solid #2e2e36;
+      border-top: 3px solid #ff6f00;
+      border-radius: 16px;
+      padding: 20px 16px 18px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.65);
+    }
+    .logo-wrap {
+      width: 165px;
+      height: 165px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      padding: 4px;
+      background: linear-gradient(135deg, #ff6f00, #d32f2f);
+      box-shadow: 0 0 24px rgba(255, 111, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo-wrap img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #000;
+    }
+    .header h1 {
+      margin: 4px 0 4px;
+      font-size: 1.55rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+    }
+    .header .badge {
+      display: inline-block;
+      background: #ff6f00;
+      color: #111;
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    /* Kort */
     .card {
-      background: #202020; border: 1px solid #333;
-      border-radius: 12px; padding: 18px; margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      background: #19191e;
+      border: 1px solid #2d2d35;
+      border-left: 4px solid #ff6f00;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
     }
-    .card h2 { margin: 0 0 12px; font-size: 1.15rem; color: #ff9800; display: flex; align-items: center; gap: 8px; }
+    .card.red-accent { border-left-color: #e53935; }
+    .card.green-accent { border-left-color: #2e7d32; }
 
-    /* WiFi */
-    .wifi-row { display: flex; justify-content: space-between; align-items: center; background: #161616; padding: 10px 12px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #2c2c2c; }
-    .wifi-label { font-size: 0.8rem; color: #999; display: block; }
-    .wifi-val { font-weight: bold; font-size: 1.05rem; letter-spacing: 0.5px; }
-    .btn {
-      width: 100%; padding: 12px; border: none; border-radius: 8px;
-      font-weight: bold; font-size: 1rem; cursor: pointer; text-align: center;
-      display: inline-block; text-decoration: none; transition: 0.2s;
+    .card h2 {
+      margin: 0 0 12px;
+      font-size: 1.1rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: #ff8f00;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .btn-wifi { background: #2e7d32; color: #fff; }
-    .btn-wifi:active { background: #1b5e20; }
-    .btn-swish { background: #ff9800; color: #111; margin-top: 8px; }
-    .btn-swish:active { background: #e68900; }
+
+    /* Info-rader */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111114;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #26262e;
+    }
+    .info-label { font-size: 0.75rem; color: #9a9aa6; text-transform: uppercase; letter-spacing: 0.5px; display: block; }
+    .info-val { font-weight: 800; font-size: 1.05rem; color: #fff; word-break: break-all; }
+
+    /* Knappar */
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-wifi { background: linear-gradient(90deg, #2e7d32, #388e3c); color: #fff; }
+    .btn-swish { background: linear-gradient(90deg, #ff6f00, #ff8f00); color: #111; }
+
+    /* Crew-lista */
+    .crew-list { display: flex; flex-direction: column; gap: 10px; }
+    .crew-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111114;
+      border: 1px solid #26262e;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .crew-info strong { display: block; font-size: 1rem; color: #fff; }
+    .crew-info span { font-size: 0.8rem; color: #aaa; }
+    .call-btn {
+      background: #23232b;
+      border: 1px solid #ff6f00;
+      color: #ff9800;
+      padding: 8px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      white-space: nowrap;
+    }
+    .call-btn:active { background: #ff6f00; color: #111; }
 
     /* Regler */
-    ul.rules { padding-left: 20px; margin: 0; line-height: 1.6; color: #ddd; }
-    ul.rules li { margin-bottom: 6px; }
+    ul.rules { padding-left: 18px; margin: 0; line-height: 1.55; color: #dcdce2; font-size: 0.93rem; }
+    ul.rules li { margin-bottom: 8px; }
+    ul.rules li strong { color: #fff; }
+
+    .footer-note { text-align: center; font-size: 0.78rem; color: #666; margin-top: 8px; }
+
     .toast {
-      position: fixed; bottom: 20px; background: #4caf50; color: #fff;
-      padding: 10px 20px; border-radius: 20px; font-weight: bold;
-      opacity: 0; transition: opacity 0.3s; pointer-events: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff6f00;
+      color: #111;
+      padding: 11px 22px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      opacity: 0;
+      transition: opacity 0.25s;
+      pointer-events: none;
+      z-index: 999;
     }
     .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
+  <div class="checkered-bar"></div>
+
   <div class="container">
+    <!-- HEADER MED TYDLIG LOGGA -->
     <div class="header">
-      <img src="burn_creek_speedshop_rund_est.png" alt="Burn Creek Speedshop" onerror="this.style.display='none'">
-      <h1>Välkommen till Burn Creek Speedshop</h1>
-      <p>Brännehylte • Garage & Speedshop</p>
+      <div class="logo-wrap">
+        <img src="burn_creek_speedshop_rund_est.png" alt="Burn Creek Speedshop Logo">
+      </div>
+      <h1>Burn Creek Speedshop</h1>
+      <span class="badge">🏁 Brännehylte • Gästdepå</span>
     </div>
 
     <!-- GÄST-WIFI -->
-    <div class="card">
+    <div class="card green-accent">
       <h2>📶 Gäst-WiFi</h2>
-      <div class="wifi-row">
+      <div class="info-row">
         <div>
-          <span class="wifi-label">Nätverk (SSID)</span>
-          <span class="wifi-val" id="ssid">Burncreekspeedshopsnyltar</span>
+          <span class="info-label">Nätverk (SSID)</span>
+          <span class="info-val" id="ssid">Burncreekspeedshopsnyltar</span>
         </div>
       </div>
-      <div class="wifi-row">
+      <div class="info-row">
         <div>
-          <span class="wifi-label">Lösenord</span>
-          <span class="wifi-val" id="pass">Jagsnyltarwifi</span>
+          <span class="info-label">Lösenord</span>
+          <span class="info-val" id="pass">Jagsnyltarwifi</span>
         </div>
       </div>
-      <button class="btn btn-wifi" onclick="copyWifi()">📋 Kopiera WiFi-lösenord</button>
-    </div>
-
-    <!-- GARAGEREGLER -->
-    <div class="card">
-      <h2>🔧 Garageregler för besökare</h2>
-      <ul class="rules">
-        <li><strong>Rör inte verktygstavlorna</strong> utan att fråga – varje nyckel har sin plats.</li>
-        <li><strong>Inga ölburkar, muggar eller bälten</strong> på lackerade huvar eller skärmar.</li>
-        <li><strong>Fråga innan du fotar</strong> pågående projektbyggen för sociala medier.</li>
-        <li><strong>Lämna ingen skruv eller skräp på golvet</strong> – magnetstaven är inte din betjänt.</li>
-        <li><strong>Kaffet är heligt:</strong> Tar du sista koppen sätter du på en ny panna.</li>
-      </ul>
+      <button class="btn btn-wifi" onclick="copyText('pass', 'WiFi-lösenord kopierat!')">📋 Kopiera WiFi-lösenord</button>
     </div>
 
     <!-- SWISH FÖR KAFFE / LÄSK -->
     <div class="card">
-      <h2>☕ Kaffe- & Läskkassa</h2>
-      <p style="margin: 0 0 10px; font-size: 0.92rem; color: #ccc;">
-        Sugen på en kaffe, läsk eller tilltugg ur kylen? Swisha valfri slant till verkstadskassan:
+      <h2>⛽ Verkstadskassa / Fika-Swish</h2>
+      <p style="margin: 0 0 10px; font-size: 0.9rem; color: #ccc;">
+        Sugen på en kaffe, kall läsk eller tilltugg? Tanka upp kassan via Swish:
       </p>
-      <div class="wifi-row">
+      <div class="info-row">
         <div>
-          <span class="wifi-label">Swish-nummer</span>
-          <span class="wifi-val" id="swishNum">079-347 53 52</span>
+          <span class="info-label">Swish-nummer</span>
+          <span class="info-val" id="swishNum">079-347 53 52</span>
         </div>
       </div>
-      <button class="btn btn-swish" onclick="copySwish()">💸 Kopiera Swish-nummer</button>
+      <button class="btn btn-swish" onclick="copyText('swishNum', 'Swish-nummer kopierat!')">💸 Kopiera Swish-nummer</button>
     </div>
+
+    <!-- CREW & KONTAKT -->
+    <div class="card red-accent">
+      <h2>🔧 Burn Creek Crew</h2>
+      <div class="crew-list">
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Fredrik Tengmark</strong>
+            <span>'Ford Hot Rod • 'GMC Vandura</span>
+          </div>
+          <a class="call-btn" href="tel:0793475352">📞 070-000 00 01</a>
+        </div>
+
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Tony Olsson</strong>
+            <span>'Buick LeSabre</span>
+          </div>
+          <a class="call-btn" href="tel:0706780016">📞 070-000 00 02</a>
+        </div>
+
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Kenneth Eklund</strong>
+            <span>'Ford Ranchero</span>
+          </div>
+          <a class="call-btn" href="tel:0768247150">📞 070-000 00 03</a>
+        </div>
+
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Håkan Gustafsson</strong>
+            <span>'Ford Galaxie 500 Cab</span>
+          </div>
+          <a class="call-btn" href="tel:0705775733">📞 070-000 00 04</a>
+        </div>
+
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Pierre Danhall</strong>
+            <span>Motorcyklar</span>
+          </div>
+          <a class="call-btn" href="tel:0723096852">📞 070-000 00 05</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPÅREGLER -->
+    <div class="card">
+      <h2>🏁 Depåregler för besökare</h2>
+      <ul class="rules">
+        <li><strong>Rör inte verktygstavlorna</strong> utan att fråga – varje nyckel har sin plats.</li>
+        <li><strong>Inga burkar, muggar eller bälten</strong> på lackerade huvar och skärmar.</li>
+        <li><strong>Fråga innan du fotar</strong> pågående projektbyggen för sociala medier.</li>
+        <li><strong>Lämna inga skruvar eller skräp</strong> på golvet.</li>
+        <li><strong>Kaffet är heligt:</strong> Tar du sista koppen sätter du på en ny panna.</li>
+      </ul>
+    </div>
+
+    <div class="footer-note">Burn Creek Speedshop • Est. 2026 • Brännehylte</div>
   </div>
 
   <div class="toast" id="toast">Kopierat!</div>
 
   <script>
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2500);
-    }
-    function copyWifi() {
-      const pass = document.getElementById('pass').textContent;
-      navigator.clipboard.writeText(pass);
-      showToast('WiFi-lösenord kopierat!');
-    }
-    function copySwish() {
-      const num = document.getElementById('swishNum').textContent.replace(/[^0-9]/g, '');
-      navigator.clipboard.writeText(num);
-      showToast('Swish-nummer kopierat!');
+    function copyText(elementId, message) {
+      let text = document.getElementById(elementId).textContent.trim();
+      if (elementId === 'swishNum') {
+        text = text.replace(/[^0-9]/g, '');
+      }
+      navigator.clipboard.writeText(text).then(() => {
+        const t = document.getElementById('toast');
+        t.textContent = message;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+      });
     }
   </script>
 </body>
