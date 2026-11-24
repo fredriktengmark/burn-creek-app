@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Burn Creek Speedshop – Gästbok</title>
+  <title>Burn Creek Speedshop – Gästdepå</title>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 
@@ -14,7 +14,7 @@
       padding: 0 0 36px;
       background-color: #0e0e10;
       background-image: 
-        radial-gradient(circle at top, rgba(255, 111, 0, 0.15), transparent 55%),
+        radial-gradient(circle at top, rgba(255, 111, 0, 0.14), transparent 55%),
         repeating-linear-gradient(45deg, #131316 0, #131316 10px, #101013 10px, #101013 20px);
       color: #f4f4f6;
       display: flex;
@@ -22,6 +22,7 @@
       align-items: center;
     }
 
+    /* Racing målflagga-bård högst upp */
     .checkered-bar {
       width: 100%;
       height: 14px;
@@ -36,11 +37,12 @@
       border-bottom: 2px solid #ff6f00;
     }
 
-    .container { max-width: 480px; width: 100%; padding: 18px 16px 0; }
+    .container { max-width: 460px; width: 100%; padding: 18px 16px 0; }
 
+    /* Header & Stor tydlig logga */
     .header {
       text-align: center;
-      margin-bottom: 20px;
+      margin-bottom: 22px;
       background: linear-gradient(180deg, #1b1b20 0%, #121215 100%);
       border: 1px solid #2e2e36;
       border-top: 3px solid #ff6f00;
@@ -49,8 +51,8 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.65);
     }
     .logo-wrap {
-      width: 155px;
-      height: 155px;
+      width: 165px;
+      height: 165px;
       margin: 0 auto 12px;
       border-radius: 50%;
       padding: 4px;
@@ -68,12 +70,13 @@
       background: #000;
     }
     .header h1 {
-      margin: 4px 0 6px;
-      font-size: 1.5rem;
+      margin: 4px 0 4px;
+      font-size: 1.55rem;
       font-weight: 900;
       letter-spacing: 1.5px;
       text-transform: uppercase;
       color: #ffffff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.8);
     }
     .header .badge {
       display: inline-block;
@@ -87,6 +90,7 @@
       text-transform: uppercase;
     }
 
+    /* Kort */
     .card {
       background: #19191e;
       border: 1px solid #2d2d35;
@@ -96,18 +100,40 @@
       margin-bottom: 16px;
       box-shadow: 0 6px 18px rgba(0,0,0,0.45);
     }
+    .card.red-accent { border-left-color: #e53935; }
+    .card.green-accent { border-left-color: #2e7d32; }
+    .card.blue-accent { border-left-color: #0288d1; }
+
     .card h2 {
-      margin: 0 0 10px;
+      margin: 0 0 12px;
       font-size: 1.1rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       color: #ff8f00;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
+    /* Info-rader */
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111114;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #26262e;
+    }
+    .info-label { font-size: 0.75rem; color: #9a9aa6; text-transform: uppercase; letter-spacing: 0.5px; display: block; }
+    .info-val { font-weight: 800; font-size: 1.05rem; color: #fff; word-break: break-all; }
+
+    /* Formulär för gästbok */
     .gb-input, .gb-select, .gb-textarea {
       width: 100%;
-      padding: 12px;
+      padding: 11px 12px;
       margin-bottom: 10px;
       border-radius: 8px;
       border: 1px solid #33333d;
@@ -119,37 +145,46 @@
       outline: none;
       border-color: #ff6f00;
     }
-    .gb-textarea { resize: vertical; min-height: 85px; }
+    .gb-textarea { resize: vertical; min-height: 75px; }
 
-    .btn-gb {
+    /* Knappar */
+    .btn {
       width: 100%;
-      padding: 14px;
+      padding: 13px;
       border: none;
       border-radius: 8px;
-      background: linear-gradient(90deg, #ff6f00, #ff8f00);
-      color: #111;
-      font-weight: 900;
-      font-size: 0.98rem;
+      font-weight: 800;
+      font-size: 0.95rem;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       cursor: pointer;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
       transition: transform 0.1s, opacity 0.2s;
     }
-    .btn-gb:active { transform: scale(0.98); }
-    .btn-gb:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-wifi { background: linear-gradient(90deg, #2e7d32, #388e3c); color: #fff; }
+    .btn-swish { background: linear-gradient(90deg, #ff6f00, #ff8f00); color: #111; }
+    .btn-gb { background: linear-gradient(90deg, #0288d1, #039be5); color: #fff; }
 
+    /* Gästboksinlägg */
     .gb-feed {
-      margin-top: 18px;
+      margin-top: 16px;
       display: flex;
       flex-direction: column;
       gap: 10px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding-right: 4px;
     }
     .gb-entry {
       background: #111114;
       border: 1px solid #282832;
       border-left: 3px solid #ff8f00;
       border-radius: 8px;
-      padding: 12px 14px;
+      padding: 10px 12px;
     }
     .gb-entry-header {
       display: flex;
@@ -158,12 +193,44 @@
       margin-bottom: 4px;
       gap: 8px;
     }
-    .gb-author { font-weight: 800; color: #fff; font-size: 0.98rem; }
-    .gb-ride { font-size: 0.8rem; color: #ff9800; font-weight: 700; display: block; margin-bottom: 6px; }
-    .gb-date { font-size: 0.74rem; color: #777; white-space: nowrap; }
-    .gb-msg { margin: 0; font-size: 0.92rem; color: #e0e0e6; line-height: 1.45; word-wrap: break-word; }
+    .gb-author { font-weight: 800; color: #fff; font-size: 0.95rem; }
+    .gb-ride { font-size: 0.78rem; color: #ff9800; font-weight: 700; display: block; margin-bottom: 5px; }
+    .gb-date { font-size: 0.72rem; color: #777; white-space: nowrap; }
+    .gb-msg { margin: 0; font-size: 0.9rem; color: #ddd; line-height: 1.4; word-wrap: break-word; }
 
-    .footer-note { text-align: center; font-size: 0.78rem; color: #666; margin-top: 12px; }
+    /* Crew-lista */
+    .crew-list { display: flex; flex-direction: column; gap: 10px; }
+    .crew-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #111114;
+      border: 1px solid #26262e;
+      border-radius: 10px;
+      padding: 10px 12px;
+      gap: 8px;
+    }
+    .crew-info strong { display: block; font-size: 1rem; color: #fff; }
+    .crew-info span { font-size: 0.8rem; color: #aaa; }
+    .call-btn {
+      background: #23232b;
+      border: 1px solid #ff6f00;
+      color: #ff9800;
+      padding: 8px 11px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.82rem;
+      white-space: nowrap;
+    }
+    .call-btn:active { background: #ff6f00; color: #111; }
+
+    /* Regler */
+    ul.rules { padding-left: 18px; margin: 0; line-height: 1.55; color: #dcdce2; font-size: 0.93rem; }
+    ul.rules li { margin-bottom: 8px; }
+    ul.rules li strong { color: #fff; }
+
+    .footer-note { text-align: center; font-size: 0.78rem; color: #666; margin-top: 8px; }
 
     .toast {
       position: fixed;
@@ -190,18 +257,38 @@
   <div class="checkered-bar"></div>
 
   <div class="container">
+    <!-- HEADER MED TYDLIG LOGGA -->
     <div class="header">
       <div class="logo-wrap">
         <img src="logo.png" alt="Burn Creek Speedshop Logo">
       </div>
       <h1>Burn Creek Speedshop</h1>
-      <span class="badge">🏁 Digital Gästbok • Brännehylte</span>
+      <span class="badge">🏁 Brännehylte • Gästdepå</span>
     </div>
 
-    <div class="card">
+    <!-- GÄST-WIFI -->
+    <div class="card green-accent">
+      <h2>📶 Gäst-WiFi</h2>
+      <div class="info-row">
+        <div>
+          <span class="info-label">Nätverk (SSID)</span>
+          <span class="info-val" id="ssid">Burncreekspeedshopsnyltar</span>
+        </div>
+      </div>
+      <div class="info-row">
+        <div>
+          <span class="info-label">Lösenord</span>
+          <span class="info-val" id="pass">Jagsnyltarwifi</span>
+        </div>
+      </div>
+      <button class="btn btn-wifi" onclick="copyWifi()">📋 Kopiera WiFi-lösenord</button>
+    </div>
+
+    <!-- DIGITAL GÄSTBOK -->
+    <div class="card blue-accent">
       <h2>✍️ Signera Gästboken</h2>
-      <p style="margin: 0 0 14px; font-size: 0.9rem; color: #bbb;">
-        Kul att du tittade förbi! Skriv en rad så dyker din hälsning upp direkt på TV:n i verkstaden.
+      <p style="margin: 0 0 12px; font-size: 0.88rem; color: #bbb;">
+        Lämna ett avtryck innan du åker! Din hälsning dyker upp direkt på TV:n i garaget.
       </p>
 
       <input type="text" id="gb-name" class="gb-input" maxlength="40" placeholder="Ditt namn / smeknamn *" />
@@ -215,22 +302,92 @@
         <option value="🔥">🔥 Inspekterade '34:an</option>
       </select>
 
-      <textarea id="gb-message" class="gb-textarea" maxlength="200" placeholder="Skriv din hälsning till grabbarna... *"></textarea>
+      <textarea id="gb-message" class="gb-textarea" maxlength="200" placeholder="Skriv en hälsning till grabbarna... *"></textarea>
 
-      <button class="btn-gb" id="gb-submit-btn" onclick="submitGuestbook()">🚀 Skicka till Gästboken & TV:n</button>
-    </div>
+      <button class="btn btn-gb" id="gb-submit-btn" onclick="submitGuestbook()">🚀 Skicka till Gästboken & TV:n</button>
 
-    <div class="card">
-      <h2>📖 Senaste besökarna</h2>
       <div class="gb-feed" id="gb-feed">
         <div style="text-align:center; color:#777; font-size:0.85rem; padding:10px;">Laddar gästboken...</div>
       </div>
     </div>
 
+    <!-- SWISH FÖR KAFFE / LÄSK -->
+    <div class="card">
+      <h2>⛽ Verkstadskassa / Fika-Swish</h2>
+      <p style="margin: 0 0 10px; font-size: 0.9rem; color: #ccc;">
+        Sugen på en kaffe, kall läsk eller tilltugg? Tanka upp kassan via Swish:
+      </p>
+      <div class="info-row">
+        <div>
+          <span class="info-label">Swish-nummer (Fredrik)</span>
+          <span class="info-val" id="swishNum">079-347 53 52</span>
+        </div>
+      </div>
+      <button class="btn btn-swish" onclick="openSwish()">💸 Kopiera nummer & Öppna Swish</button>
+    </div>
+
+    <!-- CREW & KONTAKT -->
+    <div class="card red-accent">
+      <h2>🔧 Burn Creek Crew</h2>
+      <div class="crew-list">
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Fredrik Tengmark</strong>
+            <span>Ford Hot Rod • GMC Vandura</span>
+          </div>
+          <a class="call-btn" href="tel:0793475352">📞 079-347 53 52</a>
+        </div>
+
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Tony Olsson</strong>
+            <span>Buick LeSabre</span>
+          </div>
+          <a class="call-btn" href="tel:0706780016">📞 070-678 00 16</a>
+        </div>
+
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Kenneth Eklund</strong>
+            <span>Ford Ranchero</span>
+          </div>
+          <a class="call-btn" href="tel:0768247150">📞 076-824 71 50</a>
+        </div>
+
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Håkan Gustafsson</strong>
+            <span>Ford Galaxie 500 Cab</span>
+          </div>
+          <a class="call-btn" href="tel:0705775733">📞 070-577 57 33</a>
+        </div>
+
+        <div class="crew-item">
+          <div class="crew-info">
+            <strong>Pierre Danhall</strong>
+            <span>Motorcyklar</span>
+          </div>
+          <a class="call-btn" href="tel:0723096852">📞 072-309 68 52</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPÅREGLER -->
+    <div class="card">
+      <h2>🏁 Depåregler för besökare</h2>
+      <ul class="rules">
+        <li><strong>Rör inte verktygstavlorna</strong> utan att fråga – varje nyckel har sin plats.</li>
+        <li><strong>Inga burkar, muggar eller bälten</strong> på lackerade huvar och skärmar.</li>
+        <li><strong>Fråga innan du fotar</strong> pågående projektbyggen för sociala medier.</li>
+        <li><strong>Lämna inga skruvar eller skräp</strong> på golvet.</li>
+        <li><strong>Kaffet är heligt:</strong> Tar du sista koppen sätter du på en ny panna.</li>
+      </ul>
+    </div>
+
     <div class="footer-note">Burn Creek Speedshop • Est. 2026 • Brännehylte</div>
   </div>
 
-  <div class="toast" id="toast">Klart!</div>
+  <div class="toast" id="toast">Kopierat!</div>
 
   <script>
     const firebaseConfig = {
@@ -250,6 +407,29 @@
       t.textContent = msg;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 2600);
+    }
+
+    function copyWifi() {
+      const text = document.getElementById('pass').textContent.trim();
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('WiFi-lösenord kopierat!');
+      });
+    }
+
+    function openSwish() {
+      const num = '0793475352';
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(num);
+      }
+      showToast('Nummer kopierat – öppnar Swish...');
+      const swishPayload = encodeURIComponent(JSON.stringify({
+        version: 1,
+        payee: { value: num },
+        message: { value: 'Burn Creek Fika', editable: true }
+      }));
+      setTimeout(() => {
+        window.location.href = `swish://payment?data=${swishPayload}`;
+      }, 300);
     }
 
     async function submitGuestbook() {
@@ -287,7 +467,7 @@
         showToast('Tack! Hälsningen syns på TV:n nu!');
       } catch (err) {
         console.error(err);
-        showToast('Kunde inte spara – kolla Firebase Rules!');
+        showToast('Kunde inte spara – kolla nätet!');
       } finally {
         btn.disabled = false;
         btn.textContent = '🚀 Skicka till Gästboken & TV:n';
@@ -302,7 +482,7 @@
 
     db.collection('guestbook')
       .orderBy('timestamp', 'desc')
-      .limit(25)
+      .limit(15)
       .onSnapshot(snap => {
         const feed = document.getElementById('gb-feed');
         if (snap.empty) {
