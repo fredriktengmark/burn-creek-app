@@ -247,26 +247,56 @@
       letter-spacing: 0.8px;
     }
 
-    /* Crew & Fordon */
+    /* Crew & Fordon med bakgrundsbild */
     .crew-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 20px;
     }
     .crew-card {
-      background: linear-gradient(145deg, #18181f 0%, #121217 100%);
+      position: relative;
+      overflow: hidden;
+      min-height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background-color: #141419;
+      background-size: cover;
+      background-position: center;
       border: 1px solid #2e2e38;
       border-top: 4px solid #ff5722;
       border-radius: 12px;
       padding: 22px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+    .crew-card:hover {
+      transform: translateY(-4px);
+      border-color: #ff9800;
+    }
+    .crew-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(12, 12, 16, 0.35) 0%,
+        rgba(12, 12, 16, 0.84) 55%,
+        rgba(10, 10, 13, 0.96) 100%
+      );
+      z-index: 1;
+    }
+    .crew-card-content {
+      position: relative;
+      z-index: 2;
     }
     .crew-card h3 {
       margin: 0 0 6px;
-      font-size: 1.25rem;
+      font-size: 1.3rem;
       font-weight: 900;
       text-transform: uppercase;
       color: #fff;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.9);
     }
     .ride-badge {
       display: inline-block;
@@ -278,9 +308,14 @@
       font-style: italic;
       text-transform: uppercase;
       border-radius: 4px;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
-    .crew-card p { margin: 0; font-size: 0.92rem; color: #c4c4ce; }
+    .crew-card p {
+      margin: 0;
+      font-size: 0.92rem;
+      color: #e4e4ec;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    }
 
     /* Depåregler */
     .rules-box {
@@ -505,7 +540,7 @@
       display: block;
     }
 
-    /* Admin-knappar på inlägg när Admin-läge är aktivt */
+    /* Admin-knappar */
     .admin-del-btn {
       display: none;
       margin-top: 8px;
@@ -554,8 +589,8 @@
     }
     .admin-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 18px;
     }
     .admin-subbox {
       background: #100d0e;
@@ -673,6 +708,20 @@
           <input type="file" id="admin-gal-file" accept="image/*" class="gb-input" style="padding:8px;" />
           <button onclick="uploadGalleryPhoto()" id="admin-gal-btn" style="width:100%; background:#ff6f00; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">⬆️ Ladda upp till Galleriet</button>
         </div>
+
+        <!-- 3. Byt bakgrundsbild på Crew-kort -->
+        <div class="admin-subbox">
+          <h4>🏎️ Byt bild på Crew & Fordon</h4>
+          <select id="admin-crew-select" class="gb-select">
+            <option value="fredrik">Fredrik Tengmark</option>
+            <option value="tony">Tony Olsson</option>
+            <option value="kenneth">Kenneth Eklund</option>
+            <option value="hakan">Håkan Gustafsson</option>
+            <option value="pierre">Pierre Danhall</option>
+          </select>
+          <input type="file" id="admin-crew-file" accept="image/*" class="gb-input" style="padding:8px;" />
+          <button onclick="uploadCrewPhoto()" id="admin-crew-btn" style="width:100%; background:#0288d1; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Spara Crew-bild</button>
+        </div>
       </div>
 
       <p style="margin:14px 0 0; font-size:0.84rem; color:#ccc;">
@@ -736,7 +785,7 @@
     </div>
   </section>
 
-  <!-- CREW & BYGGEN -->
+  <!-- CREW & BYGGEN MED BAKGRUNDSBILD -->
   <section id="crew" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">Startfältet – Crew & Fordon</h2>
@@ -744,34 +793,44 @@
     </div>
 
     <div class="crew-grid">
-      <div class="crew-card">
-        <h3>Fredrik Tengmark</h3>
-        <div class="ride-badge">Ford Hot Rod • GMC Vandura</div>
-        <p>Rattar jänkare och rullar gärna på träffar och cruisingar i sin Hi-Top Vandura.</p>
+      <div class="crew-card" id="crew-card-fredrik" style="background-image: url('fredrik.jpg');">
+        <div class="crew-card-content">
+          <h3>Fredrik Tengmark</h3>
+          <div class="ride-badge">Ford Hot Rod • GMC Vandura</div>
+          <p>Rattar jänkare och rullar gärna på träffar och cruisingar i sin Hi-Top Vandura.</p>
+        </div>
       </div>
 
-      <div class="crew-card">
-        <h3>Tony Olsson</h3>
-        <div class="ride-badge">Buick LeSabre</div>
-        <p>Håller fanan högt med sin klassiska Buick LeSabre och ser till att kromet glänser och kaffebryggaren går varm i depån.</p>
+      <div class="crew-card" id="crew-card-tony" style="background-image: url('tony.jpg');">
+        <div class="crew-card-content">
+          <h3>Tony Olsson</h3>
+          <div class="ride-badge">Buick LeSabre</div>
+          <p>Håller fanan högt med sin klassiska Buick LeSabre och ser till att kromet glänser och kaffebryggaren går varm i depån.</p>
+        </div>
       </div>
 
-      <div class="crew-card">
-        <h3>Kenneth Eklund</h3>
-        <div class="ride-badge">Ford Ranchero</div>
-        <p>Delar mekhörna med Håkan och rattar en rå Ford Ranchero – den perfekta kombon av amerikansk muskelbil och flak.</p>
+      <div class="crew-card" id="crew-card-kenneth" style="background-image: url('kenneth.jpg');">
+        <div class="crew-card-content">
+          <h3>Kenneth Eklund</h3>
+          <div class="ride-badge">Ford Ranchero</div>
+          <p>Delar mekhörna med Håkan och rattar en rå Ford Ranchero – den perfekta kombon av amerikansk muskelbil och flak.</p>
+        </div>
       </div>
 
-      <div class="crew-card">
-        <h3>Håkan Gustafsson</h3>
-        <div class="ride-badge">Ford Galaxie 500 Cab</div>
-        <p>Cruisar öppet i en fullsize Ford Galaxie 500 cabriolet när sommarkvällarna i Småland bjuder på fint väder.</p>
+      <div class="crew-card" id="crew-card-hakan" style="background-image: url('hakan.jpg');">
+        <div class="crew-card-content">
+          <h3>Håkan Gustafsson</h3>
+          <div class="ride-badge">Ford Galaxie 500 Cab</div>
+          <p>Cruisar öppet i en fullsize Ford Galaxie 500 cabriolet när sommarkvällarna i Småland bjuder på fint väder.</p>
+        </div>
       </div>
 
-      <div class="crew-card">
-        <h3>Pierre Danhall</h3>
-        <div class="ride-badge">Motorcyklar</div>
-        <p>Står för tvåhjulingsavdelningen i speedshopen med hojar i stallet och ständig puts på prylarna.</p>
+      <div class="crew-card" id="crew-card-pierre" style="background-image: url('pierre.jpg');">
+        <div class="crew-card-content">
+          <h3>Pierre Danhall</h3>
+          <div class="ride-badge">Motorcyklar</div>
+          <p>Står för tvåhjulingsavdelningen i speedshopen med hojar i stallet och ständig puts på prylarna.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -1025,7 +1084,7 @@
       showToast('Info-banner dold');
     }
 
-    // Admin: Ladda upp bild till galleriet
+    // Komprimera bilder i webbläsaren
     function compressImageFile(file, maxWidth, quality) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -1050,6 +1109,7 @@
       });
     }
 
+    // Admin: Galleribilder
     async function uploadGalleryPhoto() {
       const fileInput = document.getElementById('admin-gal-file');
       const caption = document.getElementById('admin-gal-caption').value.trim() || 'Burn Creek Speedshop';
@@ -1106,6 +1166,45 @@
       });
       grid.innerHTML = html;
     });
+
+    // Admin: Crew-bakgrundsbilder
+    db.collection('website_crew_photos').onSnapshot(snap => {
+      snap.forEach(doc => {
+        const card = document.getElementById(`crew-card-${doc.id}`);
+        if (card && doc.data().photo) {
+          card.style.backgroundImage = `url('${doc.data().photo}')`;
+        }
+      });
+    });
+
+    async function uploadCrewPhoto() {
+      const member = document.getElementById('admin-crew-select').value;
+      const fileInput = document.getElementById('admin-crew-file');
+      const btn = document.getElementById('admin-crew-btn');
+
+      if (!fileInput.files || !fileInput.files[0]) {
+        showToast('Välj en bild först!');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sparar...';
+      try {
+        const dataUrl = await compressImageFile(fileInput.files[0], 800, 0.75);
+        await db.collection('website_crew_photos').doc(member).set({
+          photo: dataUrl,
+          updatedAt: Date.now()
+        });
+        fileInput.value = '';
+        showToast('Crew-bild uppdaterad!');
+      } catch (err) {
+        console.error(err);
+        showToast('Kunde inte spara – kolla Firestore Rules!');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '💾 Spara Crew-bild';
+      }
+    }
 
     // --- GÄSTBOK LOGIK ---
     async function handlePhotoSelect(event) {
