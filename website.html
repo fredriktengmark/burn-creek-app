@@ -247,7 +247,7 @@
       letter-spacing: 0.8px;
     }
 
-    /* Crew & Fordon med bakgrundsbild */
+    /* Crew & Fordon med bakgrundsbild (Klickbara kort) */
     .crew-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -256,7 +256,7 @@
     .crew-card {
       position: relative;
       overflow: hidden;
-      min-height: 220px;
+      min-height: 240px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
@@ -268,11 +268,13 @@
       border-radius: 12px;
       padding: 22px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.6);
-      transition: transform 0.25s ease, border-color 0.25s ease;
+      cursor: pointer;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
     .crew-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-5px);
       border-color: #ff9800;
+      box-shadow: 0 12px 26px rgba(255, 87, 34, 0.3);
     }
     .crew-card::before {
       content: "";
@@ -280,9 +282,9 @@
       inset: 0;
       background: linear-gradient(
         180deg,
-        rgba(12, 12, 16, 0.35) 0%,
-        rgba(12, 12, 16, 0.84) 55%,
-        rgba(10, 10, 13, 0.96) 100%
+        rgba(12, 12, 16, 0.15) 0%,
+        rgba(12, 12, 16, 0.72) 65%,
+        rgba(10, 10, 13, 0.95) 100%
       );
       z-index: 1;
     }
@@ -292,7 +294,7 @@
     }
     .crew-card h3 {
       margin: 0 0 6px;
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       font-weight: 900;
       text-transform: uppercase;
       color: #fff;
@@ -308,13 +310,72 @@
       font-style: italic;
       text-transform: uppercase;
       border-radius: 4px;
-      margin-bottom: 10px;
     }
-    .crew-card p {
-      margin: 0;
-      font-size: 0.92rem;
+    .crew-click-hint {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 2;
+      background: rgba(10, 10, 13, 0.82);
+      border: 1px solid rgba(255, 111, 0, 0.6);
+      color: #ff9800;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Crew Info-Modal */
+    #crew-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 9998;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      backdrop-filter: blur(4px);
+    }
+    .crew-modal-box {
+      background: #141419;
+      border: 2px solid #ff5722;
+      border-radius: 16px;
+      max-width: 480px;
+      width: 100%;
+      overflow: hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.9);
+      animation: popIn 0.18s ease-out;
+    }
+    @keyframes popIn {
+      from { transform: scale(0.94); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .crew-modal-img {
+      width: 100%;
+      height: 240px;
+      background-color: #0c0c10;
+      background-size: cover;
+      background-position: center;
+      border-bottom: 3px solid #ff5722;
+    }
+    .crew-modal-body {
+      padding: 22px;
+    }
+    .crew-modal-body h3 {
+      margin: 0 0 8px;
+      font-size: 1.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .crew-modal-body p {
+      margin: 10px 0 20px;
+      font-size: 1rem;
       color: #e4e4ec;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+      line-height: 1.55;
     }
 
     /* Depåregler */
@@ -785,51 +846,51 @@
     </div>
   </section>
 
-  <!-- CREW & BYGGEN MED BAKGRUNDSBILD -->
+  <!-- CREW & BYGGEN (Klicka på ett kort för att öppna infon) -->
   <section id="crew" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">Startfältet – Crew & Fordon</h2>
-      <p class="section-lead">Gänget bakom nycklarna och maskinerna som rullar i Burn Creek:</p>
+      <p class="section-lead">Klicka på respektive medlem för att läsa mer om gänget bakom nycklarna:</p>
     </div>
 
     <div class="crew-grid">
-      <div class="crew-card" id="crew-card-fredrik" style="background-image: url('fredrik.jpg');">
+      <div class="crew-card" id="crew-card-fredrik" style="background-image: url('fredrik.jpg');" onclick="openCrewModal('fredrik')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Fredrik Tengmark</h3>
           <div class="ride-badge">Ford Hot Rod • GMC Vandura</div>
-          <p>Rattar jänkare och rullar gärna på träffar och cruisingar i sin Hi-Top Vandura.</p>
         </div>
       </div>
 
-      <div class="crew-card" id="crew-card-tony" style="background-image: url('tony.jpg');">
+      <div class="crew-card" id="crew-card-tony" style="background-image: url('tony.jpg');" onclick="openCrewModal('tony')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Tony Olsson</h3>
           <div class="ride-badge">Buick LeSabre</div>
-          <p>Håller fanan högt med sin klassiska Buick LeSabre och ser till att kromet glänser och kaffebryggaren går varm i depån.</p>
         </div>
       </div>
 
-      <div class="crew-card" id="crew-card-kenneth" style="background-image: url('kenneth.jpg');">
+      <div class="crew-card" id="crew-card-kenneth" style="background-image: url('kenneth.jpg');" onclick="openCrewModal('kenneth')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Kenneth Eklund</h3>
           <div class="ride-badge">Ford Ranchero</div>
-          <p>Delar mekhörna med Håkan och rattar en rå Ford Ranchero – den perfekta kombon av amerikansk muskelbil och flak.</p>
         </div>
       </div>
 
-      <div class="crew-card" id="crew-card-hakan" style="background-image: url('hakan.jpg');">
+      <div class="crew-card" id="crew-card-hakan" style="background-image: url('hakan.jpg');" onclick="openCrewModal('hakan')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Håkan Gustafsson</h3>
           <div class="ride-badge">Ford Galaxie 500 Cab</div>
-          <p>Cruisar öppet i en fullsize Ford Galaxie 500 cabriolet när sommarkvällarna i Småland bjuder på fint väder.</p>
         </div>
       </div>
 
-      <div class="crew-card" id="crew-card-pierre" style="background-image: url('pierre.jpg');">
+      <div class="crew-card" id="crew-card-pierre" style="background-image: url('pierre.jpg');" onclick="openCrewModal('pierre')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Pierre Danhall</h3>
           <div class="ride-badge">Motorcyklar</div>
-          <p>Står för tvåhjulingsavdelningen i speedshopen med hojar i stallet och ständig puts på prylarna.</p>
         </div>
       </div>
     </div>
@@ -983,8 +1044,21 @@
     <span class="admin-trigger" onclick="openLoginModal()">🔒 Admin</span>
   </footer>
 
+  <!-- INFORMATIONSRUTA NÄR MAN KLICKAR PÅ EN CREWMEDLEM -->
+  <div id="crew-modal" onclick="if(event.target === this) closeCrewModal()">
+    <div class="crew-modal-box">
+      <div class="crew-modal-img" id="crew-modal-img"></div>
+      <div class="crew-modal-body">
+        <h3 id="crew-modal-name"></h3>
+        <div class="ride-badge" id="crew-modal-ride"></div>
+        <p id="crew-modal-desc"></p>
+        <button onclick="closeCrewModal()" style="width:100%; background:#ff5722; color:#111; border:none; padding:12px; border-radius:8px; font-weight:900; text-transform:uppercase; cursor:pointer;">Stäng ruta</button>
+      </div>
+    </div>
+  </div>
+
   <!-- LÖSENORDSMODAL FÖR ADMIN -->
-  <div id="login-modal">
+  <div id="login-modal" onclick="if(event.target === this) closeLoginModal()">
     <div class="modal-box">
       <h3>🔒 Admin-inloggning</h3>
       <p style="font-size:0.85rem; color:#aaa; margin:0 0 14px;">Ange verkstadens adminlösenord:</p>
@@ -1013,6 +1087,60 @@
 
     const ADMIN_PASS = "burncreek2026";
     let compressedPhotoDataUrl = null;
+
+    // Information för varje medlem som visas i popup-rutan vid klick
+    const crewDetails = {
+      fredrik: {
+        name: "Fredrik Tengmark",
+        ride: "Ford Hot Rod • GMC Vandura",
+        desc: "Rattar jänkare och rullar gärna på träffar och cruisingar i sin Hi-Top Vandura.",
+        defaultImg: "fredrik.jpg",
+        customImg: null
+      },
+      tony: {
+        name: "Tony Olsson",
+        ride: "Buick LeSabre",
+        desc: "Håller fanan högt med sin klassiska Buick LeSabre och ser till att kromet glänser och kaffebryggaren går varm i depån.",
+        defaultImg: "tony.jpg",
+        customImg: null
+      },
+      kenneth: {
+        name: "Kenneth Eklund",
+        ride: "Ford Ranchero",
+        desc: "Delar mekhörna med Håkan och rattar en rå Ford Ranchero – den perfekta kombon av amerikansk muskelbil och flak.",
+        defaultImg: "kenneth.jpg",
+        customImg: null
+      },
+      hakan: {
+        name: "Håkan Gustafsson",
+        ride: "Ford Galaxie 500 Cab",
+        desc: "Cruisar öppet i en fullsize Ford Galaxie 500 cabriolet när sommarkvällarna i Småland bjuder på fint väder.",
+        defaultImg: "hakan.jpg",
+        customImg: null
+      },
+      pierre: {
+        name: "Pierre Danhall",
+        ride: "Motorcyklar",
+        desc: "Står för tvåhjulingsavdelningen i speedshopen med hojar i stallet och ständig puts på prylarna.",
+        defaultImg: "pierre.jpg",
+        customImg: null
+      }
+    };
+
+    function openCrewModal(memberKey) {
+      const info = crewDetails[memberKey];
+      if (!info) return;
+      document.getElementById('crew-modal-name').textContent = info.name;
+      document.getElementById('crew-modal-ride').textContent = info.ride;
+      document.getElementById('crew-modal-desc').textContent = info.desc;
+      const imgUrl = info.customImg || info.defaultImg;
+      document.getElementById('crew-modal-img').style.backgroundImage = `url('${imgUrl}')`;
+      document.getElementById('crew-modal').style.display = 'flex';
+    }
+
+    function closeCrewModal() {
+      document.getElementById('crew-modal').style.display = 'none';
+    }
 
     function showToast(msg) {
       const t = document.getElementById('toast');
@@ -1173,6 +1301,9 @@
         const card = document.getElementById(`crew-card-${doc.id}`);
         if (card && doc.data().photo) {
           card.style.backgroundImage = `url('${doc.data().photo}')`;
+          if (crewDetails[doc.id]) {
+            crewDetails[doc.id].customImg = doc.data().photo;
+          }
         }
       });
     });
