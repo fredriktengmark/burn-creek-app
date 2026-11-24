@@ -156,6 +156,7 @@
       border: 1px solid #26262e;
       border-radius: 10px;
       padding: 10px 12px;
+      gap: 8px;
     }
     .crew-info strong { display: block; font-size: 1rem; color: #fff; }
     .crew-info span { font-size: 0.8rem; color: #aaa; }
@@ -163,11 +164,11 @@
       background: #23232b;
       border: 1px solid #ff6f00;
       color: #ff9800;
-      padding: 8px 12px;
+      padding: 8px 11px;
       border-radius: 8px;
       text-decoration: none;
       font-weight: 700;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       white-space: nowrap;
     }
     .call-btn:active { background: #ff6f00; color: #111; }
@@ -195,6 +196,7 @@
       transition: opacity 0.25s;
       pointer-events: none;
       z-index: 999;
+      white-space: nowrap;
     }
     .toast.show { opacity: 1; }
   </style>
@@ -206,7 +208,7 @@
     <!-- HEADER MED TYDLIG LOGGA -->
     <div class="header">
       <div class="logo-wrap">
-        <img src="burn_creek_speedshop_rund_est.png" alt="Burn Creek Speedshop Logo">
+        <img src="logo.png" alt="Burn Creek Speedshop Logo">
       </div>
       <h1>Burn Creek Speedshop</h1>
       <span class="badge">🏁 Brännehylte • Gästdepå</span>
@@ -227,7 +229,7 @@
           <span class="info-val" id="pass">Jagsnyltarwifi</span>
         </div>
       </div>
-      <button class="btn btn-wifi" onclick="copyText('pass', 'WiFi-lösenord kopierat!')">📋 Kopiera WiFi-lösenord</button>
+      <button class="btn btn-wifi" onclick="copyWifi()">📋 Kopiera WiFi-lösenord</button>
     </div>
 
     <!-- SWISH FÖR KAFFE / LÄSK -->
@@ -238,11 +240,11 @@
       </p>
       <div class="info-row">
         <div>
-          <span class="info-label">Swish-nummer</span>
+          <span class="info-label">Swish-nummer (Fredrik)</span>
           <span class="info-val" id="swishNum">079-347 53 52</span>
         </div>
       </div>
-      <button class="btn btn-swish" onclick="copyText('swishNum', 'Swish-nummer kopierat!')">💸 Kopiera Swish-nummer</button>
+      <button class="btn btn-swish" onclick="openSwish()">💸 Kopiera nummer & Öppna Swish</button>
     </div>
 
     <!-- CREW & KONTAKT -->
@@ -252,33 +254,33 @@
         <div class="crew-item">
           <div class="crew-info">
             <strong>Fredrik Tengmark</strong>
-            <span>'Ford Hot Rod • 'GMC Vandura</span>
+            <span>Ford Hot Rod • GMC Vandura</span>
           </div>
-          <a class="call-btn" href="tel:0793475352">📞 070-000 00 01</a>
+          <a class="call-btn" href="tel:0793475352">📞 079-347 53 52</a>
         </div>
 
         <div class="crew-item">
           <div class="crew-info">
             <strong>Tony Olsson</strong>
-            <span>'Buick LeSabre</span>
+            <span>Buick LeSabre</span>
           </div>
-          <a class="call-btn" href="tel:0706780016">📞 070-000 00 02</a>
+          <a class="call-btn" href="tel:0706780016">📞 070-678 00 16</a>
         </div>
 
         <div class="crew-item">
           <div class="crew-info">
             <strong>Kenneth Eklund</strong>
-            <span>'Ford Ranchero</span>
+            <span>Ford Ranchero</span>
           </div>
-          <a class="call-btn" href="tel:0768247150">📞 070-000 00 03</a>
+          <a class="call-btn" href="tel:0768247150">📞 076-824 71 50</a>
         </div>
 
         <div class="crew-item">
           <div class="crew-info">
             <strong>Håkan Gustafsson</strong>
-            <span>'Ford Galaxie 500 Cab</span>
+            <span>Ford Galaxie 500 Cab</span>
           </div>
-          <a class="call-btn" href="tel:0705775733">📞 070-000 00 04</a>
+          <a class="call-btn" href="tel:0705775733">📞 070-577 57 33</a>
         </div>
 
         <div class="crew-item">
@@ -286,7 +288,7 @@
             <strong>Pierre Danhall</strong>
             <span>Motorcyklar</span>
           </div>
-          <a class="call-btn" href="tel:0723096852">📞 070-000 00 05</a>
+          <a class="call-btn" href="tel:0723096852">📞 072-309 68 52</a>
         </div>
       </div>
     </div>
@@ -309,17 +311,38 @@
   <div class="toast" id="toast">Kopierat!</div>
 
   <script>
-    function copyText(elementId, message) {
-      let text = document.getElementById(elementId).textContent.trim();
-      if (elementId === 'swishNum') {
-        text = text.replace(/[^0-9]/g, '');
-      }
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function copyWifi() {
+      const text = document.getElementById('pass').textContent.trim();
       navigator.clipboard.writeText(text).then(() => {
-        const t = document.getElementById('toast');
-        t.textContent = message;
-        t.classList.add('show');
-        setTimeout(() => t.classList.remove('show'), 2500);
+        showToast('WiFi-lösenord kopierat!');
       });
+    }
+
+    function openSwish() {
+      const num = '0793475352';
+      // Kopierar numret till urklipp först så man bara kan klistra in i Swish
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(num);
+      }
+      showToast('Nummer kopierat – öppnar Swish...');
+
+      // Försöker öppna Swish-appen med förifyllt nummer & meddelande
+      const swishPayload = encodeURIComponent(JSON.stringify({
+        version: 1,
+        payee: { value: num },
+        message: { value: 'Burn Creek Fika', editable: true }
+      }));
+
+      setTimeout(() => {
+        window.location.href = `swish://payment?data=${swishPayload}`;
+      }, 300);
     }
   </script>
 </body>
