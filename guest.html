@@ -147,6 +147,53 @@
     }
     .gb-textarea { resize: vertical; min-height: 75px; }
 
+    /* Bilduppladdning */
+    .photo-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px dashed #ff6f00;
+      background: rgba(255, 111, 0, 0.08);
+      color: #ff9800;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .photo-upload-label:hover { background: rgba(255, 111, 0, 0.16); }
+    .photo-preview-wrap {
+      display: none;
+      position: relative;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+    .photo-preview-wrap img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .remove-photo-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.82);
+      color: #fff;
+      border: 1px solid #ff5722;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
     /* Knappar */
     .btn {
       width: 100%;
@@ -175,7 +222,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      max-height: 360px;
+      max-height: 440px;
       overflow-y: auto;
       padding-right: 4px;
     }
@@ -197,6 +244,15 @@
     .gb-ride { font-size: 0.78rem; color: #ff9800; font-weight: 700; display: block; margin-bottom: 5px; }
     .gb-date { font-size: 0.72rem; color: #777; white-space: nowrap; }
     .gb-msg { margin: 0; font-size: 0.9rem; color: #ddd; line-height: 1.4; word-wrap: break-word; }
+    .gb-entry-photo {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 10px;
+      border: 1px solid #2c2c36;
+      display: block;
+    }
 
     /* Crew-lista */
     .crew-list { display: flex; flex-direction: column; gap: 10px; }
@@ -284,11 +340,11 @@
       <button class="btn btn-wifi" onclick="copyWifi()">📋 Kopiera WiFi-lösenord</button>
     </div>
 
-    <!-- DIGITAL GÄSTBOK -->
+    <!-- DIGITAL GÄSTBOK MED BILDUPPLADDNING -->
     <div class="card blue-accent">
       <h2>✍️ Signera Gästboken</h2>
       <p style="margin: 0 0 12px; font-size: 0.88rem; color: #bbb;">
-        Lämna ett avtryck innan du åker! Din hälsning dyker upp direkt på TV:n i garaget.
+        Lämna ett avtryck och lägg gärna med en bild på ditt åk! Hälsningen dyker upp direkt på TV:n i garaget.
       </p>
 
       <input type="text" id="gb-name" class="gb-input" maxlength="40" placeholder="Ditt namn / smeknamn *" />
@@ -299,8 +355,18 @@
         <option value="☕">☕ Kom för kaffet</option>
         <option value="🔧">🔧 Hjälpte till att skruva</option>
         <option value="🍺">🍺 Tog med kall dricka</option>
-        <option value="🔥">🔥 Inspekterade '34:an</option>
+        <option value="🔥">🔥 Kollade in projekten</option>
       </select>
+
+      <label class="photo-upload-label" for="gb-photo-input">
+        📷 Lägg till bild på ditt åk (valfritt)
+      </label>
+      <input type="file" id="gb-photo-input" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)" />
+
+      <div class="photo-preview-wrap" id="photo-preview-wrap">
+        <img id="photo-preview-img" src="" alt="Förhandsvisning" />
+        <button type="button" class="remove-photo-btn" onclick="clearPhoto()">✖ Ta bort bild</button>
+      </div>
 
       <textarea id="gb-message" class="gb-textarea" maxlength="200" placeholder="Skriv en hälsning till grabbarna... *"></textarea>
 
@@ -402,6 +468,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    let compressedPhotoDataUrl = null;
+
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
@@ -432,6 +500,45 @@
       }, 300);
     }
 
+    function handlePhotoSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const MAX_WIDTH = 800;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > MAX_WIDTH) {
+            height = Math.round((height * MAX_WIDTH) / width);
+            width = MAX_WIDTH;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+
+          compressedPhotoDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+          document.getElementById('photo-preview-img').src = compressedPhotoDataUrl;
+          document.getElementById('photo-preview-wrap').style.display = 'block';
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearPhoto() {
+      compressedPhotoDataUrl = null;
+      document.getElementById('gb-photo-input').value = '';
+      document.getElementById('photo-preview-img').src = '';
+      document.getElementById('photo-preview-wrap').style.display = 'none';
+    }
+
     async function submitGuestbook() {
       const name = document.getElementById('gb-name').value.trim();
       const ride = document.getElementById('gb-ride').value.trim();
@@ -454,16 +561,23 @@
       btn.textContent = 'Skickar...';
 
       try {
-        await db.collection('guestbook').add({
+        const payload = {
           name: name,
           ride: ride || 'Besökare',
           badge: badge,
           message: message,
           timestamp: Date.now()
-        });
+        };
+
+        if (compressedPhotoDataUrl) {
+          payload.photo = compressedPhotoDataUrl;
+        }
+
+        await db.collection('guestbook').add(payload);
 
         localStorage.setItem('bc_gb_last', Date.now().toString());
         document.getElementById('gb-message').value = '';
+        clearPhoto();
         showToast('Tack! Hälsningen syns på TV:n nu!');
       } catch (err) {
         console.error(err);
@@ -497,6 +611,10 @@
             ? new Date(d.timestamp).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
             : '';
 
+          const photoHtml = (d.photo && d.photo.startsWith('data:image/'))
+            ? `<img class="gb-entry-photo" src="${d.photo}" alt="Gästens fordon" loading="lazy" />`
+            : '';
+
           html += `
             <div class="gb-entry">
               <div class="gb-entry-header">
@@ -505,6 +623,7 @@
               </div>
               <span class="gb-ride">🚗 ${escapeHtml(d.ride || '')}</span>
               <p class="gb-msg">${escapeHtml(d.message)}</p>
+              ${photoHtml}
             </div>
           `;
         });
