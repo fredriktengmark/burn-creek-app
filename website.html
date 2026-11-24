@@ -23,6 +23,40 @@
       background-position: 0 0, 0 0, 10px 0, 0 10px, 10px 10px;
       color: #f4f4f6;
       line-height: 1.6;
+      transition: background-color 0.4s ease, filter 0.4s ease;
+    }
+
+    /* HEMLIGT RAT ROD / PATINA-LÄGE */
+    body.ratrod-mode {
+      background-color: #17110d;
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(183, 65, 14, 0.28), transparent 65%),
+        repeating-linear-gradient(135deg, rgba(120, 53, 15, 0.12) 0px, rgba(120, 53, 15, 0.12) 2px, transparent 2px, transparent 14px),
+        radial-gradient(circle at 18% 28%, rgba(28, 22, 18, 0.75) 0%, transparent 38%),
+        radial-gradient(circle at 82% 68%, rgba(120, 53, 15, 0.22) 0%, transparent 42%);
+      color: #e8dcc8;
+    }
+    body.ratrod-mode .hero h1 {
+      color: #e6c79c;
+      text-shadow: 3px 3px 0px #5c240c, 0 8px 22px rgba(0,0,0,0.95);
+    }
+    body.ratrod-mode .crew-card,
+    body.ratrod-mode .rules-box,
+    body.ratrod-mode .gb-box,
+    body.ratrod-mode .timing-board,
+    body.ratrod-mode .gallery-item {
+      border-color: #6e3b18;
+      box-shadow: inset 0 0 28px rgba(45, 18, 5, 0.7), 0 10px 24px rgba(0,0,0,0.75);
+    }
+    body.ratrod-mode .section-title {
+      color: #f0d7b5;
+      border-bottom-color: #b7410e;
+    }
+    body.ratrod-mode .ride-badge,
+    body.ratrod-mode .btn-primary,
+    body.ratrod-mode .btn-gb-submit {
+      background: linear-gradient(90deg, #8b3a12, #c2591b);
+      color: #fff3e0;
     }
 
     .checkered-bar {
@@ -103,11 +137,49 @@
     .hero {
       position: relative;
       text-align: center;
-      padding: 50px 20px 60px;
+      padding: 46px 20px 58px;
       background: radial-gradient(circle at center, rgba(255, 87, 34, 0.22) 0%, rgba(9, 9, 11, 0.92) 72%);
       overflow: hidden;
     }
 
+    /* LIVE STATUS SKYLT ("Är det liv i depån just nu?") */
+    .live-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #131318;
+      border: 1px solid #2d2d37;
+      padding: 8px 18px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.55);
+    }
+    .live-status-pill.is-open {
+      border-color: rgba(0, 230, 118, 0.55);
+      box-shadow: 0 0 18px rgba(0, 230, 118, 0.2);
+    }
+    .status-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #ef5350;
+      box-shadow: 0 0 8px #ef5350;
+      flex-shrink: 0;
+    }
+    .live-status-pill.is-open .status-dot {
+      background: #00e676;
+      box-shadow: 0 0 12px #00e676;
+      animation: pulseLive 1.5s infinite;
+    }
+    @keyframes pulseLive {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.25); opacity: 0.75; }
+    }
+
+    /* Dragracing-gran (Christmas Tree) indikator */
     .christmas-tree {
       display: inline-flex;
       gap: 8px;
@@ -115,12 +187,19 @@
       border: 2px solid #333;
       padding: 6px 14px;
       border-radius: 999px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+      cursor: pointer;
+      user-select: none;
     }
-    .bulb { width: 12px; height: 12px; border-radius: 50%; background: #2a2a30; }
+    .bulb { width: 12px; height: 12px; border-radius: 50%; background: #2a2a30; transition: all 0.2s; }
     .bulb.amber { background: #ffb300; box-shadow: 0 0 10px #ffb300; }
     .bulb.green { background: #00e676; box-shadow: 0 0 12px #00e676; }
+    .christmas-tree.burnout-active .bulb {
+      background: #ff3d00;
+      box-shadow: 0 0 14px #ff3d00, 0 0 24px #ff9100;
+      transform: scale(1.18);
+    }
 
     .hero-logo {
       width: 215px;
@@ -130,7 +209,11 @@
       padding: 5px;
       background: linear-gradient(135deg, #fbc02d, #ff5722, #d32f2f);
       box-shadow: 0 0 40px rgba(255, 87, 34, 0.5);
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.2s;
     }
+    .hero-logo:active { transform: scale(0.96); }
     .hero-logo img {
       width: 100%;
       height: 100%;
@@ -763,9 +846,7 @@
       filter: drop-shadow(0 6px 12px rgba(0,0,0,0.85));
       animation: kkBounce 1.8s infinite ease-in-out;
     }
-    .kk-character:hover {
-      transform: scale(1.06);
-    }
+    .kk-character:hover { transform: scale(1.06); }
     @keyframes kkBounce {
       0%, 100% { transform: translateY(0) rotate(-2deg); }
       50% { transform: translateY(-5px) rotate(2deg); }
@@ -790,6 +871,14 @@
       cursor: pointer;
     }
     .admin-trigger:hover { color: #ff6f00; }
+    .easter-hint {
+      display: inline-block;
+      margin-top: 8px;
+      color: #444;
+      font-size: 0.72rem;
+      cursor: pointer;
+    }
+    .easter-hint:hover { color: #ff9800; }
 
     .toast {
       position: fixed;
@@ -880,14 +969,23 @@
 
   <!-- HERO -->
   <header class="hero">
-    <div class="christmas-tree" title="Stage • Pre-Stage • Go!">
+    <!-- LIVE-STATUS ("Är det liv i depån just nu?") -->
+    <div class="live-status-pill" id="live-status-pill">
+      <span class="status-dot"></span>
+      <span id="live-status-text">Kollar depåstatus i Brännehylte...</span>
+    </div>
+    <br>
+
+    <!-- EASTER EGG: Klicka 5 gånger på granen för Burnout-läge -->
+    <div class="christmas-tree" id="christmas-tree" onclick="handleTreeEasterEgg()" title="Stage • Pre-Stage • Go!">
       <div class="bulb amber"></div>
       <div class="bulb amber"></div>
       <div class="bulb amber"></div>
       <div class="bulb green"></div>
     </div>
 
-    <div class="hero-logo">
+    <!-- EASTER EGG: Klicka 3 gånger på loggan för Rat Rod / Patina-läge -->
+    <div class="hero-logo" onclick="handleLogoEasterEgg()" title="Burn Creek Speedshop">
       <img src="logo.png" alt="Burn Creek Speedshop Logo">
     </div>
 
@@ -937,7 +1035,7 @@
   <section id="crew" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">Startfältet – Crew & Fordon</h2>
-      <p class="section-lead">Klicka på respektive medlem för att läsa mer om gänget bakom nycklarna:</p>
+      <p class="section-lead">Klicka på respektive medlem för att läsa mer om gänget i Burn Creek Speedshop.</p>
     </div>
 
     <div class="crew-grid">
@@ -1128,7 +1226,8 @@
   <footer>
     <strong>Burn Creek Speedshop</strong> • Brännehylte • Est. 2026<br>
     <a href="#gastbok" style="color:#ff6f00; font-weight:bold; text-decoration:none;">↑ Signera gästboken ovan</a><br>
-    <span class="admin-trigger" onclick="openLoginModal()">🔒 Admin</span>
+    <span class="admin-trigger" onclick="openLoginModal()">🔒 Admin</span> •
+    <span class="easter-hint" onclick="toggleRatRodMode()" title="Hemligt Rat Rod / Patina-läge">🛢️ Patina</span>
   </footer>
 
   <!-- KOLV-KALLE POPUP -->
@@ -1141,30 +1240,21 @@
       <div id="kk-joke-text"></div>
       <span class="kk-next-hint" onclick="nextKolvKalleJoke()" style="cursor:pointer;">👆 Klicka på Kalle för ett nytt skämt!</span>
     </div>
-    <!-- Specialritad SVG-maskot: Kolv-Kalle -->
     <svg class="kk-character" onclick="nextKolvKalleJoke()" viewBox="0 0 120 135" xmlns="http://www.w3.org/2000/svg" title="Klicka på Kolv-Kalle!">
-      <!-- Vevstake -->
       <rect x="52" y="76" width="16" height="40" rx="4" fill="#8e9299" stroke="#222" stroke-width="3"/>
       <circle cx="60" cy="116" r="14" fill="#6d7178" stroke="#222" stroke-width="3"/>
       <circle cx="60" cy="116" r="6" fill="#181820" stroke="#222" stroke-width="2"/>
-      <!-- Kolv-huvud -->
       <rect x="28" y="24" width="64" height="56" rx="10" fill="#d0d4dc" stroke="#222" stroke-width="3.5"/>
-      <!-- Kolvringar -->
       <line x1="28" y1="36" x2="92" y2="36" stroke="#333" stroke-width="3"/>
       <line x1="28" y1="43" x2="92" y2="43" stroke="#ff5722" stroke-width="3"/>
-      <!-- Keps -->
       <path d="M26 26 C26 10, 94 10, 94 26 Z" fill="#ff5722" stroke="#222" stroke-width="3"/>
       <path d="M68 22 L106 25 C106 29, 88 30, 66 27 Z" fill="#d32f2f" stroke="#222" stroke-width="2.5"/>
-      <!-- Ögon -->
       <circle cx="47" cy="56" r="7" fill="#fff" stroke="#222" stroke-width="2.5"/>
       <circle cx="49" cy="56" r="3" fill="#111"/>
       <circle cx="73" cy="56" r="7" fill="#fff" stroke="#222" stroke-width="2.5"/>
       <circle cx="75" cy="56" r="3" fill="#111"/>
-      <!-- Oljefläck på kinden -->
       <ellipse cx="38" cy="65" rx="5" ry="3" fill="#3a2c25" opacity="0.8"/>
-      <!-- Flin / mun -->
       <path d="M44 68 Q60 79 76 68" fill="none" stroke="#222" stroke-width="3.5" stroke-linecap="round"/>
-      <!-- Vinkande arm med skiftnyckel -->
       <path d="M92 62 Q112 52 108 38" fill="none" stroke="#222" stroke-width="5" stroke-linecap="round"/>
       <circle cx="108" cy="36" r="6" fill="#ff9800" stroke="#222" stroke-width="2.5"/>
     </svg>
@@ -1213,6 +1303,86 @@
 
     const ADMIN_PASS = "burncreek2026";
     let compressedPhotoDataUrl = null;
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    // --- LIVE DEPÅSTATUS ("Är det liv i depån just nu?") ---
+    const statusPill = document.getElementById('live-status-pill');
+    const statusText = document.getElementById('live-status-text');
+
+    db.collection('garage_status').doc('current').onSnapshot(doc => {
+      const data = doc.exists ? doc.data() : null;
+      const isOpen = Boolean(data && (data.isOpen === true || (Array.isArray(data.checkedIn) && data.checkedIn.length > 0)));
+
+      if (isOpen) {
+        const who = Array.isArray(data.checkedIn) && data.checkedIn.length > 0
+          ? ` (${data.checkedIn.join(', ')})`
+          : '';
+        statusPill.classList.add('is-open');
+        statusText.textContent = `LIV I DEPÅN – Det skruvas i Brännehylte${who}!`;
+      } else {
+        statusPill.classList.remove('is-open');
+        statusText.textContent = 'SLÄCKT I DEPÅN JUST NU – Ingen incheckad i Brännehylte';
+      }
+    }, () => {
+      statusPill.classList.remove('is-open');
+      statusText.textContent = 'DEPÅN I BRÄNNEHYLTE • EST. 2026';
+    });
+
+    // --- HEMLIGT RAT ROD / PATINA-LÄGE & EASTER EGGS ---
+    let logoClickCount = 0;
+    let logoClickTimer = null;
+
+    function toggleRatRodMode() {
+      const active = document.body.classList.toggle('ratrod-mode');
+      sessionStorage.setItem('bc_ratrod', active ? 'true' : 'false');
+      showToast(active ? '🛢️ Rat Rod / Patina-läge aktiverat!' : '🏁 Standard racing-tema återställt');
+    }
+
+    if (sessionStorage.getItem('bc_ratrod') === 'true') {
+      document.body.classList.add('ratrod-mode');
+    }
+
+    function handleLogoEasterEgg() {
+      logoClickCount++;
+      clearTimeout(logoClickTimer);
+      logoClickTimer = setTimeout(() => { logoClickCount = 0; }, 1200);
+
+      if (logoClickCount >= 3) {
+        logoClickCount = 0;
+        toggleRatRodMode();
+      }
+    }
+
+    let treeClickCount = 0;
+    function handleTreeEasterEgg() {
+      treeClickCount++;
+      const tree = document.getElementById('christmas-tree');
+      if (treeClickCount >= 5) {
+        treeClickCount = 0;
+        tree.classList.toggle('burnout-active');
+        showToast(tree.classList.contains('burnout-active') ? '🔥 FULL BURNOUT-GRAN AKTIVERAD!' : '🚦 Startgran återställd');
+      }
+    }
+
+    // Skriv "svets" eller "kalle" på tangentbordet för att kalla fram Kolv-Kalle direkt
+    let typedBuffer = '';
+    window.addEventListener('keydown', (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+      if (e.key.length === 1) {
+        typedBuffer = (typedBuffer + e.key.toLowerCase()).slice(-10);
+        if (typedBuffer.includes('svets') || typedBuffer.includes('kalle')) {
+          typedBuffer = '';
+          showKolvKalle();
+          showToast('⚡ Gnistor i luften – Kolv-Kalle dök upp!');
+        }
+      }
+    });
 
     // --- KOLV-KALLE VERKSTADSHUMOR ---
     const kolvKalleJokes = [
@@ -1263,7 +1433,6 @@
       document.getElementById('kolvkalle-widget').classList.remove('show');
     }
 
-    // Första popup efter 12 sek, därefter varannan minut
     setTimeout(showKolvKalle, 12000);
     setInterval(showKolvKalle, 120000);
 
@@ -1319,13 +1488,6 @@
 
     function closeCrewModal() {
       document.getElementById('crew-modal').style.display = 'none';
-    }
-
-    function showToast(msg) {
-      const t = document.getElementById('toast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 2800);
     }
 
     // --- ADMIN LOGIK ---
