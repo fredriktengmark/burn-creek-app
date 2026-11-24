@@ -23,40 +23,156 @@
       background-position: 0 0, 0 0, 10px 0, 0 10px, 10px 10px;
       color: #f4f4f6;
       line-height: 1.6;
-      transition: background-color 0.4s ease, filter 0.4s ease;
+      transition: background-color 0.45s ease, color 0.35s ease;
     }
 
-    /* HEMLIGT RAT ROD / PATINA-LÄGE */
+    /* =========================================================================
+       REJÄLT RAT ROD / PATINA-LÄGE (Stor visuell skillnad från grundtemat)
+       ========================================================================= */
     body.ratrod-mode {
-      background-color: #17110d;
+      background-color: #1a0f09;
       background-image:
-        radial-gradient(circle at 50% 0%, rgba(183, 65, 14, 0.28), transparent 65%),
-        repeating-linear-gradient(135deg, rgba(120, 53, 15, 0.12) 0px, rgba(120, 53, 15, 0.12) 2px, transparent 2px, transparent 14px),
-        radial-gradient(circle at 18% 28%, rgba(28, 22, 18, 0.75) 0%, transparent 38%),
-        radial-gradient(circle at 82% 68%, rgba(120, 53, 15, 0.22) 0%, transparent 42%);
-      color: #e8dcc8;
+        radial-gradient(circle at 50% 0%, rgba(194, 78, 22, 0.34), rgba(20, 10, 5, 0.96) 68%),
+        repeating-linear-gradient(
+          -28deg,
+          rgba(146, 64, 14, 0.22) 0px,
+          rgba(146, 64, 14, 0.22) 3px,
+          rgba(28, 17, 11, 0.72) 3px,
+          rgba(28, 17, 11, 0.72) 16px
+        ),
+        radial-gradient(circle at 15% 30%, rgba(124, 45, 18, 0.32), transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(180, 83, 9, 0.26), transparent 45%);
+      color: #ead8be;
+    }
+    body.ratrod-mode .checkered-bar {
+      background-color: #24140b;
+      border-bottom-color: #b45309;
+      filter: sepia(0.75) contrast(1.15);
+    }
+    body.ratrod-mode .race-stripe {
+      background: linear-gradient(90deg, #5c1d0c 0%, #5c1d0c 33%, #9a3412 33%, #9a3412 66%, #b45309 66%, #b45309 100%);
+    }
+    body.ratrod-mode nav {
+      background: rgba(24, 14, 8, 0.96);
+      border-bottom: 2px solid #9a3412;
+    }
+    body.ratrod-mode .nav-brand span { color: #d97706; }
+    body.ratrod-mode .hero {
+      background: radial-gradient(circle at center, rgba(180, 83, 9, 0.28) 0%, rgba(22, 12, 7, 0.95) 75%);
+    }
+    body.ratrod-mode .hero-logo {
+      background: linear-gradient(135deg, #b45309, #7c2d12, #451a03);
+      box-shadow: 0 0 35px rgba(180, 83, 9, 0.45);
+      transform: rotate(-3deg);
+    }
+    body.ratrod-mode .hero-logo img {
+      filter: sepia(0.55) contrast(1.2) brightness(0.92);
     }
     body.ratrod-mode .hero h1 {
-      color: #e6c79c;
-      text-shadow: 3px 3px 0px #5c240c, 0 8px 22px rgba(0,0,0,0.95);
+      font-family: 'Courier New', Courier, monospace;
+      font-style: normal;
+      letter-spacing: 3px;
+      color: #f3d5a5;
+      text-shadow: 4px 4px 0px #451a03, 0 8px 24px rgba(0, 0, 0, 0.95);
     }
-    body.ratrod-mode .crew-card,
-    body.ratrod-mode .rules-box,
-    body.ratrod-mode .gb-box,
-    body.ratrod-mode .timing-board,
-    body.ratrod-mode .gallery-item {
-      border-color: #6e3b18;
-      box-shadow: inset 0 0 28px rgba(45, 18, 5, 0.7), 0 10px 24px rgba(0,0,0,0.75);
+    body.ratrod-mode .hero-tag {
+      background: #7c2d12;
+      color: #fde68a;
+      border: 1px solid #d97706;
+      transform: skew(-4deg) rotate(1deg);
     }
     body.ratrod-mode .section-title {
-      color: #f0d7b5;
-      border-bottom-color: #b7410e;
+      font-family: 'Courier New', Courier, monospace;
+      font-style: normal;
+      color: #f5deb3;
+      border-bottom: 4px dashed #b45309;
+    }
+    body.ratrod-mode .timing-board,
+    body.ratrod-mode .rules-box,
+    body.ratrod-mode .gb-box,
+    body.ratrod-mode .gallery-item,
+    body.ratrod-mode .crew-card {
+      background-color: #1f130c;
+      border-color: #7c2d12;
+      border-top-color: #d97706;
+      box-shadow: inset 0 0 26px rgba(12, 6, 3, 0.85), 0 10px 24px rgba(0, 0, 0, 0.8);
+    }
+    body.ratrod-mode .timing-cell {
+      background: #140c08;
+      border-color: #5c240d;
+      border-left-color: #d97706;
+    }
+    body.ratrod-mode .timing-cell strong {
+      color: #ea580c;
+      text-shadow: 0 0 12px rgba(234, 88, 12, 0.45);
     }
     body.ratrod-mode .ride-badge,
     body.ratrod-mode .btn-primary,
     body.ratrod-mode .btn-gb-submit {
-      background: linear-gradient(90deg, #8b3a12, #c2591b);
-      color: #fff3e0;
+      background: linear-gradient(90deg, #7c2d12, #b45309);
+      color: #fef3c7;
+      border: 1px solid #f59e0b;
+    }
+    body.ratrod-mode .btn-secondary {
+      background: #1a0f09;
+      border-color: #b45309;
+      color: #f3d5a5;
+    }
+    body.ratrod-mode .rule-item {
+      background: #140c08;
+      border-color: #4a1d0b;
+      border-left-color: #d97706;
+    }
+    body.ratrod-mode .rule-num {
+      background: #7c2d12;
+      color: #fde68a;
+    }
+    body.ratrod-mode footer {
+      background: #120a06;
+      border-top-color: #7c2d12;
+    }
+
+    /* =========================================================================
+       REJÄLT FULL BURNOUT-LÄGE (Triggas på startgranen)
+       ========================================================================= */
+    body.burnout-mode {
+      background-color: #180604;
+      background-image:
+        radial-gradient(circle at 50% 15%, rgba(255, 61, 0, 0.42), rgba(24, 6, 4, 0.95) 65%),
+        radial-gradient(circle at 20% 80%, rgba(255, 145, 0, 0.25), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(213, 0, 0, 0.32), transparent 50%);
+      color: #fff5f0;
+    }
+    body.burnout-mode .hero {
+      background: radial-gradient(circle at center, rgba(255, 61, 0, 0.45) 0%, rgba(28, 6, 4, 0.92) 72%);
+      animation: burnoutShake 0.22s infinite alternate;
+    }
+    @keyframes burnoutShake {
+      0% { transform: translateX(-1.5px) translateY(0.5px); }
+      100% { transform: translateX(1.5px) translateY(-0.5px); }
+    }
+    body.burnout-mode .hero h1 {
+      color: #ffea00;
+      text-shadow: 0 0 18px #ff3d00, 3px 3px 0px #b71c1c, 0 8px 28px rgba(255, 61, 0, 0.9);
+    }
+    body.burnout-mode .hero-logo {
+      background: linear-gradient(135deg, #ffea00, #ff3d00, #d50000);
+      box-shadow: 0 0 55px rgba(255, 61, 0, 0.9), 0 0 25px rgba(255, 234, 0, 0.6);
+    }
+    body.burnout-mode .crew-card,
+    body.burnout-mode .timing-board,
+    body.burnout-mode .rules-box,
+    body.burnout-mode .gb-box,
+    body.burnout-mode .gallery-item {
+      border-color: #ff3d00;
+      box-shadow: 0 0 24px rgba(255, 61, 0, 0.35), inset 0 0 20px rgba(255, 61, 0, 0.14);
+    }
+    body.burnout-mode .btn-primary,
+    body.burnout-mode .btn-gb-submit,
+    body.burnout-mode .ride-badge {
+      background: linear-gradient(90deg, #d50000, #ff3d00, #ffea00);
+      color: #111;
+      box-shadow: 0 0 24px rgba(255, 61, 0, 0.8);
     }
 
     .checkered-bar {
@@ -182,6 +298,7 @@
     /* Dragracing-gran (Christmas Tree) indikator */
     .christmas-tree {
       display: inline-flex;
+      align-items: center;
       gap: 8px;
       background: #141418;
       border: 2px solid #333;
@@ -195,11 +312,24 @@
     .bulb { width: 12px; height: 12px; border-radius: 50%; background: #2a2a30; transition: all 0.2s; }
     .bulb.amber { background: #ffb300; box-shadow: 0 0 10px #ffb300; }
     .bulb.green { background: #00e676; box-shadow: 0 0 12px #00e676; }
+    .christmas-tree.burnout-active {
+      border-color: #ff3d00;
+      box-shadow: 0 0 22px rgba(255, 61, 0, 0.85);
+    }
     .christmas-tree.burnout-active .bulb {
       background: #ff3d00;
-      box-shadow: 0 0 14px #ff3d00, 0 0 24px #ff9100;
-      transform: scale(1.18);
+      box-shadow: 0 0 14px #ff3d00, 0 0 24px #ffea00;
+      transform: scale(1.2);
     }
+    .burnout-label {
+      display: none;
+      font-size: 0.72rem;
+      font-weight: 900;
+      color: #ffea00;
+      letter-spacing: 0.8px;
+      margin-left: 4px;
+    }
+    .christmas-tree.burnout-active .burnout-label { display: inline; }
 
     .hero-logo {
       width: 215px;
@@ -211,7 +341,7 @@
       box-shadow: 0 0 40px rgba(255, 87, 34, 0.5);
       cursor: pointer;
       user-select: none;
-      transition: transform 0.2s;
+      transition: transform 0.2s, filter 0.3s, box-shadow 0.3s;
     }
     .hero-logo:active { transform: scale(0.96); }
     .hero-logo img {
@@ -977,20 +1107,21 @@
     <br>
 
     <!-- EASTER EGG: Klicka 5 gånger på granen för Burnout-läge -->
-    <div class="christmas-tree" id="christmas-tree" onclick="handleTreeEasterEgg()" title="Stage • Pre-Stage • Go!">
+    <div class="christmas-tree" id="christmas-tree" onclick="handleTreeEasterEgg()" title="Klicka 5 gånger för Burnout-läge!">
       <div class="bulb amber"></div>
       <div class="bulb amber"></div>
       <div class="bulb amber"></div>
       <div class="bulb green"></div>
+      <span class="burnout-label">🔥 BURNOUT</span>
     </div>
 
     <!-- EASTER EGG: Klicka 3 gånger på loggan för Rat Rod / Patina-läge -->
-    <div class="hero-logo" onclick="handleLogoEasterEgg()" title="Burn Creek Speedshop">
+    <div class="hero-logo" onclick="handleLogoEasterEgg()" title="Klicka 3 gånger för Rat Rod / Patina-läge">
       <img src="logo.png" alt="Burn Creek Speedshop Logo">
     </div>
 
     <h1>Burn Creek Speedshop</h1>
-    <div class="hero-tag"><span>Brännehylte • Est. 2026</span></div>
+    <div class="hero-tag" id="hero-tag"><span>Brännehylte • Est. 2026</span></div>
 
     <p>
       I småländska Brännehylte samlas fem biltokiga polare för att skruva V8, 
@@ -1227,7 +1358,7 @@
     <strong>Burn Creek Speedshop</strong> • Brännehylte • Est. 2026<br>
     <a href="#gastbok" style="color:#ff6f00; font-weight:bold; text-decoration:none;">↑ Signera gästboken ovan</a><br>
     <span class="admin-trigger" onclick="openLoginModal()">🔒 Admin</span> •
-    <span class="easter-hint" onclick="toggleRatRodMode()" title="Hemligt Rat Rod / Patina-läge">🛢️ Patina</span>
+    <span class="easter-hint" onclick="toggleRatRodMode()" title="Rat Rod / Patina-läge">🛢️ Rat Rod Patina</span>
   </footer>
 
   <!-- KOLV-KALLE POPUP -->
@@ -1334,18 +1465,28 @@
       statusText.textContent = 'DEPÅN I BRÄNNEHYLTE • EST. 2026';
     });
 
-    // --- HEMLIGT RAT ROD / PATINA-LÄGE & EASTER EGGS ---
+    // --- RAT ROD / PATINA-LÄGE & BURNOUT-LÄGE ---
     let logoClickCount = 0;
     let logoClickTimer = null;
+    const heroTagSpan = document.querySelector('#hero-tag span');
+
+    function syncRatRodTag() {
+      if (!heroTagSpan) return;
+      heroTagSpan.textContent = document.body.classList.contains('ratrod-mode')
+        ? 'Rat Rod Patina • Brännehylte'
+        : 'Brännehylte • Est. 2026';
+    }
 
     function toggleRatRodMode() {
       const active = document.body.classList.toggle('ratrod-mode');
       sessionStorage.setItem('bc_ratrod', active ? 'true' : 'false');
-      showToast(active ? '🛢️ Rat Rod / Patina-läge aktiverat!' : '🏁 Standard racing-tema återställt');
+      syncRatRodTag();
+      showToast(active ? '🛢️ RAT ROD / PATINA-LÄGE AKTIVERAT!' : '🏁 Standard racing-tema återställt');
     }
 
     if (sessionStorage.getItem('bc_ratrod') === 'true') {
       document.body.classList.add('ratrod-mode');
+      syncRatRodTag();
     }
 
     function handleLogoEasterEgg() {
@@ -1365,8 +1506,9 @@
       const tree = document.getElementById('christmas-tree');
       if (treeClickCount >= 5) {
         treeClickCount = 0;
-        tree.classList.toggle('burnout-active');
-        showToast(tree.classList.contains('burnout-active') ? '🔥 FULL BURNOUT-GRAN AKTIVERAD!' : '🚦 Startgran återställd');
+        const active = tree.classList.toggle('burnout-active');
+        document.body.classList.toggle('burnout-mode', active);
+        showToast(active ? '🔥 FULL BURNOUT-LÄGE – RÖK PÅ DÄCKEN!' : '🚦 Burnout-läge avslaget');
       }
     }
 
