@@ -4,12 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Burn Creek Speedshop • Brännehylte • Est. 2026</title>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
   <style>
     * { box-sizing: border-box; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; scroll-behavior: smooth; }
     body {
       margin: 0;
       background-color: #09090b;
-      /* Kolfiber / Asfaltsmönster */
       background-image:
         radial-gradient(circle at 50% 0%, rgba(255, 87, 34, 0.16), transparent 60%),
         linear-gradient(27deg, #111115 5px, transparent 5px),
@@ -22,7 +25,6 @@
       line-height: 1.6;
     }
 
-    /* Rutig målflagga */
     .checkered-bar {
       width: 100%;
       height: 16px;
@@ -37,11 +39,24 @@
       border-bottom: 3px solid #ff5722;
     }
 
-    /* Racing-stripes avdelare */
     .race-stripe {
       height: 8px;
       width: 100%;
       background: linear-gradient(90deg, #d32f2f 0%, #d32f2f 33%, #ff6f00 33%, #ff6f00 66%, #fbc02d 66%, #fbc02d 100%);
+    }
+
+    /* Publik Info-banner från Admin */
+    #public-announcement {
+      display: none;
+      background: linear-gradient(90deg, #d32f2f, #ff6f00);
+      color: #fff;
+      text-align: center;
+      padding: 12px 20px;
+      font-weight: 800;
+      font-size: 0.98rem;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid #fbc02d;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
     }
 
     /* Navigation */
@@ -93,7 +108,6 @@
       overflow: hidden;
     }
 
-    /* Dragracing-gran (Christmas Tree) indikator */
     .christmas-tree {
       display: inline-flex;
       gap: 8px;
@@ -268,7 +282,7 @@
     }
     .crew-card p { margin: 0; font-size: 0.92rem; color: #c4c4ce; }
 
-    /* Depåregler – Pit Lane Board */
+    /* Depåregler */
     .rules-box {
       background: #141419;
       border: 2px solid #d32f2f;
@@ -316,6 +330,7 @@
       border-radius: 12px;
       overflow: hidden;
       transition: transform 0.2s;
+      position: relative;
     }
     .gallery-item:hover { transform: translateY(-4px); border-color: #ff6f00; }
     .gallery-img-wrap {
@@ -351,6 +366,228 @@
       background: #181820;
     }
 
+    /* Digital Gästbok på hemsidan */
+    .gb-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+    .gb-box {
+      background: #141419;
+      border: 1px solid #2c2c36;
+      border-top: 4px solid #ff6f00;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.5);
+    }
+    .gb-box h3 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #ff8f00;
+    }
+    .gb-input, .gb-select, .gb-textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px solid #33333d;
+      background: #0c0c0f;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+    .gb-input:focus, .gb-select:focus, .gb-textarea:focus {
+      outline: none;
+      border-color: #ff6f00;
+    }
+    .gb-textarea { resize: vertical; min-height: 85px; }
+
+    .photo-upload-label {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 11px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px dashed #ff6f00;
+      background: rgba(255, 111, 0, 0.08);
+      color: #ff9800;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .photo-upload-label:hover { background: rgba(255, 111, 0, 0.16); }
+    .photo-preview-wrap {
+      display: none;
+      position: relative;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #333;
+    }
+    .photo-preview-wrap img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .remove-photo-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      border: 1px solid #ff5722;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-gb-submit {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #ff5722, #ff9800);
+      color: #111;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 0.96rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    .btn-gb-submit:active { transform: scale(0.98); }
+    .btn-gb-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .gb-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 520px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+    .gb-entry {
+      background: #0c0c0f;
+      border: 1px solid #262630;
+      border-left: 3px solid #ff6f00;
+      border-radius: 8px;
+      padding: 12px 14px;
+      position: relative;
+    }
+    .gb-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+      gap: 8px;
+    }
+    .gb-author { font-weight: 800; color: #fff; font-size: 0.95rem; }
+    .gb-ride { font-size: 0.78rem; color: #ff9800; font-weight: 700; display: block; margin-bottom: 6px; }
+    .gb-date { font-size: 0.72rem; color: #777; white-space: nowrap; }
+    .gb-msg { margin: 0; font-size: 0.9rem; color: #ddd; line-height: 1.4; word-wrap: break-word; }
+    .gb-entry-photo {
+      width: 100%;
+      max-height: 240px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 10px;
+      border: 1px solid #2c2c36;
+      display: block;
+    }
+
+    /* Admin-knappar på inlägg när Admin-läge är aktivt */
+    .admin-del-btn {
+      display: none;
+      margin-top: 8px;
+      background: #b71c1c;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    body.admin-mode .admin-del-btn { display: inline-block; }
+
+    /* ADMIN MODAL & PANEL */
+    #admin-panel-section {
+      display: none;
+      max-width: 1080px;
+      margin: 24px auto 0;
+      padding: 0 20px;
+    }
+    body.admin-mode #admin-panel-section { display: block; }
+
+    .admin-card {
+      background: #191315;
+      border: 2px solid #d32f2f;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 10px 30px rgba(211, 47, 47, 0.25);
+    }
+    .admin-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #3a2224;
+      padding-bottom: 12px;
+    }
+    .admin-header h2 {
+      margin: 0;
+      color: #ff5252;
+      font-size: 1.3rem;
+      text-transform: uppercase;
+    }
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+    }
+    .admin-subbox {
+      background: #100d0e;
+      border: 1px solid #332022;
+      border-radius: 10px;
+      padding: 16px;
+    }
+    .admin-subbox h4 { margin: 0 0 10px; color: #ff9800; text-transform: uppercase; font-size: 0.95rem; }
+
+    /* Lösenords-modal */
+    #login-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.86);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #16161c;
+      border: 2px solid #ff6f00;
+      border-radius: 14px;
+      padding: 24px;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.8);
+    }
+    .modal-box h3 { margin: 0 0 8px; color: #fff; text-transform: uppercase; }
+
     /* Footer */
     footer {
       background: #070709;
@@ -361,11 +598,43 @@
       font-size: 0.9rem;
     }
     footer strong { color: #ff6f00; }
+    .admin-trigger {
+      display: inline-block;
+      margin-top: 12px;
+      color: #555;
+      text-decoration: none;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .admin-trigger:hover { color: #ff6f00; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #ff6f00;
+      color: #111;
+      padding: 11px 22px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.9rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+      opacity: 0;
+      transition: opacity 0.25s;
+      pointer-events: none;
+      z-index: 99999;
+      white-space: nowrap;
+    }
+    .toast.show { opacity: 1; }
   </style>
 </head>
 <body>
   <div class="checkered-bar"></div>
   <div class="race-stripe"></div>
+
+  <!-- PUBLIK INFO-BANNER (styrs från Admin) -->
+  <div id="public-announcement"></div>
 
   <nav>
     <a href="#" class="nav-brand">🏁 Burn Creek <span>Speedshop</span></a>
@@ -374,9 +643,43 @@
       <a href="#crew">Crew & Åk</a>
       <a href="#regler">Depåregler</a>
       <a href="#galleri">Bilder</a>
-      <a href="guest.html">Gästbok</a>
+      <a href="#gastbok">Gästbok</a>
     </div>
   </nav>
+
+  <!-- ADMIN-PANEL (Visas endast när man loggat in med burncreek2026) -->
+  <section id="admin-panel-section">
+    <div class="admin-card">
+      <div class="admin-header">
+        <h2>🔓 Burn Creek Admin-kontroll</h2>
+        <button onclick="logoutAdmin()" style="background:#333; color:#fff; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Logga ut Admin</button>
+      </div>
+
+      <div class="admin-grid">
+        <!-- 1. Info-banner -->
+        <div class="admin-subbox">
+          <h4>📢 Info-banner högst upp på sidan</h4>
+          <input type="text" id="admin-banner-input" class="gb-input" placeholder="T.ex. Öppet garage & grill på lördag kl 15!" />
+          <div style="display:flex; gap:8px;">
+            <button onclick="saveBanner()" style="flex:1; background:#2e7d32; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer;">Publicera Banner</button>
+            <button onclick="clearBanner()" style="background:#b71c1c; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer;">Dölj</button>
+          </div>
+        </div>
+
+        <!-- 2. Lägg till bild i galleriet direkt -->
+        <div class="admin-subbox">
+          <h4>📸 Lägg till bild i "Glimtar från Garaget"</h4>
+          <input type="text" id="admin-gal-caption" class="gb-input" placeholder="Bildtext (t.ex. Fredagsmek på Rancheron)" />
+          <input type="file" id="admin-gal-file" accept="image/*" class="gb-input" style="padding:8px;" />
+          <button onclick="uploadGalleryPhoto()" id="admin-gal-btn" style="width:100%; background:#ff6f00; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">⬆️ Ladda upp till Galleriet</button>
+        </div>
+      </div>
+
+      <p style="margin:14px 0 0; font-size:0.84rem; color:#ccc;">
+        💡 <strong>Tips:</strong> När Admin-läge är aktivt ser du även röda <b>"🗑 Radera"</b>-knappar på alla inlägg i Gästboken och på uppladdade galleribilder nedanför.
+      </p>
+    </div>
+  </section>
 
   <!-- HERO -->
   <header class="hero">
@@ -401,13 +704,13 @@
 
     <div class="hero-btns">
       <a href="#crew" class="btn btn-primary"><span>🔥 Se Crewet & Fordonen</span></a>
-      <a href="guest.html" class="btn btn-secondary"><span>✍️ Signera Gästboken</span></a>
+      <a href="#gastbok" class="btn btn-secondary"><span>✍️ Signera Gästboken</span></a>
     </div>
   </header>
 
   <div class="race-stripe"></div>
 
-  <!-- DEPÅN / TIDTAGNINGSTAVLA -->
+  <!-- DEPÅN -->
   <section id="depan" class="section">
     <div class="section-header">
       <h2 class="section-title">Depån i Brännehylte</h2>
@@ -530,11 +833,11 @@
       <p class="section-lead">Färska bilder från lokalen, bänkarna, bilarna och kvällsmeket i Brännehylte.</p>
     </div>
 
-    <div class="gallery-grid">
+    <div class="gallery-grid" id="gallery-grid">
       <div class="gallery-item">
         <div class="gallery-img-wrap">
           <img src="bild1.jpg" alt="Burn Creek Speedshop lokal" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="placeholder-text" style="display:none;">📸 Plats för bild1.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp bild1.jpg på GitHub</span></div>
+          <div class="placeholder-text" style="display:none;">📸 Plats för bild1.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp via Admin eller GitHub</span></div>
         </div>
         <div class="gallery-caption">🏁 Verkstadsgolvet i Brännehylte</div>
       </div>
@@ -542,7 +845,7 @@
       <div class="gallery-item">
         <div class="gallery-img-wrap">
           <img src="bild2.jpg" alt="Mekkväll och V8-skruv" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="placeholder-text" style="display:none;">📸 Plats för bild2.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp bild2.jpg på GitHub</span></div>
+          <div class="placeholder-text" style="display:none;">📸 Plats för bild2.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp via Admin eller GitHub</span></div>
         </div>
         <div class="gallery-caption">🔧 Mekkväll & V8-skruv</div>
       </div>
@@ -550,7 +853,7 @@
       <div class="gallery-item">
         <div class="gallery-img-wrap">
           <img src="bild3.jpg" alt="Depåmyshörnan" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="placeholder-text" style="display:none;">📸 Plats för bild3.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp bild3.jpg på GitHub</span></div>
+          <div class="placeholder-text" style="display:none;">📸 Plats för bild3.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp via Admin eller GitHub</span></div>
         </div>
         <div class="gallery-caption">🛋️ Depåmyshörnan & 42-tummaren</div>
       </div>
@@ -558,16 +861,365 @@
       <div class="gallery-item">
         <div class="gallery-img-wrap">
           <img src="bild4.jpg" alt="Crewets jänkare" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="placeholder-text" style="display:none;">📸 Plats för bild4.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp bild4.jpg på GitHub</span></div>
+          <div class="placeholder-text" style="display:none;">📸 Plats för bild4.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp via Admin eller GitHub</span></div>
         </div>
         <div class="gallery-caption">🇺🇸 Klassiskt amerikanskt stål</div>
+      </div>
+    </div>
+
+    <!-- Dynamiska bilder uppladdade via Admin -->
+    <div class="gallery-grid" id="dynamic-gallery-grid" style="margin-top: 18px;"></div>
+  </section>
+
+  <!-- DIGITAL GÄSTBOK DIREKT PÅ HEMSIDAN -->
+  <section id="gastbok" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">✍️ Digital Gästbok</h2>
+      <p class="section-lead">Har du hälsat på i depån eller vill skicka en hälsning till grabbarna? Lägg gärna med en bild på ditt åk – det syns direkt här och på TV:n i garaget!</p>
+    </div>
+
+    <div class="gb-layout">
+      <!-- Formulär -->
+      <div class="gb-box">
+        <h3>Lämna ett avtryck</h3>
+        <input type="text" id="gb-name" class="gb-input" maxlength="40" placeholder="Ditt namn / smeknamn *" />
+        <input type="text" id="gb-ride" class="gb-input" maxlength="50" placeholder="Vad åker du? (t.ex. Chevy Bel Air, Volvo 240, Hoj)" />
+        
+        <select id="gb-badge" class="gb-select">
+          <option value="🏁">🏁 Bara på besök & snackar skit</option>
+          <option value="☕">☕ Kom för kaffet</option>
+          <option value="🔧">🔧 Hjälpte till att skruva</option>
+          <option value="🍺">🍺 Tog med kall dricka</option>
+          <option value="🔥">🔥 Kollade in projekten</option>
+        </select>
+
+        <label class="photo-upload-label" for="gb-photo-input">
+          📷 Lägg till bild på ditt åk (valfritt)
+        </label>
+        <input type="file" id="gb-photo-input" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)" />
+
+        <div class="photo-preview-wrap" id="photo-preview-wrap">
+          <img id="photo-preview-img" src="" alt="Förhandsvisning" />
+          <button type="button" class="remove-photo-btn" onclick="clearPhoto()">✖ Ta bort bild</button>
+        </div>
+
+        <textarea id="gb-message" class="gb-textarea" maxlength="200" placeholder="Skriv din hälsning till grabbarna... *"></textarea>
+
+        <button class="btn-gb-submit" id="gb-submit-btn" onclick="submitGuestbook()">🚀 Skicka till Gästboken & TV:n</button>
+      </div>
+
+      <!-- Flöde -->
+      <div class="gb-box">
+        <h3>📖 Senaste besökarna</h3>
+        <div class="gb-feed" id="gb-feed">
+          <div style="text-align:center; color:#777; font-size:0.85rem; padding:12px;">Laddar gästboken...</div>
+        </div>
       </div>
     </div>
   </section>
 
   <footer>
     <strong>Burn Creek Speedshop</strong> • Brännehylte • Est. 2026<br>
-    Varit på besök i depån? <a href="guest.html" style="color:#ff6f00; font-weight:bold;">Signera vår digitala gästbok här!</a>
+    <a href="#gastbok" style="color:#ff6f00; font-weight:bold; text-decoration:none;">↑ Signera gästboken ovan</a><br>
+    <span class="admin-trigger" onclick="openLoginModal()">🔒 Admin</span>
   </footer>
+
+  <!-- LÖSENORDSMODAL FÖR ADMIN -->
+  <div id="login-modal">
+    <div class="modal-box">
+      <h3>🔒 Admin-inloggning</h3>
+      <p style="font-size:0.85rem; color:#aaa; margin:0 0 14px;">Ange verkstadens adminlösenord:</p>
+      <input type="password" id="admin-pass-input" class="gb-input" placeholder="Lösenord..." onkeydown="if(event.key==='Enter') checkAdminPassword()" />
+      <div style="display:flex; gap:10px; margin-top:6px;">
+        <button onclick="checkAdminPassword()" style="flex:1; background:#ff6f00; color:#111; border:none; padding:11px; border-radius:8px; font-weight:900; cursor:pointer;">Logga in</button>
+        <button onclick="closeLoginModal()" style="background:#2a2a32; color:#fff; border:none; padding:11px 14px; border-radius:8px; font-weight:bold; cursor:pointer;">Avbryt</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast">Klart!</div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAyn6xM-pkDVK7ojbQXCjfHO07P8rwevMQ",
+      authDomain: "burncreekspeedshop.firebaseapp.com",
+      projectId: "burncreekspeedshop",
+      storageBucket: "burncreekspeedshop.firebasestorage.app",
+      messagingSenderId: "611870239128",
+      appId: "1:611870239128:web:5e8973ec49556be0f823ed"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const ADMIN_PASS = "burncreek2026";
+    let compressedPhotoDataUrl = null;
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    }
+
+    // --- ADMIN LOGIK ---
+    if (sessionStorage.getItem('bc_admin') === 'true') {
+      document.body.classList.add('admin-mode');
+    }
+
+    function openLoginModal() {
+      if (sessionStorage.getItem('bc_admin') === 'true') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+      document.getElementById('login-modal').style.display = 'flex';
+      setTimeout(() => document.getElementById('admin-pass-input').focus(), 100);
+    }
+
+    function closeLoginModal() {
+      document.getElementById('login-modal').style.display = 'none';
+      document.getElementById('admin-pass-input').value = '';
+    }
+
+    function checkAdminPassword() {
+      const val = document.getElementById('admin-pass-input').value.trim();
+      if (val === ADMIN_PASS) {
+        sessionStorage.setItem('bc_admin', 'true');
+        document.body.classList.add('admin-mode');
+        closeLoginModal();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        showToast('Inloggad som Admin!');
+      } else {
+        showToast('Fel lösenord!');
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem('bc_admin');
+      document.body.classList.remove('admin-mode');
+      showToast('Utloggad från Admin');
+    }
+
+    // Admin: Info-banner
+    db.collection('website_settings').doc('banner').onSnapshot(doc => {
+      const bannerEl = document.getElementById('public-announcement');
+      const inputEl = document.getElementById('admin-banner-input');
+      if (doc.exists && doc.data().text) {
+        bannerEl.textContent = doc.data().text;
+        bannerEl.style.display = 'block';
+        if (inputEl) inputEl.value = doc.data().text;
+      } else {
+        bannerEl.style.display = 'none';
+      }
+    });
+
+    async function saveBanner() {
+      const text = document.getElementById('admin-banner-input').value.trim();
+      await db.collection('website_settings').doc('banner').set({ text: text });
+      showToast('Info-banner uppdaterad!');
+    }
+
+    async function clearBanner() {
+      document.getElementById('admin-banner-input').value = '';
+      await db.collection('website_settings').doc('banner').set({ text: '' });
+      showToast('Info-banner dold');
+    }
+
+    // Admin: Ladda upp bild till galleriet
+    function compressImageFile(file, maxWidth, quality) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let w = img.width;
+            let h = img.height;
+            if (w > maxWidth) {
+              h = Math.round((h * maxWidth) / w);
+              w = maxWidth;
+            }
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function uploadGalleryPhoto() {
+      const fileInput = document.getElementById('admin-gal-file');
+      const caption = document.getElementById('admin-gal-caption').value.trim() || 'Burn Creek Speedshop';
+      const btn = document.getElementById('admin-gal-btn');
+
+      if (!fileInput.files || !fileInput.files[0]) {
+        showToast('Välj en bild först!');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Laddar upp...';
+      try {
+        const dataUrl = await compressImageFile(fileInput.files[0], 900, 0.75);
+        await db.collection('website_gallery').add({
+          photo: dataUrl,
+          caption: caption,
+          timestamp: Date.now()
+        });
+        fileInput.value = '';
+        document.getElementById('admin-gal-caption').value = '';
+        showToast('Bild tillagd i galleriet!');
+      } catch (err) {
+        console.error(err);
+        showToast('Kunde inte ladda upp bild – kolla Firestore Rules!');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '⬆️ Ladda upp till Galleriet';
+      }
+    }
+
+    async function deleteGalleryPhoto(id) {
+      if (!confirm('Ta bort denna bild från galleriet?')) return;
+      await db.collection('website_gallery').doc(id).delete();
+      showToast('Bild borttagen');
+    }
+
+    db.collection('website_gallery').orderBy('timestamp', 'desc').onSnapshot(snap => {
+      const grid = document.getElementById('dynamic-gallery-grid');
+      let html = '';
+      snap.forEach(doc => {
+        const d = doc.data();
+        html += `
+          <div class="gallery-item">
+            <div class="gallery-img-wrap">
+              <img src="${d.photo}" alt="${escapeHtml(d.caption || '')}" loading="lazy">
+            </div>
+            <div class="gallery-caption">
+              ${escapeHtml(d.caption || '')}
+              <br><button class="admin-del-btn" onclick="deleteGalleryPhoto('${doc.id}')">🗑 Radera bild</button>
+            </div>
+          </div>
+        `;
+      });
+      grid.innerHTML = html;
+    });
+
+    // --- GÄSTBOK LOGIK ---
+    async function handlePhotoSelect(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      compressedPhotoDataUrl = await compressImageFile(file, 800, 0.72);
+      document.getElementById('photo-preview-img').src = compressedPhotoDataUrl;
+      document.getElementById('photo-preview-wrap').style.display = 'block';
+    }
+
+    function clearPhoto() {
+      compressedPhotoDataUrl = null;
+      document.getElementById('gb-photo-input').value = '';
+      document.getElementById('photo-preview-img').src = '';
+      document.getElementById('photo-preview-wrap').style.display = 'none';
+    }
+
+    async function submitGuestbook() {
+      const name = document.getElementById('gb-name').value.trim();
+      const ride = document.getElementById('gb-ride').value.trim();
+      const badge = document.getElementById('gb-badge').value;
+      const message = document.getElementById('gb-message').value.trim();
+      const btn = document.getElementById('gb-submit-btn');
+
+      if (!name || !message) {
+        showToast('Fyll i både namn och hälsning!');
+        return;
+      }
+
+      const lastPost = localStorage.getItem('bc_gb_last');
+      if (lastPost && Date.now() - Number(lastPost) < 60000 && sessionStorage.getItem('bc_admin') !== 'true') {
+        showToast('Vänta en minut innan nästa hälsning!');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Skickar...';
+
+      try {
+        const payload = {
+          name: name,
+          ride: ride || 'Besökare',
+          badge: badge,
+          message: message,
+          timestamp: Date.now()
+        };
+
+        if (compressedPhotoDataUrl) {
+          payload.photo = compressedPhotoDataUrl;
+        }
+
+        await db.collection('guestbook').add(payload);
+
+        localStorage.setItem('bc_gb_last', Date.now().toString());
+        document.getElementById('gb-message').value = '';
+        clearPhoto();
+        showToast('Tack! Hälsningen syns i gästboken & på TV:n!');
+      } catch (err) {
+        console.error(err);
+        showToast('Kunde inte spara – kontrollera bildstorlek eller regler!');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🚀 Skicka till Gästboken & TV:n';
+      }
+    }
+
+    async function deleteGuestbookEntry(id) {
+      if (!confirm('Radera detta gästboksinlägg?')) return;
+      await db.collection('guestbook').doc(id).delete();
+      showToast('Inlägg raderat');
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
+    db.collection('guestbook')
+      .orderBy('timestamp', 'desc')
+      .limit(20)
+      .onSnapshot(snap => {
+        const feed = document.getElementById('gb-feed');
+        if (snap.empty) {
+          feed.innerHTML = '<div style="text-align:center; color:#777; font-size:0.85rem;">Inga hälsningar ännu – bli först!</div>';
+          return;
+        }
+
+        let html = '';
+        snap.forEach(doc => {
+          const d = doc.data();
+          const dateStr = d.timestamp
+            ? new Date(d.timestamp).toLocaleDateString('sv-SE', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })
+            : '';
+
+          const photoHtml = (d.photo && d.photo.startsWith('data:image/'))
+            ? `<img class="gb-entry-photo" src="${d.photo}" alt="Gästens fordon" loading="lazy" />`
+            : '';
+
+          html += `
+            <div class="gb-entry">
+              <div class="gb-entry-header">
+                <span class="gb-author">${escapeHtml(d.badge || '🏁')} ${escapeHtml(d.name)}</span>
+                <span class="gb-date">${dateStr}</span>
+              </div>
+              <span class="gb-ride">🚗 ${escapeHtml(d.ride || '')}</span>
+              <p class="gb-msg">${escapeHtml(d.message)}</p>
+              ${photoHtml}
+              <button class="admin-del-btn" onclick="deleteGuestbookEntry('${doc.id}')">🗑 Radera inlägg</button>
+            </div>
+          `;
+        });
+        feed.innerHTML = html;
+      });
+  </script>
 </body>
 </html>
