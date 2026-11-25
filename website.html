@@ -27,7 +27,7 @@
     }
 
     /* =========================================================================
-       REJÄLT RAT ROD / PATINA-LÄGE (Stor visuell skillnad från grundtemat)
+       RAT ROD / PATINA-LÄGE
        ========================================================================= */
     body.ratrod-mode {
       background-color: #1a0f09;
@@ -91,13 +91,15 @@
     body.ratrod-mode .rules-box,
     body.ratrod-mode .gb-box,
     body.ratrod-mode .gallery-item,
-    body.ratrod-mode .crew-card {
+    body.ratrod-mode .crew-card,
+    body.ratrod-mode .perk-card {
       background-color: #1f130c;
       border-color: #7c2d12;
       border-top-color: #d97706;
       box-shadow: inset 0 0 26px rgba(12, 6, 3, 0.85), 0 10px 24px rgba(0, 0, 0, 0.8);
     }
-    body.ratrod-mode .timing-cell {
+    body.ratrod-mode .timing-cell,
+    body.ratrod-mode .info-chip {
       background: #140c08;
       border-color: #5c240d;
       border-left-color: #d97706;
@@ -133,7 +135,7 @@
     }
 
     /* =========================================================================
-       REJÄLT FULL BURNOUT-LÄGE (Triggas på startgranen)
+       FULL BURNOUT-LÄGE
        ========================================================================= */
     body.burnout-mode {
       background-color: #180604;
@@ -163,7 +165,8 @@
     body.burnout-mode .timing-board,
     body.burnout-mode .rules-box,
     body.burnout-mode .gb-box,
-    body.burnout-mode .gallery-item {
+    body.burnout-mode .gallery-item,
+    body.burnout-mode .perk-card {
       border-color: #ff3d00;
       box-shadow: 0 0 24px rgba(255, 61, 0, 0.35), inset 0 0 20px rgba(255, 61, 0, 0.14);
     }
@@ -258,7 +261,7 @@
       overflow: hidden;
     }
 
-    /* LIVE STATUS SKYLT ("Är det liv i depån just nu?") */
+    /* LIVE STATUS SKYLT */
     .live-status-pill {
       display: inline-flex;
       align-items: center;
@@ -295,7 +298,7 @@
       50% { transform: scale(1.25); opacity: 0.75; }
     }
 
-    /* Dragracing-gran (Christmas Tree) indikator */
+    /* Dragracing-gran */
     .christmas-tree {
       display: inline-flex;
       align-items: center;
@@ -460,7 +463,62 @@
       letter-spacing: 0.8px;
     }
 
-    /* Crew & Fordon med bakgrundsbild (Klickbara kort) */
+    /* Gäst-WiFi & Swish-kort */
+    .perks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .perk-card {
+      background: #141419;
+      border: 1px solid #2d2d37;
+      border-top: 4px solid #2e7d32;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+    .perk-card.swish-card { border-top-color: #ff6f00; }
+    .perk-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .info-chip {
+      background: #0c0c10;
+      border: 1px solid #262630;
+      border-left: 3px solid #fbc02d;
+      padding: 9px 12px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
+    .info-chip small {
+      display: block;
+      font-size: 0.72rem;
+      color: #9a9aa6;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+    }
+    .info-chip strong { font-size: 1rem; color: #fff; word-break: break-all; }
+    .action-btn {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    .action-btn:active { transform: scale(0.98); }
+    .btn-copy-wifi { background: linear-gradient(90deg, #2e7d32, #43a047); color: #fff; }
+    .btn-do-swish { background: linear-gradient(90deg, #ff5722, #ff9800); color: #111; }
+
+    /* Crew & Fordon med bakgrundsbild */
     .crew-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -574,9 +632,7 @@
       background-position: center;
       border-bottom: 3px solid #ff5722;
     }
-    .crew-modal-body {
-      padding: 22px;
-    }
+    .crew-modal-body { padding: 22px; }
     .crew-modal-body h3 {
       margin: 0 0 8px;
       font-size: 1.5rem;
@@ -657,14 +713,6 @@
       height: 100%;
       object-fit: cover;
       display: block;
-    }
-    .placeholder-text {
-      text-align: center;
-      padding: 20px;
-      color: #777;
-      font-weight: 800;
-      text-transform: uppercase;
-      font-size: 0.85rem;
     }
     .gallery-caption {
       padding: 13px 16px;
@@ -1049,7 +1097,7 @@
     </div>
   </nav>
 
-  <!-- ADMIN-PANEL (Visas endast när man loggat in med burncreek2026) -->
+  <!-- UTÖKAD ADMIN-PANEL (Visas endast när man loggat in med burncreek2026) -->
   <section id="admin-panel-section">
     <div class="admin-card">
       <div class="admin-header">
@@ -1068,7 +1116,18 @@
           </div>
         </div>
 
-        <!-- 2. Lägg till bild i galleriet direkt -->
+        <!-- 2. Live Depåstatus -->
+        <div class="admin-subbox">
+          <h4>🟢 Live Depåstatus i Brännehylte</h4>
+          <label style="display:flex; align-items:center; gap:8px; margin-bottom:10px; font-size:0.9rem; font-weight:bold; cursor:pointer;">
+            <input type="checkbox" id="admin-status-open" />
+            Garaget är öppet / liv i depån nu
+          </label>
+          <input type="text" id="admin-status-who" class="gb-input" placeholder="Vilka är på plats? (t.ex. Fredrik, Tony)" />
+          <button onclick="saveGarageStatus()" style="width:100%; background:#2e7d32; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Uppdatera Depåstatus</button>
+        </div>
+
+        <!-- 3. Lägg till bild i galleriet direkt -->
         <div class="admin-subbox">
           <h4>📸 Lägg till bild i "Glimtar från Garaget"</h4>
           <input type="text" id="admin-gal-caption" class="gb-input" placeholder="Bildtext (t.ex. Fredagsmek på Rancheron)" />
@@ -1076,37 +1135,37 @@
           <button onclick="uploadGalleryPhoto()" id="admin-gal-btn" style="width:100%; background:#ff6f00; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">⬆️ Ladda upp till Galleriet</button>
         </div>
 
-        <!-- 3. Byt bakgrundsbild på Crew-kort -->
+        <!-- 4. Redigera Crew-medlem (Text + Bild) -->
         <div class="admin-subbox">
-          <h4>🏎️ Byt bild på Crew & Fordon</h4>
-          <select id="admin-crew-select" class="gb-select">
+          <h4>🏎️ Redigera Crew & Fordon</h4>
+          <select id="admin-crew-select" class="gb-select" onchange="loadCrewIntoAdminForm()">
             <option value="fredrik">Fredrik Tengmark</option>
             <option value="tony">Tony Olsson</option>
             <option value="kenneth">Kenneth Eklund</option>
             <option value="hakan">Håkan Gustafsson</option>
             <option value="pierre">Pierre Danhall</option>
           </select>
+          <input type="text" id="admin-crew-ride" class="gb-input" placeholder="Fordon / roll (t.ex. Buick LeSabre)" />
+          <textarea id="admin-crew-desc" class="gb-textarea" style="min-height:65px;" placeholder="Beskrivning som visas när man klickar på kortet..."></textarea>
           <input type="file" id="admin-crew-file" accept="image/*" class="gb-input" style="padding:8px;" />
-          <button onclick="uploadCrewPhoto()" id="admin-crew-btn" style="width:100%; background:#0288d1; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Spara Crew-bild</button>
+          <button onclick="saveCrewMemberChanges()" id="admin-crew-btn" style="width:100%; background:#0288d1; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Spara Crew-ändringar</button>
         </div>
       </div>
 
       <p style="margin:14px 0 0; font-size:0.84rem; color:#ccc;">
-        💡 <strong>Tips:</strong> När Admin-läge är aktivt ser du även röda <b>"🗑 Radera"</b>-knappar på alla inlägg i Gästboken och på uppladdade galleribilder nedanför.
+        💡 <strong>Tips:</strong> När Admin-läge är aktivt ser du även röda <b>"🗑 Radera"</b>-knappar på inläggen i Gästboken och på galleribilderna nedanför.
       </p>
     </div>
   </section>
 
   <!-- HERO -->
   <header class="hero">
-    <!-- LIVE-STATUS ("Är det liv i depån just nu?") -->
     <div class="live-status-pill" id="live-status-pill">
       <span class="status-dot"></span>
       <span id="live-status-text">Kollar depåstatus i Brännehylte...</span>
     </div>
     <br>
 
-    <!-- EASTER EGG: Klicka 5 gånger på granen för Burnout-läge -->
     <div class="christmas-tree" id="christmas-tree" onclick="handleTreeEasterEgg()" title="Klicka 5 gånger för Burnout-läge!">
       <div class="bulb amber"></div>
       <div class="bulb amber"></div>
@@ -1115,7 +1174,6 @@
       <span class="burnout-label">🔥 BURNOUT</span>
     </div>
 
-    <!-- EASTER EGG: Klicka 3 gånger på loggan för Rat Rod / Patina-läge -->
     <div class="hero-logo" onclick="handleLogoEasterEgg()" title="Klicka 3 gånger för Rat Rod / Patina-läge">
       <img src="logo.png" alt="Burn Creek Speedshop Logo">
     </div>
@@ -1136,7 +1194,7 @@
 
   <div class="race-stripe"></div>
 
-  <!-- DEPÅN -->
+  <!-- DEPÅN, GÄST-WIFI & SWISH -->
   <section id="depan" class="section">
     <div class="section-header">
       <h2 class="section-title">Depån i Brännehylte</h2>
@@ -1160,9 +1218,36 @@
         <span>Jänkare & Hojar</span>
       </div>
     </div>
+
+    <div class="perks-grid">
+      <div class="perk-card">
+        <h3>📶 Gästnätverk (WiFi)</h3>
+        <div class="info-chip">
+          <small>Nätverk (SSID)</small>
+          <strong id="wifi-ssid">Burncreekspeedshopsnyltar</strong>
+        </div>
+        <div class="info-chip">
+          <small>Lösenord</small>
+          <strong id="wifi-pass">Jagsnyltarwifi</strong>
+        </div>
+        <button class="action-btn btn-copy-wifi" onclick="copyWifiPassword()">📋 Kopiera WiFi-lösenord</button>
+      </div>
+
+      <div class="perk-card swish-card">
+        <h3>💸 Fika-Swish / Verkstadskassa</h3>
+        <div class="info-chip">
+          <small>Swish-nummer (Fredrik)</small>
+          <strong>079-347 53 52</strong>
+        </div>
+        <p style="margin: 0 0 12px; font-size: 0.88rem; color: #c4c4ce;">
+          Bjud på en kaffe, kall dricka eller en slant till depåkassan när du hälsar på.
+        </p>
+        <button class="action-btn btn-do-swish" onclick="triggerSwish()">💸 Kopiera nummer & Öppna Swish</button>
+      </div>
+    </div>
   </section>
 
-  <!-- CREW & BYGGEN (Klicka på ett kort för att öppna infon) -->
+  <!-- CREW & BYGGEN -->
   <section id="crew" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">Startfältet – Crew & Fordon</h2>
@@ -1174,7 +1259,7 @@
         <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Fredrik Tengmark</h3>
-          <div class="ride-badge">Ford Hot Rod • GMC Vandura</div>
+          <div class="ride-badge" id="crew-badge-fredrik">Ford Hot Rod • GMC Vandura</div>
         </div>
       </div>
 
@@ -1182,7 +1267,7 @@
         <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Tony Olsson</h3>
-          <div class="ride-badge">Buick LeSabre</div>
+          <div class="ride-badge" id="crew-badge-tony">Buick LeSabre</div>
         </div>
       </div>
 
@@ -1190,7 +1275,7 @@
         <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Kenneth Eklund</h3>
-          <div class="ride-badge">Ford Ranchero</div>
+          <div class="ride-badge" id="crew-badge-kenneth">Ford Ranchero</div>
         </div>
       </div>
 
@@ -1198,7 +1283,7 @@
         <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Håkan Gustafsson</h3>
-          <div class="ride-badge">Ford Galaxie 500 Cab</div>
+          <div class="ride-badge" id="crew-badge-hakan">Ford Galaxie 500 Cab</div>
         </div>
       </div>
 
@@ -1206,7 +1291,7 @@
         <span class="crew-click-hint">👆 Klicka för info</span>
         <div class="crew-card-content">
           <h3>Pierre Danhall</h3>
-          <div class="ride-badge">Motorcyklar</div>
+          <div class="ride-badge" id="crew-badge-pierre">Motorcyklar</div>
         </div>
       </div>
     </div>
@@ -1222,7 +1307,7 @@
         <div class="rule-item">
           <div class="rule-num">01</div>
           <div class="rule-text">
-            <strong>Rör inte verktygstavlorna</strong>
+            <strong>Rör inte verktygen</strong>
             Fråga alltid innan du lånar – varje nyckel och hylsa har sin bestämda plats.
           </div>
         </div>
@@ -1262,56 +1347,23 @@
     </div>
   </section>
 
-  <!-- GALLERI -->
+  <!-- GALLERI (Endast dynamiska bilder som laddas upp) -->
   <section id="galleri" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">Glimtar från Garaget</h2>
       <p class="section-lead">Färska bilder från lokalen, bänkarna, bilarna och kvällsmeket i Brännehylte.</p>
     </div>
 
-    <div class="gallery-grid" id="gallery-grid">
-      <div class="gallery-item">
-        <div class="gallery-img-wrap">
-          <img src="bild1.jpg" alt="Burn Creek Speedshop lokal" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="placeholder-text" style="display:none;">📸 Plats för bild1.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp via Admin eller GitHub</span></div>
-        </div>
-        <div class="gallery-caption">🏁 Verkstadsgolvet i Brännehylte</div>
-      </div>
-
-      <div class="gallery-item">
-        <div class="gallery-img-wrap">
-          <img src="bild2.jpg" alt="Mekkväll och V8-skruv" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="placeholder-text" style="display:none;">📸 Plats för bild2.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp via Admin eller GitHub</span></div>
-        </div>
-        <div class="gallery-caption">🔧 Mekkväll & V8-skruv</div>
-      </div>
-
-      <div class="gallery-item">
-        <div class="gallery-img-wrap">
-          <img src="bild3.jpg" alt="Depåmyshörnan" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="placeholder-text" style="display:none;">📸 Plats för bild3.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp via Admin eller GitHub</span></div>
-        </div>
-        <div class="gallery-caption">🛋️ Depåmyshörnan</div>
-      </div>
-
-      <div class="gallery-item">
-        <div class="gallery-img-wrap">
-          <img src="bild4.jpg" alt="Crewets jänkare" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-          <div class="placeholder-text" style="display:none;">📸 Plats för bild4.jpg<br><span style="font-size:0.75rem; color:#555;">Ladda upp via Admin eller GitHub</span></div>
-        </div>
-        <div class="gallery-caption">🇺🇸 Klassiskt amerikanskt stål</div>
-      </div>
+    <div class="gallery-grid" id="dynamic-gallery-grid">
+      <div style="color:#777; font-size:0.9rem;">Inga galleribilder uppladdade ännu.</div>
     </div>
-
-    <!-- Dynamiska bilder uppladdade via Admin -->
-    <div class="gallery-grid" id="dynamic-gallery-grid" style="margin-top: 18px;"></div>
   </section>
 
   <!-- DIGITAL GÄSTBOK DIREKT PÅ HEMSIDAN -->
   <section id="gastbok" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">✍️ Digital Gästbok</h2>
-      <p class="section-lead">Har du hälsat på i depån eller vill skicka en hälsning till grabbarna? Lägg gärna med en bild på ditt åk – det syns direkt här och på TV:n i garaget!</p>
+      <p class="section-lead">Har du hälsat på i depån eller vill skicka en hälsning till grabbarna? Lägg gärna med en bild på ditt åk!</p>
     </div>
 
     <div class="gb-layout">
@@ -1341,7 +1393,7 @@
 
         <textarea id="gb-message" class="gb-textarea" maxlength="200" placeholder="Skriv din hälsning till grabbarna... *"></textarea>
 
-        <button class="btn-gb-submit" id="gb-submit-btn" onclick="submitGuestbook()">🚀 Skicka till Gästboken & TV:n</button>
+        <button class="btn-gb-submit" id="gb-submit-btn" onclick="submitGuestbook()">🚀 Skicka till Gästboken</button>
       </div>
 
       <!-- Flöde -->
@@ -1442,7 +1494,31 @@
       setTimeout(() => t.classList.remove('show'), 2800);
     }
 
-    // --- LIVE DEPÅSTATUS ("Är det liv i depån just nu?") ---
+    // --- GÄST-WIFI & SWISH ---
+    function copyWifiPassword() {
+      const pass = document.getElementById('wifi-pass').textContent.trim();
+      navigator.clipboard.writeText(pass).then(() => {
+        showToast('WiFi-lösenord kopierat!');
+      });
+    }
+
+    function triggerSwish() {
+      const num = '0793475352';
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(num);
+      }
+      showToast('Nummer kopierat – öppnar Swish...');
+      const payload = encodeURIComponent(JSON.stringify({
+        version: 1,
+        payee: { value: num },
+        message: { value: 'Burn Creek Speedshop', editable: true }
+      }));
+      setTimeout(() => {
+        window.location.href = `swish://payment?data=${payload}`;
+      }, 300);
+    }
+
+    // --- LIVE DEPÅSTATUS ---
     const statusPill = document.getElementById('live-status-pill');
     const statusText = document.getElementById('live-status-text');
 
@@ -1460,10 +1536,27 @@
         statusPill.classList.remove('is-open');
         statusText.textContent = 'SLÄCKT I DEPÅN JUST NU – Ingen incheckad i Brännehylte';
       }
+
+      const openChk = document.getElementById('admin-status-open');
+      const whoInp = document.getElementById('admin-status-who');
+      if (openChk && data) openChk.checked = Boolean(data.isOpen);
+      if (whoInp && data && Array.isArray(data.checkedIn)) whoInp.value = data.checkedIn.join(', ');
     }, () => {
       statusPill.classList.remove('is-open');
       statusText.textContent = 'DEPÅN I BRÄNNEHYLTE • EST. 2026';
     });
+
+    async function saveGarageStatus() {
+      const isOpen = document.getElementById('admin-status-open').checked;
+      const rawWho = document.getElementById('admin-status-who').value.trim();
+      const checkedIn = rawWho ? rawWho.split(',').map(s => s.trim()).filter(Boolean) : [];
+      await db.collection('garage_status').doc('current').set({
+        isOpen: isOpen,
+        checkedIn: checkedIn,
+        updatedAt: Date.now()
+      });
+      showToast('Depåstatus uppdaterad!');
+    }
 
     // --- RAT ROD / PATINA-LÄGE & BURNOUT-LÄGE ---
     let logoClickCount = 0;
@@ -1512,7 +1605,6 @@
       }
     }
 
-    // Skriv "svets" eller "kalle" på tangentbordet för att kalla fram Kolv-Kalle direkt
     let typedBuffer = '';
     window.addEventListener('keydown', (e) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
@@ -1578,7 +1670,7 @@
     setTimeout(showKolvKalle, 12000);
     setInterval(showKolvKalle, 120000);
 
-    // --- CREW MODAL ---
+    // --- CREW DATA & MODAL ---
     const crewDetails = {
       fredrik: {
         name: "Fredrik Tengmark",
@@ -1617,6 +1709,14 @@
       }
     };
 
+    function loadCrewIntoAdminForm() {
+      const key = document.getElementById('admin-crew-select').value;
+      const info = crewDetails[key];
+      if (!info) return;
+      document.getElementById('admin-crew-ride').value = info.ride || '';
+      document.getElementById('admin-crew-desc').value = info.desc || '';
+    }
+
     function openCrewModal(memberKey) {
       const info = crewDetails[memberKey];
       if (!info) return;
@@ -1635,10 +1735,12 @@
     // --- ADMIN LOGIK ---
     if (sessionStorage.getItem('bc_admin') === 'true') {
       document.body.classList.add('admin-mode');
+      loadCrewIntoAdminForm();
     }
 
     function openLoginModal() {
       if (sessionStorage.getItem('bc_admin') === 'true') {
+        loadCrewIntoAdminForm();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
@@ -1656,6 +1758,7 @@
       if (val === ADMIN_PASS) {
         sessionStorage.setItem('bc_admin', 'true');
         document.body.classList.add('admin-mode');
+        loadCrewIntoAdminForm();
         closeLoginModal();
         window.scrollTo({ top: 0, behavior: 'smooth' });
         showToast('Inloggad som Admin!');
@@ -1695,7 +1798,6 @@
       showToast('Info-banner dold');
     }
 
-    // Komprimera bilder i webbläsaren
     function compressImageFile(file, maxWidth, quality) {
       return new Promise((resolve) => {
         const reader = new FileReader();
@@ -1760,6 +1862,11 @@
 
     db.collection('website_gallery').orderBy('timestamp', 'desc').onSnapshot(snap => {
       const grid = document.getElementById('dynamic-gallery-grid');
+      if (snap.empty) {
+        grid.innerHTML = '<div style="color:#777; font-size:0.9rem;">Inga galleribilder uppladdade ännu.</div>';
+        return;
+      }
+
       let html = '';
       snap.forEach(doc => {
         const d = doc.data();
@@ -1778,45 +1885,58 @@
       grid.innerHTML = html;
     });
 
-    // Admin: Crew-bakgrundsbilder
+    // Admin: Crew-texter & bakgrundsbilder
     db.collection('website_crew_photos').onSnapshot(snap => {
       snap.forEach(doc => {
+        const d = doc.data();
         const card = document.getElementById(`crew-card-${doc.id}`);
-        if (card && doc.data().photo) {
-          card.style.backgroundImage = `url('${doc.data().photo}')`;
-          if (crewDetails[doc.id]) {
-            crewDetails[doc.id].customImg = doc.data().photo;
+        const badge = document.getElementById(`crew-badge-${doc.id}`);
+
+        if (crewDetails[doc.id]) {
+          if (d.photo) {
+            crewDetails[doc.id].customImg = d.photo;
+            if (card) card.style.backgroundImage = `url('${d.photo}')`;
+          }
+          if (d.ride) {
+            crewDetails[doc.id].ride = d.ride;
+            if (badge) badge.textContent = d.ride;
+          }
+          if (d.desc) {
+            crewDetails[doc.id].desc = d.desc;
           }
         }
       });
+      if (sessionStorage.getItem('bc_admin') === 'true') {
+        loadCrewIntoAdminForm();
+      }
     });
 
-    async function uploadCrewPhoto() {
+    async function saveCrewMemberChanges() {
       const member = document.getElementById('admin-crew-select').value;
+      const ride = document.getElementById('admin-crew-ride').value.trim();
+      const desc = document.getElementById('admin-crew-desc').value.trim();
       const fileInput = document.getElementById('admin-crew-file');
       const btn = document.getElementById('admin-crew-btn');
-
-      if (!fileInput.files || !fileInput.files[0]) {
-        showToast('Välj en bild först!');
-        return;
-      }
 
       btn.disabled = true;
       btn.textContent = 'Sparar...';
       try {
-        const dataUrl = await compressImageFile(fileInput.files[0], 800, 0.75);
-        await db.collection('website_crew_photos').doc(member).set({
-          photo: dataUrl,
-          updatedAt: Date.now()
-        });
+        const updatePayload = { updatedAt: Date.now() };
+        if (ride) updatePayload.ride = ride;
+        if (desc) updatePayload.desc = desc;
+        if (fileInput.files && fileInput.files[0]) {
+          updatePayload.photo = await compressImageFile(fileInput.files[0], 800, 0.75);
+        }
+
+        await db.collection('website_crew_photos').doc(member).set(updatePayload, { merge: true });
         fileInput.value = '';
-        showToast('Crew-bild uppdaterad!');
+        showToast('Crew-uppgifter sparade!');
       } catch (err) {
         console.error(err);
         showToast('Kunde inte spara – kolla Firestore Rules!');
       } finally {
         btn.disabled = false;
-        btn.textContent = '💾 Spara Crew-bild';
+        btn.textContent = '💾 Spara Crew-ändringar';
       }
     }
 
@@ -1875,13 +1995,13 @@
         localStorage.setItem('bc_gb_last', Date.now().toString());
         document.getElementById('gb-message').value = '';
         clearPhoto();
-        showToast('Tack! Hälsningen syns i gästboken & på TV:n!');
+        showToast('Tack! Din hälsning är sparad i gästboken!');
       } catch (err) {
         console.error(err);
         showToast('Kunde inte spara – kontrollera bildstorlek eller regler!');
       } finally {
         btn.disabled = false;
-        btn.textContent = '🚀 Skicka till Gästboken & TV:n';
+        btn.textContent = '🚀 Skicka till Gästboken';
       }
     }
 
