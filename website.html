@@ -528,7 +528,7 @@
     .btn-do-swish { background: linear-gradient(90deg, #ff5722, #ff9800); color: #111; }
 
     /* =========================================================================
-       NÄSTA GREJ I SIKTE (FLERA HÄNDELSER) & VECKANS GARAGE-OMRÖSTNING
+       NÄSTA GREJ I SIKTE (SYNKAD MED APPENS 'events') & GARAGE-OMRÖSTNING
        ========================================================================= */
     .features-grid {
       display: grid;
@@ -1412,13 +1412,22 @@
           <button onclick="saveGarageStatus()" style="width:100%; background:#2e7d32; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Uppdatera Depåstatus</button>
         </div>
 
-        <!-- 3. Nästa grej i sikte (Lägg till flera händelser) -->
+        <!-- 3. Nästa grej i sikte (Synkad med appens kalender 'events') -->
         <div class="admin-subbox">
-          <h4>⏱️ Nästa grej i sikte (Lägg till händelse)</h4>
+          <h4>⏱️ Nästa grej i sikte (Appens kalender)</h4>
+          <select id="admin-cd-cat" class="gb-select">
+            <option value="race">🏁 Bilträff / Race / Cruising</option>
+            <option value="mek">🔧 Mekkväll / Garagehäng</option>
+            <option value="grill">🍔 Grillkväll & Fest</option>
+            <option value="stad">🧹 Städ & Underhåll</option>
+          </select>
           <input type="text" id="admin-cd-title" class="gb-input" placeholder="Rubrik (t.ex. Street Week 2027)" />
-          <input type="text" id="admin-cd-sub" class="gb-input" placeholder="Plats / info (t.ex. Mantorp • '34 Ford Hot Rod)" />
-          <input type="datetime-local" id="admin-cd-date" class="gb-input" />
-          <button onclick="addNewEvent()" style="width:100%; background:#fbc02d; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">➕ Lägg till i listan</button>
+          <div style="display:flex; gap:8px;">
+            <input type="date" id="admin-cd-date" class="gb-input" style="flex:1;" />
+            <input type="text" id="admin-cd-time" class="gb-input" placeholder="Tid (t.ex. 18:00)" style="flex:1;" />
+          </div>
+          <input type="text" id="admin-cd-sub" class="gb-input" placeholder="Plats / detaljer (t.ex. Mantorp • '34 Ford Hot Rod)" />
+          <button onclick="addNewEvent()" style="width:100%; background:#fbc02d; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">➕ Lägg till i kalendern</button>
           <div class="admin-mini-list" id="admin-events-list"></div>
         </div>
 
@@ -1561,11 +1570,11 @@
     </div>
   </section>
 
-  <!-- NÄSTA GREJ I SIKTE (FLERA HÄNDELSER) & VECKANS GARAGE-OMRÖSTNING -->
+  <!-- NÄSTA GREJ I SIKTE (SYNKAD MED APPENS KALENDER) & GARAGE-OMRÖSTNING -->
   <section id="aktuellt" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">I Sikte & Garage-omröstning</h2>
-      <p class="section-lead">Håll koll på kommande träffar och race för gänget samt lägg din röst i veckans verkstadsfråga:</p>
+      <p class="section-lead">Håll koll på kommande träffar och mekkvällar från kalendern samt lägg din röst i veckans verkstadsfråga:</p>
     </div>
 
     <div class="features-grid">
@@ -1573,8 +1582,8 @@
       <div class="feature-box">
         <div>
           <h3>⏱️ Nästa grej i sikte</h3>
-          <div class="countdown-event-title" id="cd-event-title">High Chaparral Countryfestival</div>
-          <div class="countdown-event-sub" id="cd-event-sub">Kulltorp • 27 maj 2027 • Camping & jänkare</div>
+          <div class="countdown-event-title" id="cd-event-title">Hämtar från kalendern...</div>
+          <div class="countdown-event-sub" id="cd-event-sub"></div>
         </div>
 
         <div class="cd-grid">
@@ -1775,7 +1784,7 @@
     </div>
   </section>
 
-  <!-- GALLERI (Endast dynamiska bilder som laddas upp) -->
+  <!-- GALLERI -->
   <section id="galleri" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">Glimtar från Garaget</h2>
@@ -2010,76 +2019,112 @@
     }
 
     // =========================================================================
-    // NÄSTA GREJ I SIKTE (FLERA HÄNDELSER)
+    // NÄSTA GREJ I SIKTE (SYNKAD MED APPENS KALENDER 'events')
     // =========================================================================
-    let eventsList = [
-      {
-        id: 'default_hc',
-        title: 'High Chaparral Countryfestival',
-        subtitle: 'Kulltorp • 27 maj 2027 • Camping & jänkare',
-        targetIso: '2027-05-27T12:00'
-      }
-    ];
-    let primaryTargetMs = new Date('2027-05-27T12:00:00').getTime();
+    let appCalendarEvents = [];
+    let primaryTargetMs = null;
 
-    function renderEventsUI() {
-      const sorted = [...eventsList].sort((a, b) => new Date(a.targetIso).getTime() - new Date(b.targetIso).getTime());
-      const mainEv = sorted[0] || {
-        title: 'Inga inlagda träffar ännu',
-        subtitle: 'Lägg till kommande grejer i Admin-panelen',
-        targetIso: new Date().toISOString()
-      };
+    function buildEventTimestamp(ev) {
+      if (!ev || !ev.date) return NaN;
+      const timePart = (ev.time && /^\d{1,2}:\d{2}/.test(ev.time.trim()))
+        ? ev.time.trim().padStart(5, '0')
+        : '18:00';
+      return new Date(`${ev.date}T${timePart}:00`).getTime();
+    }
 
-      document.getElementById('cd-event-title').textContent = mainEv.title;
-      document.getElementById('cd-event-sub').textContent = mainEv.subtitle || '';
-      const parsed = new Date(mainEv.targetIso).getTime();
-      primaryTargetMs = isNaN(parsed) ? Date.now() : parsed;
-      updateCountdownTick();
-
-      const upcomingBox = document.getElementById('upcoming-events-list');
-      const rest = sorted.slice(1);
-      if (rest.length > 0) {
-        upcomingBox.style.display = 'flex';
-        upcomingBox.innerHTML = rest.map(ev => {
-          const dMs = new Date(ev.targetIso).getTime() - Date.now();
-          const daysLeft = Math.max(0, Math.ceil(dMs / (1000 * 60 * 60 * 24)));
-          return `
-            <div class="upcoming-item">
-              <div class="upcoming-item-info">
-                <strong>${escapeHtml(ev.title)}</strong>
-                <small>${escapeHtml(ev.subtitle || ev.targetIso.replace('T', ' '))}</small>
-              </div>
-              <span class="upcoming-days-badge">${daysLeft} dgr</span>
-            </div>
-          `;
-        }).join('');
-      } else {
-        upcomingBox.style.display = 'none';
-      }
-
-      const adminList = document.getElementById('admin-events-list');
-      if (adminList) {
-        adminList.innerHTML = sorted.map(ev => `
-          <div class="admin-mini-item">
-            <strong>${escapeHtml(ev.title)}</strong> (${escapeHtml(ev.targetIso.replace('T', ' '))})
-            ${ev.id !== 'default_hc' ? `<div class="admin-btn-row"><button class="btn-mini" style="background:#b71c1c; color:#fff;" onclick="deleteEvent('${ev.id}')">🗑 Ta bort</button></div>` : ''}
-          </div>
-        `).join('');
+    function getCategoryIcon(cat) {
+      switch (cat) {
+        case 'race': return '🏁';
+        case 'grill': return '🍔';
+        case 'stad': return '🧹';
+        default: return '🔧';
       }
     }
 
-    db.collection('website_events').orderBy('targetIso', 'asc').onSnapshot(snap => {
-      if (!snap.empty) {
-        const loaded = [];
-        snap.forEach(doc => loaded.push({ id: doc.id, ...doc.data() }));
-        eventsList = loaded;
+    function renderEventsUI() {
+      const now = Date.now();
+      const enriched = appCalendarEvents
+        .map(ev => ({ ...ev, _ts: buildEventTimestamp(ev) }))
+        .filter(ev => !isNaN(ev._ts) && ev._ts >= now - (6 * 60 * 60 * 1000)) // Behåll pågående händelser upp till 6h
+        .sort((a, b) => a._ts - b._ts);
+
+      const titleEl = document.getElementById('cd-event-title');
+      const subEl = document.getElementById('cd-event-sub');
+      const upcomingBox = document.getElementById('upcoming-events-list');
+
+      if (enriched.length === 0) {
+        titleEl.textContent = 'Inga planerade träffar i kalendern just nu';
+        subEl.textContent = 'Lägg in nästa mekkväll eller bilträff i appen så dyker den upp här!';
+        primaryTargetMs = null;
+        updateCountdownTick();
+        upcomingBox.style.display = 'none';
+      } else {
+        const mainEv = enriched[0];
+        const icon = getCategoryIcon(mainEv.category);
+        const dateLabel = `${mainEv.date}${mainEv.time ? ' kl ' + mainEv.time : ''}`;
+        const descPart = mainEv.desc ? ` • ${mainEv.desc}` : '';
+
+        titleEl.textContent = `${icon} ${mainEv.title}`;
+        subEl.textContent = `${dateLabel}${descPart}`;
+        primaryTargetMs = mainEv._ts;
+        updateCountdownTick();
+
+        const rest = enriched.slice(1);
+        if (rest.length > 0) {
+          upcomingBox.style.display = 'flex';
+          upcomingBox.innerHTML = rest.map(ev => {
+            const dMs = ev._ts - Date.now();
+            const daysLeft = Math.max(0, Math.ceil(dMs / (1000 * 60 * 60 * 24)));
+            const subInfo = `${ev.date}${ev.time ? ' kl ' + ev.time : ''}${ev.desc ? ' • ' + ev.desc : ''}`;
+            return `
+              <div class="upcoming-item">
+                <div class="upcoming-item-info">
+                  <strong>${getCategoryIcon(ev.category)} ${escapeHtml(ev.title)}</strong>
+                  <small>${escapeHtml(subInfo)}</small>
+                </div>
+                <span class="upcoming-days-badge">${daysLeft === 0 ? 'IDAG' : daysLeft + ' dgr'}</span>
+              </div>
+            `;
+          }).join('');
+        } else {
+          upcomingBox.style.display = 'none';
+        }
       }
+
+      // Admin-lista med samtliga kalenderhändelser från appen
+      const adminList = document.getElementById('admin-events-list');
+      if (adminList) {
+        const allSorted = [...appCalendarEvents].sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'));
+        adminList.innerHTML = allSorted.length > 0
+          ? allSorted.map(ev => `
+              <div class="admin-mini-item">
+                <strong>${getCategoryIcon(ev.category)} ${escapeHtml(ev.title || '')}</strong> (${escapeHtml(ev.date || '')}${ev.time ? ' ' + escapeHtml(ev.time) : ''})
+                ${ev.desc ? `<div style="color:#bbb;">${escapeHtml(ev.desc)}</div>` : ''}
+                <div class="admin-btn-row"><button class="btn-mini" style="background:#b71c1c; color:#fff;" onclick="deleteEvent('${ev.id}')">🗑 Ta bort</button></div>
+              </div>
+            `).join('')
+          : '<div style="color:#888; font-size:0.8rem;">Inga händelser i kalendern.</div>';
+      }
+    }
+
+    db.collection('events').onSnapshot(snap => {
+      const loaded = [];
+      snap.forEach(doc => loaded.push({ id: doc.id, ...doc.data() }));
+      appCalendarEvents = loaded;
       renderEventsUI();
     }, () => {
       renderEventsUI();
     });
 
     function updateCountdownTick() {
+      if (!primaryTargetMs) {
+        document.getElementById('cd-days').textContent = '00';
+        document.getElementById('cd-hours').textContent = '00';
+        document.getElementById('cd-mins').textContent = '00';
+        document.getElementById('cd-secs').textContent = '00';
+        return;
+      }
+
       const diff = Math.max(0, primaryTargetMs - Date.now());
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -2095,27 +2140,35 @@
     setInterval(updateCountdownTick, 1000);
 
     async function addNewEvent() {
+      const category = document.getElementById('admin-cd-cat').value;
       const title = document.getElementById('admin-cd-title').value.trim();
-      const subtitle = document.getElementById('admin-cd-sub').value.trim();
-      const targetIso = document.getElementById('admin-cd-date').value;
-      if (!title || !targetIso) {
-        showToast('Fyll i både rubrik och datum/tid!');
+      const date = document.getElementById('admin-cd-date').value;
+      const time = document.getElementById('admin-cd-time').value.trim();
+      const desc = document.getElementById('admin-cd-sub').value.trim();
+      if (!title || !date) {
+        showToast('Fyll i både rubrik och datum!');
         return;
       }
-      await db.collection('website_events').add({
+      await db.collection('events').add({
+        category: category,
         title: title,
-        subtitle: subtitle,
-        targetIso: targetIso,
-        createdAt: Date.now()
+        date: date,
+        time: time,
+        desc: desc,
+        attendees: [],
+        author: 'Admin (Hemsidan)',
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
       document.getElementById('admin-cd-title').value = '';
-      document.getElementById('admin-cd-sub').value = '';
       document.getElementById('admin-cd-date').value = '';
-      showToast('Ny grej tillagd i listan!');
+      document.getElementById('admin-cd-time').value = '';
+      document.getElementById('admin-cd-sub').value = '';
+      showToast('Tillagd i appens kalender och i listan!');
     }
 
     async function deleteEvent(id) {
-      await db.collection('website_events').doc(id).delete();
+      if (!confirm('Ta bort denna händelse från både hemsidan och appens kalender?')) return;
+      await db.collection('events').doc(id).delete();
       showToast('Händelse borttagen');
     }
 
@@ -2142,7 +2195,6 @@
       if (document.getElementById('bay-need-help').checked) needs.push('Extra handtag');
 
       const needsText = needs.length > 0 ? ` [${needs.join(', ')}]` : '';
-      // Formaterar 'car' så att det ser snyggt ut direkt i appens Gästmek-kort
       const formattedCarField = `${vehicle} – ${desc}${needsText} (Tel: ${phone})`;
 
       btn.disabled = true;
@@ -2194,7 +2246,6 @@
       let approvedCount = 0;
 
       docs.forEach(r => {
-        // Poster skapade direkt i appen saknar status-fält och räknas som godkända direkt
         const isApproved = r.status === 'approved' || !r.status;
         const statusBadge = isApproved
           ? '✅ Inbokad / Godkänd'
@@ -2216,7 +2267,6 @@
 
         if (isApproved) {
           approvedCount++;
-          // Dölj ev. telefonnummer i den publika listan på hemsidan
           const publicCarText = String(r.car || '').replace(/\s*\(Tel:[^)]*\)/gi, '');
           approvedHtml += `
             <div class="bay-booking-item">
