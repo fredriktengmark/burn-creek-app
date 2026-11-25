@@ -54,7 +54,7 @@
     }
     body.ratrod-mode nav {
       background: rgba(24, 14, 8, 0.96);
-      border-bottom: 2px solid #9a3412;
+      border-bottom-color: #9a3412;
     }
     body.ratrod-mode .nav-brand span { color: #d97706; }
     body.ratrod-mode .hero {
@@ -93,7 +93,8 @@
     body.ratrod-mode .gallery-item,
     body.ratrod-mode .crew-card,
     body.ratrod-mode .perk-card,
-    body.ratrod-mode .feature-box {
+    body.ratrod-mode .feature-box,
+    body.ratrod-mode .bay-card {
       background-color: #1f130c;
       border-color: #7c2d12;
       border-top-color: #d97706;
@@ -102,7 +103,8 @@
     body.ratrod-mode .timing-cell,
     body.ratrod-mode .info-chip,
     body.ratrod-mode .cd-unit,
-    body.ratrod-mode .poll-option {
+    body.ratrod-mode .poll-option,
+    body.ratrod-mode .upcoming-item {
       background: #140c08;
       border-color: #5c240d;
       border-left-color: #d97706;
@@ -171,7 +173,8 @@
     body.burnout-mode .gb-box,
     body.burnout-mode .gallery-item,
     body.burnout-mode .perk-card,
-    body.burnout-mode .feature-box {
+    body.burnout-mode .feature-box,
+    body.burnout-mode .bay-card {
       border-color: #ff3d00;
       box-shadow: 0 0 24px rgba(255, 61, 0, 0.35), inset 0 0 20px rgba(255, 61, 0, 0.14);
     }
@@ -246,12 +249,12 @@
       gap: 8px;
     }
     .nav-brand span { color: #ff6f00; }
-    .nav-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .nav-links { display: flex; gap: 15px; flex-wrap: wrap; }
     .nav-links a {
       color: #ddd;
       text-decoration: none;
       font-weight: 800;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       transition: color 0.2s;
@@ -525,13 +528,13 @@
     .btn-do-swish { background: linear-gradient(90deg, #ff5722, #ff9800); color: #111; }
 
     /* =========================================================================
-       NÄSTA GREJ I SIKTE (NEDRÄKNING) & VECKANS GARAGE-OMRÖSTNING
+       NÄSTA GREJ I SIKTE (FLERA HÄNDELSER) & VECKANS GARAGE-OMRÖSTNING
        ========================================================================= */
     .features-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 22px;
-      align-items: stretch;
+      align-items: start;
     }
     .feature-box {
       background: #141419;
@@ -540,9 +543,6 @@
       border-radius: 14px;
       padding: 24px;
       box-shadow: 0 8px 22px rgba(0,0,0,0.55);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
     }
     .feature-box.poll-box { border-top-color: #ff5722; }
     .feature-box h3 {
@@ -562,13 +562,12 @@
     .countdown-event-sub {
       font-size: 0.85rem;
       color: #a8a8b3;
-      margin: 0 0 18px;
+      margin: 0 0 16px;
     }
     .cd-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      margin-top: auto;
     }
     .cd-unit {
       background: #0a0a0d;
@@ -593,6 +592,47 @@
       color: #999;
       font-weight: 800;
       letter-spacing: 0.6px;
+    }
+
+    /* Lista för fler inlagda grejer i sikte */
+    .upcoming-list {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid #262630;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .upcoming-item {
+      background: #0c0c10;
+      border: 1px solid #25252e;
+      border-left: 3px solid #ff9800;
+      border-radius: 8px;
+      padding: 9px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .upcoming-item-info strong {
+      display: block;
+      font-size: 0.9rem;
+      color: #fff;
+    }
+    .upcoming-item-info small {
+      font-size: 0.76rem;
+      color: #999;
+    }
+    .upcoming-days-badge {
+      background: rgba(255, 111, 0, 0.16);
+      border: 1px solid rgba(255, 111, 0, 0.45);
+      color: #ffb300;
+      font-family: 'Courier New', monospace;
+      font-weight: 900;
+      font-size: 0.8rem;
+      padding: 4px 9px;
+      border-radius: 6px;
+      white-space: nowrap;
     }
 
     /* Garage-omröstning */
@@ -653,6 +693,83 @@
       display: flex;
       justify-content: space-between;
     }
+
+    /* =========================================================================
+       BOKA GÄSTMEKPLATS
+       ========================================================================= */
+    .bay-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+    .bay-card {
+      background: #141419;
+      border: 1px solid #2c2c36;
+      border-top: 4px solid #0288d1;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.5);
+    }
+    .bay-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #4fc3f7;
+    }
+    .bay-checks {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .bay-check-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: #0c0c10;
+      border: 1px solid #282832;
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.83rem;
+      font-weight: 700;
+      color: #ddd;
+      cursor: pointer;
+    }
+    .btn-bay-submit {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #0288d1, #03a9f4);
+      color: #fff;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 0.96rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      transition: transform 0.1s, opacity 0.2s;
+    }
+    .btn-bay-submit:active { transform: scale(0.98); }
+    .btn-bay-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .bay-booking-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .bay-booking-item {
+      background: #0c0c10;
+      border: 1px solid #262630;
+      border-left: 4px solid #00e676;
+      border-radius: 8px;
+      padding: 11px 14px;
+    }
+    .bay-booking-item strong { color: #fff; font-size: 0.95rem; display: block; }
+    .bay-booking-item span { font-size: 0.8rem; color: #4fc3f7; font-weight: 700; }
 
     /* Crew & Fordon med bakgrundsbild */
     .crew-grid {
@@ -998,7 +1115,7 @@
       display: block;
     }
 
-    /* Admin-knappar */
+    /* Admin-knappar & Admin-listor */
     .admin-del-btn {
       display: none;
       margin-top: 8px;
@@ -1057,6 +1174,36 @@
       padding: 16px;
     }
     .admin-subbox h4 { margin: 0 0 10px; color: #ff9800; text-transform: uppercase; font-size: 0.95rem; }
+
+    .admin-mini-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+    .admin-mini-item {
+      background: #181315;
+      border: 1px solid #3a2427;
+      border-radius: 6px;
+      padding: 8px 10px;
+      font-size: 0.82rem;
+    }
+    .admin-btn-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+    }
+    .btn-mini {
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
 
     /* Lösenords-modal */
     #login-modal {
@@ -1227,6 +1374,7 @@
     <div class="nav-links">
       <a href="#depan">Depån</a>
       <a href="#aktuellt">I Sikte & Röstning</a>
+      <a href="#mekplats">Gästmekplats</a>
       <a href="#crew">Crew & Åk</a>
       <a href="#regler">Depåregler</a>
       <a href="#galleri">Bilder</a>
@@ -1264,16 +1412,25 @@
           <button onclick="saveGarageStatus()" style="width:100%; background:#2e7d32; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Uppdatera Depåstatus</button>
         </div>
 
-        <!-- 3. Nästa grej i sikte (Nedräkning) -->
+        <!-- 3. Nästa grej i sikte (Lägg till flera händelser) -->
         <div class="admin-subbox">
-          <h4>⏱️ Nästa grej i sikte (Nedräkning)</h4>
-          <input type="text" id="admin-cd-title" class="gb-input" placeholder="Rubrik (t.ex. High Chaparral Countryfestival)" />
-          <input type="text" id="admin-cd-sub" class="gb-input" placeholder="Plats / info (t.ex. Kulltorp • Camping & V8)" />
+          <h4>⏱️ Nästa grej i sikte (Lägg till händelse)</h4>
+          <input type="text" id="admin-cd-title" class="gb-input" placeholder="Rubrik (t.ex. Street Week 2027)" />
+          <input type="text" id="admin-cd-sub" class="gb-input" placeholder="Plats / info (t.ex. Mantorp • '34 Ford Hot Rod)" />
           <input type="datetime-local" id="admin-cd-date" class="gb-input" />
-          <button onclick="saveCountdownSettings()" style="width:100%; background:#fbc02d; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Spara Nedräkning</button>
+          <button onclick="addNewEvent()" style="width:100%; background:#fbc02d; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">➕ Lägg till i listan</button>
+          <div class="admin-mini-list" id="admin-events-list"></div>
         </div>
 
-        <!-- 4. Veckans Garage-omröstning -->
+        <!-- 4. Förfrågningar om Gästmekplats -->
+        <div class="admin-subbox">
+          <h4>🔧 Inkomna Gästmekplats-förfrågningar</h4>
+          <div class="admin-mini-list" id="admin-bay-requests">
+            <div style="color:#888; font-size:0.8rem;">Inga förfrågningar ännu.</div>
+          </div>
+        </div>
+
+        <!-- 5. Veckans Garage-omröstning -->
         <div class="admin-subbox">
           <h4>🗳️ Veckans Garage-omröstning</h4>
           <input type="text" id="admin-poll-q" class="gb-input" placeholder="Fråga (t.ex. Ford vs. GM i garaget?)" />
@@ -1283,7 +1440,7 @@
           <button onclick="saveNewPoll()" style="width:100%; background:#ff5722; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">🚀 Starta ny omröstning (nollställer röster)</button>
         </div>
 
-        <!-- 5. Lägg till bild i galleriet direkt -->
+        <!-- 6. Lägg till bild i galleriet direkt -->
         <div class="admin-subbox">
           <h4>📸 Lägg till bild i "Glimtar från Garaget"</h4>
           <input type="text" id="admin-gal-caption" class="gb-input" placeholder="Bildtext (t.ex. Fredagsmek på Rancheron)" />
@@ -1291,7 +1448,7 @@
           <button onclick="uploadGalleryPhoto()" id="admin-gal-btn" style="width:100%; background:#ff6f00; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">⬆️ Ladda upp till Galleriet</button>
         </div>
 
-        <!-- 6. Redigera Crew-medlem (Text + Bild) -->
+        <!-- 7. Redigera Crew-medlem (Text + Bild) -->
         <div class="admin-subbox">
           <h4>🏎️ Redigera Crew & Fordon</h4>
           <select id="admin-crew-select" class="gb-select" onchange="loadCrewIntoAdminForm()">
@@ -1344,6 +1501,7 @@
 
     <div class="hero-btns">
       <a href="#crew" class="btn btn-primary"><span>🔥 Se Crewet & Fordonen</span></a>
+      <a href="#mekplats" class="btn btn-secondary"><span>🔧 Boka Gästmekplats</span></a>
       <a href="#gastbok" class="btn btn-secondary"><span>✍️ Signera Gästboken</span></a>
     </div>
   </header>
@@ -1403,15 +1561,15 @@
     </div>
   </section>
 
-  <!-- NÄSTA GREJ I SIKTE & VECKANS GARAGE-OMRÖSTNING -->
+  <!-- NÄSTA GREJ I SIKTE (FLERA HÄNDELSER) & VECKANS GARAGE-OMRÖSTNING -->
   <section id="aktuellt" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">I Sikte & Garage-omröstning</h2>
-      <p class="section-lead">Håll koll på nästa mål för gänget och lägg din röst i veckans verkstadsfråga:</p>
+      <p class="section-lead">Håll koll på kommande träffar och race för gänget samt lägg din röst i veckans verkstadsfråga:</p>
     </div>
 
     <div class="features-grid">
-      <!-- Nästa grej i sikte -->
+      <!-- Nästa grej i sikte (huvudnedräkning + lista på kommande grejer) -->
       <div class="feature-box">
         <div>
           <h3>⏱️ Nästa grej i sikte</h3>
@@ -1437,6 +1595,8 @@
             <span>Sekunder</span>
           </div>
         </div>
+
+        <div class="upcoming-list" id="upcoming-events-list" style="display:none;"></div>
       </div>
 
       <!-- Veckans Garage-omröstning -->
@@ -1449,6 +1609,67 @@
         <div class="poll-footer-note">
           <span id="poll-status-hint">Klicka på ett alternativ för att rösta</span>
           <span id="poll-total-votes">0 röster</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOKA GÄSTMEKPLATS -->
+  <section id="mekplats" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">🔧 Boka Gästmekplats</h2>
+      <p class="section-lead">
+        Behöver du komma in under tak i Brännehylte en dag eller kväll för att meka, svetsa eller byta olja? 
+        Skicka en förfrågan nedan så hör vi av oss!
+      </p>
+    </div>
+
+    <div class="bay-layout">
+      <!-- Bokningsformulär -->
+      <div class="bay-card">
+        <h3>Skicka bokningsförfrågan</h3>
+        <input type="text" id="bay-name" class="gb-input" maxlength="50" placeholder="Ditt namn *" />
+        <input type="tel" id="bay-phone" class="gb-input" maxlength="30" placeholder="Telefonnummer (så vi kan svara på SMS/samtal) *" />
+        <input type="text" id="bay-vehicle" class="gb-input" maxlength="60" placeholder="Fordon (t.ex. Cheva Impala -65, Volvo 740) *" />
+        <input type="date" id="bay-date" class="gb-input" />
+
+        <div class="bay-checks">
+          <label class="bay-check-item">
+            <input type="checkbox" id="bay-need-jack" />
+            Domkraft & pallbockar
+          </label>
+          <label class="bay-check-item">
+            <input type="checkbox" id="bay-need-weld" />
+            Svets / slip
+          </label>
+          <label class="bay-check-item">
+            <input type="checkbox" id="bay-need-air" />
+            Tryckluft & el
+          </label>
+          <label class="bay-check-item">
+            <input type="checkbox" id="bay-need-help" />
+            Behöver ett extra handtag
+          </label>
+        </div>
+
+        <textarea id="bay-desc" class="gb-textarea" maxlength="260" placeholder="Vad ska du göra och ungefär hur lång tid räknar du med? *"></textarea>
+
+        <button class="btn-bay-submit" id="bay-submit-btn" onclick="submitBayRequest()">📅 Skicka förfrågan till Crewet</button>
+      </div>
+
+      <!-- Villkor & Godkända bokningar -->
+      <div class="bay-card" style="border-top-color: #fbc02d;">
+        <h3 style="color: #fbc02d;">📋 Så funkar gästmekplatsen</h3>
+        <ul style="margin: 0; padding-left: 18px; color: #d4d4dc; font-size: 0.92rem; line-height: 1.65;">
+          <li><strong>Alltid med en medlem på plats:</strong> Gästmek sker när någon ur Burn Creek Crew är i lokalen.</li>
+          <li><strong>Eget ansvar:</strong> Allt skruvande sker på egen risk – vi hjälps åt att hålla säkerheten uppe.</li>
+          <li><strong>Städa efter dig:</strong> Sopa golvet, torka upp spill och lägg tillbaka lånade grejer innan du rullar ut.</li>
+          <li><strong>Bidrag till depåkassan:</strong> En frivillig slant via Fika-Swish för el, värme och förbrukningsmaterial uppskattas alltid!</li>
+        </ul>
+
+        <div id="approved-bay-section" style="margin-top: 18px; display: none;">
+          <h4 style="margin: 0 0 8px; font-size: 0.9rem; text-transform: uppercase; color: #00e676;">✅ Kommande inbokade gästmek</h4>
+          <div class="bay-booking-list" id="approved-bay-list"></div>
         </div>
       </div>
     </div>
@@ -1772,41 +1993,79 @@
     }
 
     // =========================================================================
-    // NÄSTA GREJ I SIKTE (NEDRÄKNING)
+    // NÄSTA GREJ I SIKTE (FLERA HÄNDELSER)
     // =========================================================================
-    let countdownTargetMs = new Date('2027-05-27T12:00:00').getTime();
-
-    db.collection('website_settings').doc('countdown').onSnapshot(doc => {
-      const titleEl = document.getElementById('cd-event-title');
-      const subEl = document.getElementById('cd-event-sub');
-      const adminTitle = document.getElementById('admin-cd-title');
-      const adminSub = document.getElementById('admin-cd-sub');
-      const adminDate = document.getElementById('admin-cd-date');
-
-      if (doc.exists) {
-        const d = doc.data();
-        if (d.title) {
-          titleEl.textContent = d.title;
-          if (adminTitle) adminTitle.value = d.title;
-        }
-        if (d.subtitle) {
-          subEl.textContent = d.subtitle;
-          if (adminSub) adminSub.value = d.subtitle;
-        }
-        if (d.targetIso) {
-          const parsed = new Date(d.targetIso).getTime();
-          if (!isNaN(parsed)) countdownTargetMs = parsed;
-          if (adminDate) adminDate.value = d.targetIso;
-        }
-      } else {
-        if (adminTitle) adminTitle.value = titleEl.textContent;
-        if (adminSub) adminSub.value = subEl.textContent;
-        if (adminDate) adminDate.value = '2027-05-27T12:00';
+    let eventsList = [
+      {
+        id: 'default_hc',
+        title: 'High Chaparral Countryfestival',
+        subtitle: 'Kulltorp • 27 maj 2027 • Camping & jänkare',
+        targetIso: '2027-05-27T12:00'
       }
+    ];
+    let primaryTargetMs = new Date('2027-05-27T12:00:00').getTime();
+
+    function renderEventsUI() {
+      const sorted = [...eventsList].sort((a, b) => new Date(a.targetIso).getTime() - new Date(b.targetIso).getTime());
+      const mainEv = sorted[0] || {
+        title: 'Inga inlagda träffar ännu',
+        subtitle: 'Lägg till kommande grejer i Admin-panelen',
+        targetIso: new Date().toISOString()
+      };
+
+      document.getElementById('cd-event-title').textContent = mainEv.title;
+      document.getElementById('cd-event-sub').textContent = mainEv.subtitle || '';
+      const parsed = new Date(mainEv.targetIso).getTime();
+      primaryTargetMs = isNaN(parsed) ? Date.now() : parsed;
+      updateCountdownTick();
+
+      // Övriga kommande grejer i sikte
+      const upcomingBox = document.getElementById('upcoming-events-list');
+      const rest = sorted.slice(1);
+      if (rest.length > 0) {
+        upcomingBox.style.display = 'flex';
+        upcomingBox.innerHTML = rest.map(ev => {
+          const dMs = new Date(ev.targetIso).getTime() - Date.now();
+          const daysLeft = Math.max(0, Math.ceil(dMs / (1000 * 60 * 60 * 24)));
+          return `
+            <div class="upcoming-item">
+              <div class="upcoming-item-info">
+                <strong>${escapeHtml(ev.title)}</strong>
+                <small>${escapeHtml(ev.subtitle || ev.targetIso.replace('T', ' '))}</small>
+              </div>
+              <span class="upcoming-days-badge">${daysLeft} dgr</span>
+            </div>
+          `;
+        }).join('');
+      } else {
+        upcomingBox.style.display = 'none';
+      }
+
+      // Admin-lista för att ta bort händelser
+      const adminList = document.getElementById('admin-events-list');
+      if (adminList) {
+        adminList.innerHTML = sorted.map(ev => `
+          <div class="admin-mini-item">
+            <strong>${escapeHtml(ev.title)}</strong> (${escapeHtml(ev.targetIso.replace('T', ' '))})
+            ${ev.id !== 'default_hc' ? `<div class="admin-btn-row"><button class="btn-mini" style="background:#b71c1c; color:#fff;" onclick="deleteEvent('${ev.id}')">🗑 Ta bort</button></div>` : ''}
+          </div>
+        `).join('');
+      }
+    }
+
+    db.collection('website_events').orderBy('targetIso', 'asc').onSnapshot(snap => {
+      if (!snap.empty) {
+        const loaded = [];
+        snap.forEach(doc => loaded.push({ id: doc.id, ...doc.data() }));
+        eventsList = loaded;
+      }
+      renderEventsUI();
+    }, () => {
+      renderEventsUI();
     });
 
     function updateCountdownTick() {
-      const diff = Math.max(0, countdownTargetMs - Date.now());
+      const diff = Math.max(0, primaryTargetMs - Date.now());
       const days = Math.floor(diff / (1000 * 60 * 60 * 24));
       const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
       const mins = Math.floor((diff / (1000 * 60)) % 60);
@@ -1820,7 +2079,7 @@
     updateCountdownTick();
     setInterval(updateCountdownTick, 1000);
 
-    async function saveCountdownSettings() {
+    async function addNewEvent() {
       const title = document.getElementById('admin-cd-title').value.trim();
       const subtitle = document.getElementById('admin-cd-sub').value.trim();
       const targetIso = document.getElementById('admin-cd-date').value;
@@ -1828,12 +2087,143 @@
         showToast('Fyll i både rubrik och datum/tid!');
         return;
       }
-      await db.collection('website_settings').doc('countdown').set({
+      await db.collection('website_events').add({
         title: title,
         subtitle: subtitle,
-        targetIso: targetIso
+        targetIso: targetIso,
+        createdAt: Date.now()
       });
-      showToast('Nedräkning uppdaterad!');
+      document.getElementById('admin-cd-title').value = '';
+      document.getElementById('admin-cd-sub').value = '';
+      document.getElementById('admin-cd-date').value = '';
+      showToast('Ny grej tillagd i listan!');
+    }
+
+    async function deleteEvent(id) {
+      await db.collection('website_events').doc(id).delete();
+      showToast('Händelse borttagen');
+    }
+
+    // =========================================================================
+    // BOKA GÄSTMEKPLATS
+    // =========================================================================
+    async function submitBayRequest() {
+      const name = document.getElementById('bay-name').value.trim();
+      const phone = document.getElementById('bay-phone').value.trim();
+      const vehicle = document.getElementById('bay-vehicle').value.trim();
+      const date = document.getElementById('bay-date').value;
+      const desc = document.getElementById('bay-desc').value.trim();
+      const btn = document.getElementById('bay-submit-btn');
+
+      if (!name || !phone || !vehicle || !desc) {
+        showToast('Fyll i namn, telefon, fordon och beskrivning!');
+        return;
+      }
+
+      const needs = [];
+      if (document.getElementById('bay-need-jack').checked) needs.push('Domkraft/pallbockar');
+      if (document.getElementById('bay-need-weld').checked) needs.push('Svets/slip');
+      if (document.getElementById('bay-need-air').checked) needs.push('Tryckluft/el');
+      if (document.getElementById('bay-need-help').checked) needs.push('Extra handtag');
+
+      btn.disabled = true;
+      btn.textContent = 'Skickar förfrågan...';
+
+      try {
+        await db.collection('guest_bay_requests').add({
+          name: name,
+          phone: phone,
+          vehicle: vehicle,
+          date: date || 'Flexibelt datum',
+          needs: needs,
+          description: desc,
+          status: 'pending',
+          timestamp: Date.now()
+        });
+
+        document.getElementById('bay-name').value = '';
+        document.getElementById('bay-phone').value = '';
+        document.getElementById('bay-vehicle').value = '';
+        document.getElementById('bay-date').value = '';
+        document.getElementById('bay-desc').value = '';
+        document.getElementById('bay-need-jack').checked = false;
+        document.getElementById('bay-need-weld').checked = false;
+        document.getElementById('bay-need-air').checked = false;
+        document.getElementById('bay-need-help').checked = false;
+
+        showToast('Förfrågan skickad! Vi hör av oss inom kort.');
+      } catch (err) {
+        console.error(err);
+        showToast('Kunde inte skicka – kontrollera Firestore Rules!');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '📅 Skicka förfrågan till Crewet';
+      }
+    }
+
+    db.collection('guest_bay_requests').orderBy('timestamp', 'desc').onSnapshot(snap => {
+      const adminContainer = document.getElementById('admin-bay-requests');
+      const publicSection = document.getElementById('approved-bay-section');
+      const publicList = document.getElementById('approved-bay-list');
+
+      let adminHtml = '';
+      let approvedHtml = '';
+      let approvedCount = 0;
+
+      snap.forEach(doc => {
+        const r = doc.data();
+        const statusBadge = r.status === 'approved'
+          ? '✅ Godkänd'
+          : (r.status === 'rejected' ? '❌ Nekad' : '⏳ Väntar på svar');
+
+        const needsStr = Array.isArray(r.needs) && r.needs.length > 0 ? r.needs.join(', ') : 'Egna grejer';
+
+        adminHtml += `
+          <div class="admin-mini-item">
+            <strong>${escapeHtml(r.name)} (${escapeHtml(r.phone)})</strong>
+            <div>🚗 ${escapeHtml(r.vehicle)} • 📅 ${escapeHtml(r.date || '')}</div>
+            <div style="color:#bbb;">🔧 ${escapeHtml(needsStr)}</div>
+            <div style="color:#ddd; margin-top:3px;">"${escapeHtml(r.description)}"</div>
+            <div style="margin-top:4px; font-weight:bold; color:#ff9800;">Status: ${statusBadge}</div>
+            <div class="admin-btn-row">
+              <button class="btn-mini" style="background:#2e7d32; color:#fff;" onclick="updateBayStatus('${doc.id}', 'approved')">✅ Godkänn</button>
+              <button class="btn-mini" style="background:#ef6c00; color:#fff;" onclick="updateBayStatus('${doc.id}', 'rejected')">❌ Neka</button>
+              <button class="btn-mini" style="background:#b71c1c; color:#fff;" onclick="deleteBayRequest('${doc.id}')">🗑 Radera</button>
+            </div>
+          </div>
+        `;
+
+        if (r.status === 'approved') {
+          approvedCount++;
+          approvedHtml += `
+            <div class="bay-booking-item">
+              <strong>📅 ${escapeHtml(r.date || 'Inbokat')} – ${escapeHtml(r.name)}</strong>
+              <span>🚗 ${escapeHtml(r.vehicle)}</span>
+            </div>
+          `;
+        }
+      });
+
+      if (adminContainer) {
+        adminContainer.innerHTML = adminHtml || '<div style="color:#888; font-size:0.8rem;">Inga förfrågningar ännu.</div>';
+      }
+      if (approvedCount > 0) {
+        publicSection.style.display = 'block';
+        publicList.innerHTML = approvedHtml;
+      } else {
+        publicSection.style.display = 'none';
+      }
+    });
+
+    async function updateBayStatus(id, newStatus) {
+      await db.collection('guest_bay_requests').doc(id).update({ status: newStatus });
+      showToast(newStatus === 'approved' ? 'Bokning godkänd!' : 'Bokning nekad');
+    }
+
+    async function deleteBayRequest(id) {
+      if (!confirm('Ta bort denna förfrågan?')) return;
+      await db.collection('guest_bay_requests').doc(id).delete();
+      showToast('Förfrågan raderad');
     }
 
     // =========================================================================
