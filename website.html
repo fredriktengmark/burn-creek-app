@@ -594,7 +594,6 @@
       letter-spacing: 0.6px;
     }
 
-    /* Lista för fler inlagda grejer i sikte */
     .upcoming-list {
       margin-top: 16px;
       padding-top: 14px;
@@ -695,7 +694,7 @@
     }
 
     /* =========================================================================
-       BOKA GÄSTMEKPLATS
+       BOKA GÄSTMEKPLATS (SPEGLAD MED APPENS 'guests'-SAMLING)
        ========================================================================= */
     .bay-layout {
       display: grid;
@@ -759,7 +758,7 @@
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 14px;
+      margin-top: 10px;
     }
     .bay-booking-item {
       background: #0c0c10;
@@ -769,7 +768,8 @@
       padding: 11px 14px;
     }
     .bay-booking-item strong { color: #fff; font-size: 0.95rem; display: block; }
-    .bay-booking-item span { font-size: 0.8rem; color: #4fc3f7; font-weight: 700; }
+    .bay-booking-item span { font-size: 0.82rem; color: #4fc3f7; font-weight: 700; display: block; }
+    .bay-booking-item small { font-size: 0.75rem; color: #999; }
 
     /* Crew & Fordon med bakgrundsbild */
     .crew-grid {
@@ -1422,11 +1422,11 @@
           <div class="admin-mini-list" id="admin-events-list"></div>
         </div>
 
-        <!-- 4. Förfrågningar om Gästmekplats -->
+        <!-- 4. Gästmek (Synkad med appens 'guests'-samling) -->
         <div class="admin-subbox">
-          <h4>🔧 Inkomna Gästmekplats-förfrågningar</h4>
+          <h4>🔧 Gästmek-förfrågningar & Bokningar</h4>
           <div class="admin-mini-list" id="admin-bay-requests">
-            <div style="color:#888; font-size:0.8rem;">Inga förfrågningar ännu.</div>
+            <div style="color:#888; font-size:0.8rem;">Inga gästmek inlagda ännu.</div>
           </div>
         </div>
 
@@ -1569,7 +1569,7 @@
     </div>
 
     <div class="features-grid">
-      <!-- Nästa grej i sikte (huvudnedräkning + lista på kommande grejer) -->
+      <!-- Nästa grej i sikte -->
       <div class="feature-box">
         <div>
           <h3>⏱️ Nästa grej i sikte</h3>
@@ -1614,13 +1614,13 @@
     </div>
   </section>
 
-  <!-- BOKA GÄSTMEKPLATS -->
+  <!-- BOKA GÄSTMEKPLATS (SPEGLAD MOT APPENS 'guests') -->
   <section id="mekplats" class="section" style="padding-top: 10px;">
     <div class="section-header">
       <h2 class="section-title">🔧 Boka Gästmekplats</h2>
       <p class="section-lead">
         Behöver du komma in under tak i Brännehylte en dag eller kväll för att meka, svetsa eller byta olja? 
-        Skicka en förfrågan nedan så hör vi av oss!
+        Skicka en förfrågan nedan så syns den direkt i vår app och vi hör av oss!
       </p>
     </div>
 
@@ -1657,18 +1657,18 @@
         <button class="btn-bay-submit" id="bay-submit-btn" onclick="submitBayRequest()">📅 Skicka förfrågan till Crewet</button>
       </div>
 
-      <!-- Villkor & Godkända bokningar -->
+      <!-- Villkor & Inbokade gästmek från appen -->
       <div class="bay-card" style="border-top-color: #fbc02d;">
         <h3 style="color: #fbc02d;">📋 Så funkar gästmekplatsen</h3>
         <ul style="margin: 0; padding-left: 18px; color: #d4d4dc; font-size: 0.92rem; line-height: 1.65;">
+          <li><strong>Kostnad: 150 kr per dag:</strong> Betalas via Fika-Swish (079-347 53 52) – går rakt in i verkstadskassan för el, värme och förbrukning.</li>
           <li><strong>Alltid med en medlem på plats:</strong> Gästmek sker när någon ur Burn Creek Crew är i lokalen.</li>
           <li><strong>Eget ansvar:</strong> Allt skruvande sker på egen risk – vi hjälps åt att hålla säkerheten uppe.</li>
-          <li><strong>Städa efter dig:</strong> Sopa golvet, torka upp spill och lägg tillbaka lånade grejer innan du rullar ut.</li>
-          <li><strong>Bidrag till depåkassan:</strong> En frivillig slant via Fika-Swish för el, värme och förbrukningsmaterial uppskattas alltid!</li>
+          <li><strong>Städa efter dig:</strong> Sopa golvet, torka upp spill och lägg tillbaka lånade grejer innan du rullar ut (annars utgår straffavgift på en platta öl eller hembakat!).</li>
         </ul>
 
         <div id="approved-bay-section" style="margin-top: 18px; display: none;">
-          <h4 style="margin: 0 0 8px; font-size: 0.9rem; text-transform: uppercase; color: #00e676;">✅ Kommande inbokade gästmek</h4>
+          <h4 style="margin: 0 0 8px; font-size: 0.9rem; text-transform: uppercase; color: #00e676;">✅ Inbokade gästmek i kalendern</h4>
           <div class="bay-booking-list" id="approved-bay-list"></div>
         </div>
       </div>
@@ -1952,32 +1952,49 @@
       }, 300);
     }
 
-    // --- LIVE DEPÅSTATUS ---
+    // --- LIVE DEPÅSTATUS (Speglar appens 'active_members' + manuell status) ---
     const statusPill = document.getElementById('live-status-pill');
     const statusText = document.getElementById('live-status-text');
+    let appCheckedInNames = [];
+    let manualGarageStatus = { isOpen: false, checkedIn: [] };
 
-    db.collection('garage_status').doc('current').onSnapshot(doc => {
-      const data = doc.exists ? doc.data() : null;
-      const isOpen = Boolean(data && (data.isOpen === true || (Array.isArray(data.checkedIn) && data.checkedIn.length > 0)));
+    function renderLiveGarageStatus() {
+      const combined = Array.from(new Set([...appCheckedInNames, ...(manualGarageStatus.checkedIn || [])]));
+      const isOpen = manualGarageStatus.isOpen === true || combined.length > 0;
 
       if (isOpen) {
-        const who = Array.isArray(data.checkedIn) && data.checkedIn.length > 0
-          ? ` (${data.checkedIn.join(', ')})`
-          : '';
+        const who = combined.length > 0 ? ` (${combined.join(', ')})` : '';
         statusPill.classList.add('is-open');
         statusText.textContent = `LIV I DEPÅN – Det skruvas i Brännehylte${who}!`;
       } else {
         statusPill.classList.remove('is-open');
         statusText.textContent = 'SLÄCKT I DEPÅN JUST NU – Ingen incheckad i Brännehylte';
       }
+    }
+
+    db.collection('active_members').onSnapshot(snap => {
+      const names = [];
+      snap.forEach(doc => {
+        if (doc.data().name) names.push(doc.data().name);
+      });
+      appCheckedInNames = names;
+      renderLiveGarageStatus();
+    }, () => {});
+
+    db.collection('garage_status').doc('current').onSnapshot(doc => {
+      const data = doc.exists ? doc.data() : { isOpen: false, checkedIn: [] };
+      manualGarageStatus = {
+        isOpen: Boolean(data.isOpen),
+        checkedIn: Array.isArray(data.checkedIn) ? data.checkedIn : []
+      };
+      renderLiveGarageStatus();
 
       const openChk = document.getElementById('admin-status-open');
       const whoInp = document.getElementById('admin-status-who');
-      if (openChk && data) openChk.checked = Boolean(data.isOpen);
-      if (whoInp && data && Array.isArray(data.checkedIn)) whoInp.value = data.checkedIn.join(', ');
+      if (openChk) openChk.checked = manualGarageStatus.isOpen;
+      if (whoInp) whoInp.value = manualGarageStatus.checkedIn.join(', ');
     }, () => {
-      statusPill.classList.remove('is-open');
-      statusText.textContent = 'DEPÅN I BRÄNNEHYLTE • EST. 2026';
+      renderLiveGarageStatus();
     });
 
     async function saveGarageStatus() {
@@ -2019,7 +2036,6 @@
       primaryTargetMs = isNaN(parsed) ? Date.now() : parsed;
       updateCountdownTick();
 
-      // Övriga kommande grejer i sikte
       const upcomingBox = document.getElementById('upcoming-events-list');
       const rest = sorted.slice(1);
       if (rest.length > 0) {
@@ -2041,7 +2057,6 @@
         upcomingBox.style.display = 'none';
       }
 
-      // Admin-lista för att ta bort händelser
       const adminList = document.getElementById('admin-events-list');
       if (adminList) {
         adminList.innerHTML = sorted.map(ev => `
@@ -2105,7 +2120,7 @@
     }
 
     // =========================================================================
-    // BOKA GÄSTMEKPLATS
+    // BOKA GÄSTMEKPLATS (SPEGLAR APPENS BEFINTLIGA 'guests'-SAMLING)
     // =========================================================================
     async function submitBayRequest() {
       const name = document.getElementById('bay-name').value.trim();
@@ -2126,19 +2141,23 @@
       if (document.getElementById('bay-need-air').checked) needs.push('Tryckluft/el');
       if (document.getElementById('bay-need-help').checked) needs.push('Extra handtag');
 
+      const needsText = needs.length > 0 ? ` [${needs.join(', ')}]` : '';
+      // Formaterar 'car' så att det ser snyggt ut direkt i appens Gästmek-kort
+      const formattedCarField = `${vehicle} – ${desc}${needsText} (Tel: ${phone})`;
+
       btn.disabled = true;
       btn.textContent = 'Skickar förfrågan...';
 
       try {
-        await db.collection('guest_bay_requests').add({
+        await db.collection('guests').add({
           name: name,
-          phone: phone,
-          vehicle: vehicle,
+          car: formattedCarField,
           date: date || 'Flexibelt datum',
-          needs: needs,
-          description: desc,
+          host: 'Hemsidan (Förfrågan)',
+          phone: phone,
           status: 'pending',
-          timestamp: Date.now()
+          source: 'website',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         document.getElementById('bay-name').value = '';
@@ -2151,61 +2170,66 @@
         document.getElementById('bay-need-air').checked = false;
         document.getElementById('bay-need-help').checked = false;
 
-        showToast('Förfrågan skickad! Vi hör av oss inom kort.');
+        showToast('Förfrågan skickad! Syns nu i appen och vi hör av oss.');
       } catch (err) {
         console.error(err);
-        showToast('Kunde inte skicka – kontrollera Firestore Rules!');
+        showToast('Kunde inte skicka – kontrollera Firestore Rules för guests!');
       } finally {
         btn.disabled = false;
         btn.textContent = '📅 Skicka förfrågan till Crewet';
       }
     }
 
-    db.collection('guest_bay_requests').orderBy('timestamp', 'desc').onSnapshot(snap => {
+    db.collection('guests').onSnapshot(snap => {
       const adminContainer = document.getElementById('admin-bay-requests');
       const publicSection = document.getElementById('approved-bay-section');
       const publicList = document.getElementById('approved-bay-list');
+
+      const docs = [];
+      snap.forEach(doc => docs.push({ id: doc.id, ...doc.data() }));
+      docs.sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
 
       let adminHtml = '';
       let approvedHtml = '';
       let approvedCount = 0;
 
-      snap.forEach(doc => {
-        const r = doc.data();
-        const statusBadge = r.status === 'approved'
-          ? '✅ Godkänd'
-          : (r.status === 'rejected' ? '❌ Nekad' : '⏳ Väntar på svar');
-
-        const needsStr = Array.isArray(r.needs) && r.needs.length > 0 ? r.needs.join(', ') : 'Egna grejer';
+      docs.forEach(r => {
+        // Poster skapade direkt i appen saknar status-fält och räknas som godkända direkt
+        const isApproved = r.status === 'approved' || !r.status;
+        const statusBadge = isApproved
+          ? '✅ Inbokad / Godkänd'
+          : (r.status === 'rejected' ? '❌ Nekad' : '⏳ Förfrågan från hemsidan');
 
         adminHtml += `
           <div class="admin-mini-item">
-            <strong>${escapeHtml(r.name)} (${escapeHtml(r.phone)})</strong>
-            <div>🚗 ${escapeHtml(r.vehicle)} • 📅 ${escapeHtml(r.date || '')}</div>
-            <div style="color:#bbb;">🔧 ${escapeHtml(needsStr)}</div>
-            <div style="color:#ddd; margin-top:3px;">"${escapeHtml(r.description)}"</div>
+            <strong>${escapeHtml(r.name || 'Gäst')}</strong> • 📅 ${escapeHtml(r.date || 'Ej satt')}
+            <div style="color:#ddd; margin-top:2px;">🚗 ${escapeHtml(r.car || '')}</div>
+            <div style="font-size:0.75rem; color:#aaa;">Värd/Källa: ${escapeHtml(r.host || '')}</div>
             <div style="margin-top:4px; font-weight:bold; color:#ff9800;">Status: ${statusBadge}</div>
             <div class="admin-btn-row">
-              <button class="btn-mini" style="background:#2e7d32; color:#fff;" onclick="updateBayStatus('${doc.id}', 'approved')">✅ Godkänn</button>
-              <button class="btn-mini" style="background:#ef6c00; color:#fff;" onclick="updateBayStatus('${doc.id}', 'rejected')">❌ Neka</button>
-              <button class="btn-mini" style="background:#b71c1c; color:#fff;" onclick="deleteBayRequest('${doc.id}')">🗑 Radera</button>
+              ${!isApproved ? `<button class="btn-mini" style="background:#2e7d32; color:#fff;" onclick="updateBayStatus('${r.id}', 'approved')">✅ Godkänn</button>` : ''}
+              ${r.status !== 'rejected' ? `<button class="btn-mini" style="background:#ef6c00; color:#fff;" onclick="updateBayStatus('${r.id}', 'rejected')">❌ Neka</button>` : ''}
+              <button class="btn-mini" style="background:#b71c1c; color:#fff;" onclick="deleteBayRequest('${r.id}')">🗑 Radera</button>
             </div>
           </div>
         `;
 
-        if (r.status === 'approved') {
+        if (isApproved) {
           approvedCount++;
+          // Dölj ev. telefonnummer i den publika listan på hemsidan
+          const publicCarText = String(r.car || '').replace(/\s*\(Tel:[^)]*\)/gi, '');
           approvedHtml += `
             <div class="bay-booking-item">
-              <strong>📅 ${escapeHtml(r.date || 'Inbokat')} – ${escapeHtml(r.name)}</strong>
-              <span>🚗 ${escapeHtml(r.vehicle)}</span>
+              <strong>📅 ${escapeHtml(r.date || 'Inbokat')} – ${escapeHtml(r.name || 'Gäst')}</strong>
+              <span>🚗 ${escapeHtml(publicCarText)}</span>
+              ${r.host && r.host !== 'Hemsidan (Förfrågan)' ? `<small>Värd: ${escapeHtml(r.host)}</small>` : ''}
             </div>
           `;
         }
       });
 
       if (adminContainer) {
-        adminContainer.innerHTML = adminHtml || '<div style="color:#888; font-size:0.8rem;">Inga förfrågningar ännu.</div>';
+        adminContainer.innerHTML = adminHtml || '<div style="color:#888; font-size:0.8rem;">Inga gästmek inlagda ännu.</div>';
       }
       if (approvedCount > 0) {
         publicSection.style.display = 'block';
@@ -2216,14 +2240,14 @@
     });
 
     async function updateBayStatus(id, newStatus) {
-      await db.collection('guest_bay_requests').doc(id).update({ status: newStatus });
-      showToast(newStatus === 'approved' ? 'Bokning godkänd!' : 'Bokning nekad');
+      await db.collection('guests').doc(id).update({ status: newStatus });
+      showToast(newStatus === 'approved' ? 'Gästmek godkänd!' : 'Förfrågan nekad');
     }
 
     async function deleteBayRequest(id) {
-      if (!confirm('Ta bort denna förfrågan?')) return;
-      await db.collection('guest_bay_requests').doc(id).delete();
-      showToast('Förfrågan raderad');
+      if (!confirm('Ta bort denna gästmek från både hemsidan och appen?')) return;
+      await db.collection('guests').doc(id).delete();
+      showToast('Gästmek borttagen');
     }
 
     // =========================================================================
