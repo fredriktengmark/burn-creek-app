@@ -92,28 +92,32 @@
     body.ratrod-mode .gb-box,
     body.ratrod-mode .gallery-item,
     body.ratrod-mode .crew-card,
-    body.ratrod-mode .perk-card {
+    body.ratrod-mode .perk-card,
+    body.ratrod-mode .feature-box {
       background-color: #1f130c;
       border-color: #7c2d12;
       border-top-color: #d97706;
       box-shadow: inset 0 0 26px rgba(12, 6, 3, 0.85), 0 10px 24px rgba(0, 0, 0, 0.8);
     }
     body.ratrod-mode .timing-cell,
-    body.ratrod-mode .info-chip {
+    body.ratrod-mode .info-chip,
+    body.ratrod-mode .cd-unit,
+    body.ratrod-mode .poll-option {
       background: #140c08;
       border-color: #5c240d;
       border-left-color: #d97706;
     }
-    body.ratrod-mode .timing-cell strong {
+    body.ratrod-mode .timing-cell strong,
+    body.ratrod-mode .cd-unit strong {
       color: #ea580c;
       text-shadow: 0 0 12px rgba(234, 88, 12, 0.45);
     }
     body.ratrod-mode .ride-badge,
     body.ratrod-mode .btn-primary,
-    body.ratrod-mode .btn-gb-submit {
+    body.ratrod-mode .btn-gb-submit,
+    body.ratrod-mode .poll-bar-fill {
       background: linear-gradient(90deg, #7c2d12, #b45309);
       color: #fef3c7;
-      border: 1px solid #f59e0b;
     }
     body.ratrod-mode .btn-secondary {
       background: #1a0f09;
@@ -166,13 +170,15 @@
     body.burnout-mode .rules-box,
     body.burnout-mode .gb-box,
     body.burnout-mode .gallery-item,
-    body.burnout-mode .perk-card {
+    body.burnout-mode .perk-card,
+    body.burnout-mode .feature-box {
       border-color: #ff3d00;
       box-shadow: 0 0 24px rgba(255, 61, 0, 0.35), inset 0 0 20px rgba(255, 61, 0, 0.14);
     }
     body.burnout-mode .btn-primary,
     body.burnout-mode .btn-gb-submit,
-    body.burnout-mode .ride-badge {
+    body.burnout-mode .ride-badge,
+    body.burnout-mode .poll-bar-fill {
       background: linear-gradient(90deg, #d50000, #ff3d00, #ffea00);
       color: #111;
       box-shadow: 0 0 24px rgba(255, 61, 0, 0.8);
@@ -240,12 +246,12 @@
       gap: 8px;
     }
     .nav-brand span { color: #ff6f00; }
-    .nav-links { display: flex; gap: 18px; flex-wrap: wrap; }
+    .nav-links { display: flex; gap: 16px; flex-wrap: wrap; }
     .nav-links a {
       color: #ddd;
       text-decoration: none;
       font-weight: 800;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       text-transform: uppercase;
       letter-spacing: 0.8px;
       transition: color 0.2s;
@@ -517,6 +523,136 @@
     .action-btn:active { transform: scale(0.98); }
     .btn-copy-wifi { background: linear-gradient(90deg, #2e7d32, #43a047); color: #fff; }
     .btn-do-swish { background: linear-gradient(90deg, #ff5722, #ff9800); color: #111; }
+
+    /* =========================================================================
+       NÄSTA GREJ I SIKTE (NEDRÄKNING) & VECKANS GARAGE-OMRÖSTNING
+       ========================================================================= */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 22px;
+      align-items: stretch;
+    }
+    .feature-box {
+      background: #141419;
+      border: 1px solid #2c2c36;
+      border-top: 4px solid #fbc02d;
+      border-radius: 14px;
+      padding: 24px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.55);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .feature-box.poll-box { border-top-color: #ff5722; }
+    .feature-box h3 {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .countdown-event-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #ff9800;
+      margin: 4px 0 2px;
+    }
+    .countdown-event-sub {
+      font-size: 0.85rem;
+      color: #a8a8b3;
+      margin: 0 0 18px;
+    }
+    .cd-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: auto;
+    }
+    .cd-unit {
+      background: #0a0a0d;
+      border: 1px solid #262630;
+      border-bottom: 3px solid #ff5722;
+      border-radius: 10px;
+      padding: 14px 6px;
+      text-align: center;
+    }
+    .cd-unit strong {
+      display: block;
+      font-family: 'Courier New', monospace;
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: #fbc02d;
+      line-height: 1.1;
+      text-shadow: 0 0 10px rgba(251, 192, 45, 0.35);
+    }
+    .cd-unit span {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #999;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+    }
+
+    /* Garage-omröstning */
+    .poll-question {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f4f4f6;
+      margin: 6px 0 14px;
+    }
+    .poll-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .poll-option {
+      position: relative;
+      overflow: hidden;
+      background: #0c0c10;
+      border: 1px solid #2d2d37;
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.1s;
+    }
+    .poll-option:hover { border-color: #ff9800; }
+    .poll-option:active { transform: scale(0.99); }
+    .poll-option.voted { border-color: #ff5722; }
+    .poll-bar-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 0%;
+      background: linear-gradient(90deg, rgba(255, 87, 34, 0.32), rgba(255, 152, 0, 0.22));
+      z-index: 1;
+      transition: width 0.5s ease;
+    }
+    .poll-option-row {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 0.92rem;
+    }
+    .poll-stats {
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: #fbc02d;
+      white-space: nowrap;
+    }
+    .poll-footer-note {
+      margin-top: 12px;
+      font-size: 0.78rem;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+    }
 
     /* Crew & Fordon med bakgrundsbild */
     .crew-grid {
@@ -1090,6 +1226,7 @@
     <a href="#" class="nav-brand">🏁 Burn Creek <span>Speedshop</span></a>
     <div class="nav-links">
       <a href="#depan">Depån</a>
+      <a href="#aktuellt">I Sikte & Röstning</a>
       <a href="#crew">Crew & Åk</a>
       <a href="#regler">Depåregler</a>
       <a href="#galleri">Bilder</a>
@@ -1127,7 +1264,26 @@
           <button onclick="saveGarageStatus()" style="width:100%; background:#2e7d32; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Uppdatera Depåstatus</button>
         </div>
 
-        <!-- 3. Lägg till bild i galleriet direkt -->
+        <!-- 3. Nästa grej i sikte (Nedräkning) -->
+        <div class="admin-subbox">
+          <h4>⏱️ Nästa grej i sikte (Nedräkning)</h4>
+          <input type="text" id="admin-cd-title" class="gb-input" placeholder="Rubrik (t.ex. High Chaparral Countryfestival)" />
+          <input type="text" id="admin-cd-sub" class="gb-input" placeholder="Plats / info (t.ex. Kulltorp • Camping & V8)" />
+          <input type="datetime-local" id="admin-cd-date" class="gb-input" />
+          <button onclick="saveCountdownSettings()" style="width:100%; background:#fbc02d; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">💾 Spara Nedräkning</button>
+        </div>
+
+        <!-- 4. Veckans Garage-omröstning -->
+        <div class="admin-subbox">
+          <h4>🗳️ Veckans Garage-omröstning</h4>
+          <input type="text" id="admin-poll-q" class="gb-input" placeholder="Fråga (t.ex. Ford vs. GM i garaget?)" />
+          <input type="text" id="admin-poll-opt1" class="gb-input" placeholder="Alternativ 1 *" />
+          <input type="text" id="admin-poll-opt2" class="gb-input" placeholder="Alternativ 2 *" />
+          <input type="text" id="admin-poll-opt3" class="gb-input" placeholder="Alternativ 3 (valfritt)" />
+          <button onclick="saveNewPoll()" style="width:100%; background:#ff5722; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">🚀 Starta ny omröstning (nollställer röster)</button>
+        </div>
+
+        <!-- 5. Lägg till bild i galleriet direkt -->
         <div class="admin-subbox">
           <h4>📸 Lägg till bild i "Glimtar från Garaget"</h4>
           <input type="text" id="admin-gal-caption" class="gb-input" placeholder="Bildtext (t.ex. Fredagsmek på Rancheron)" />
@@ -1135,7 +1291,7 @@
           <button onclick="uploadGalleryPhoto()" id="admin-gal-btn" style="width:100%; background:#ff6f00; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">⬆️ Ladda upp till Galleriet</button>
         </div>
 
-        <!-- 4. Redigera Crew-medlem (Text + Bild) -->
+        <!-- 6. Redigera Crew-medlem (Text + Bild) -->
         <div class="admin-subbox">
           <h4>🏎️ Redigera Crew & Fordon</h4>
           <select id="admin-crew-select" class="gb-select" onchange="loadCrewIntoAdminForm()">
@@ -1243,6 +1399,57 @@
           Tar du en dricka, kaffe eller snacks så får du gärna swisha det du tycker det är värt, så vi kan fortsätta att fylla på med mer.
         </p>
         <button class="action-btn btn-do-swish" onclick="triggerSwish()">💸 Kopiera nummer & Öppna Swish</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- NÄSTA GREJ I SIKTE & VECKANS GARAGE-OMRÖSTNING -->
+  <section id="aktuellt" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">I Sikte & Garage-omröstning</h2>
+      <p class="section-lead">Håll koll på nästa mål för gänget och lägg din röst i veckans verkstadsfråga:</p>
+    </div>
+
+    <div class="features-grid">
+      <!-- Nästa grej i sikte -->
+      <div class="feature-box">
+        <div>
+          <h3>⏱️ Nästa grej i sikte</h3>
+          <div class="countdown-event-title" id="cd-event-title">High Chaparral Countryfestival</div>
+          <div class="countdown-event-sub" id="cd-event-sub">Kulltorp • 27 maj 2027 • Camping & jänkare</div>
+        </div>
+
+        <div class="cd-grid">
+          <div class="cd-unit">
+            <strong id="cd-days">00</strong>
+            <span>Dagar</span>
+          </div>
+          <div class="cd-unit">
+            <strong id="cd-hours">00</strong>
+            <span>Timmar</span>
+          </div>
+          <div class="cd-unit">
+            <strong id="cd-mins">00</strong>
+            <span>Minuter</span>
+          </div>
+          <div class="cd-unit">
+            <strong id="cd-secs">00</strong>
+            <span>Sekunder</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Veckans Garage-omröstning -->
+      <div class="feature-box poll-box">
+        <div>
+          <h3>🗳️ Veckans Garage-omröstning</h3>
+          <div class="poll-question" id="poll-question">Vad regerar i garaget?</div>
+          <div class="poll-options" id="poll-options-list"></div>
+        </div>
+        <div class="poll-footer-note">
+          <span id="poll-status-hint">Klicka på ett alternativ för att rösta</span>
+          <span id="poll-total-votes">0 röster</span>
+        </div>
       </div>
     </div>
   </section>
@@ -1494,6 +1701,12 @@
       setTimeout(() => t.classList.remove('show'), 2800);
     }
 
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, m => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[m]));
+    }
+
     // --- GÄST-WIFI & SWISH ---
     function copyWifiPassword() {
       const pass = document.getElementById('wifi-pass').textContent.trim();
@@ -1556,6 +1769,186 @@
         updatedAt: Date.now()
       });
       showToast('Depåstatus uppdaterad!');
+    }
+
+    // =========================================================================
+    // NÄSTA GREJ I SIKTE (NEDRÄKNING)
+    // =========================================================================
+    let countdownTargetMs = new Date('2027-05-27T12:00:00').getTime();
+
+    db.collection('website_settings').doc('countdown').onSnapshot(doc => {
+      const titleEl = document.getElementById('cd-event-title');
+      const subEl = document.getElementById('cd-event-sub');
+      const adminTitle = document.getElementById('admin-cd-title');
+      const adminSub = document.getElementById('admin-cd-sub');
+      const adminDate = document.getElementById('admin-cd-date');
+
+      if (doc.exists) {
+        const d = doc.data();
+        if (d.title) {
+          titleEl.textContent = d.title;
+          if (adminTitle) adminTitle.value = d.title;
+        }
+        if (d.subtitle) {
+          subEl.textContent = d.subtitle;
+          if (adminSub) adminSub.value = d.subtitle;
+        }
+        if (d.targetIso) {
+          const parsed = new Date(d.targetIso).getTime();
+          if (!isNaN(parsed)) countdownTargetMs = parsed;
+          if (adminDate) adminDate.value = d.targetIso;
+        }
+      } else {
+        if (adminTitle) adminTitle.value = titleEl.textContent;
+        if (adminSub) adminSub.value = subEl.textContent;
+        if (adminDate) adminDate.value = '2027-05-27T12:00';
+      }
+    });
+
+    function updateCountdownTick() {
+      const diff = Math.max(0, countdownTargetMs - Date.now());
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const mins = Math.floor((diff / (1000 * 60)) % 60);
+      const secs = Math.floor((diff / 1000) % 60);
+
+      document.getElementById('cd-days').textContent = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').textContent = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').textContent = String(mins).padStart(2, '0');
+      document.getElementById('cd-secs').textContent = String(secs).padStart(2, '0');
+    }
+    updateCountdownTick();
+    setInterval(updateCountdownTick, 1000);
+
+    async function saveCountdownSettings() {
+      const title = document.getElementById('admin-cd-title').value.trim();
+      const subtitle = document.getElementById('admin-cd-sub').value.trim();
+      const targetIso = document.getElementById('admin-cd-date').value;
+      if (!title || !targetIso) {
+        showToast('Fyll i både rubrik och datum/tid!');
+        return;
+      }
+      await db.collection('website_settings').doc('countdown').set({
+        title: title,
+        subtitle: subtitle,
+        targetIso: targetIso
+      });
+      showToast('Nedräkning uppdaterad!');
+    }
+
+    // =========================================================================
+    // VECKANS GARAGE-OMRÖSTNING
+    // =========================================================================
+    let currentPollData = {
+      pollId: 'default_poll_1',
+      question: 'Vad regerar i garaget?',
+      options: ['🇺🇸 Ford V8', '🔥 GM / Chevy V8', '🏍️ Två hjul & krom'],
+      votes: [0, 0, 0]
+    };
+
+    function renderPoll() {
+      const qEl = document.getElementById('poll-question');
+      const listEl = document.getElementById('poll-options-list');
+      const totalEl = document.getElementById('poll-total-votes');
+      const hintEl = document.getElementById('poll-status-hint');
+
+      qEl.textContent = currentPollData.question;
+      const votes = currentPollData.votes || [];
+      const totalVotes = votes.reduce((a, b) => a + (Number(b) || 0), 0);
+      const votedIndex = localStorage.getItem('bc_poll_voted_' + currentPollData.pollId);
+
+      totalEl.textContent = `${totalVotes} ${totalVotes === 1 ? 'röst' : 'röster'}`;
+      hintEl.textContent = votedIndex !== null
+        ? '✅ Tack för din röst!'
+        : 'Klicka på ett alternativ för att rösta';
+
+      let html = '';
+      currentPollData.options.forEach((opt, idx) => {
+        const count = Number(votes[idx]) || 0;
+        const pct = totalVotes > 0 ? Math.round((count / totalVotes) * 100) : 0;
+        const isMyChoice = String(idx) === votedIndex;
+        html += `
+          <div class="poll-option ${isMyChoice ? 'voted' : ''}" onclick="castPollVote(${idx})">
+            <div class="poll-bar-fill" style="width:${pct}%;"></div>
+            <div class="poll-option-row">
+              <span>${isMyChoice ? '✔ ' : ''}${escapeHtml(opt)}</span>
+              <span class="poll-stats">${pct}% (${count})</span>
+            </div>
+          </div>
+        `;
+      });
+      listEl.innerHTML = html;
+    }
+
+    db.collection('website_settings').doc('garage_poll').onSnapshot(doc => {
+      if (doc.exists && doc.data().question && Array.isArray(doc.data().options)) {
+        const d = doc.data();
+        currentPollData = {
+          pollId: d.pollId || 'poll_1',
+          question: d.question,
+          options: d.options,
+          votes: d.votes || d.options.map(() => 0)
+        };
+      }
+      const qInp = document.getElementById('admin-poll-q');
+      const o1 = document.getElementById('admin-poll-opt1');
+      const o2 = document.getElementById('admin-poll-opt2');
+      const o3 = document.getElementById('admin-poll-opt3');
+      if (qInp) qInp.value = currentPollData.question;
+      if (o1) o1.value = currentPollData.options[0] || '';
+      if (o2) o2.value = currentPollData.options[1] || '';
+      if (o3) o3.value = currentPollData.options[2] || '';
+
+      renderPoll();
+    }, () => {
+      renderPoll();
+    });
+
+    async function castPollVote(index) {
+      const storageKey = 'bc_poll_voted_' + currentPollData.pollId;
+      if (localStorage.getItem(storageKey) !== null) {
+        showToast('Du har redan röstat i denna omgång!');
+        return;
+      }
+
+      localStorage.setItem(storageKey, String(index));
+      const newVotes = currentPollData.options.map((_, i) => (Number(currentPollData.votes[i]) || 0) + (i === index ? 1 : 0));
+      currentPollData.votes = newVotes;
+      renderPoll();
+
+      try {
+        await db.collection('website_settings').doc('garage_poll').set({
+          pollId: currentPollData.pollId,
+          question: currentPollData.question,
+          options: currentPollData.options,
+          votes: newVotes
+        }, { merge: true });
+        showToast('Din röst är registrerad!');
+      } catch (err) {
+        console.error(err);
+        showToast('Kunde inte spara röst – kontrollera Firestore Rules!');
+      }
+    }
+
+    async function saveNewPoll() {
+      const q = document.getElementById('admin-poll-q').value.trim();
+      const opt1 = document.getElementById('admin-poll-opt1').value.trim();
+      const opt2 = document.getElementById('admin-poll-opt2').value.trim();
+      const opt3 = document.getElementById('admin-poll-opt3').value.trim();
+
+      const options = [opt1, opt2, opt3].filter(Boolean);
+      if (!q || options.length < 2) {
+        showToast('Ange en fråga och minst 2 alternativ!');
+        return;
+      }
+
+      await db.collection('website_settings').doc('garage_poll').set({
+        pollId: 'poll_' + Date.now(),
+        question: q,
+        options: options,
+        votes: options.map(() => 0)
+      });
+      showToast('Ny garage-omröstning publicerad!');
     }
 
     // --- RAT ROD / PATINA-LÄGE & BURNOUT-LÄGE ---
@@ -2009,12 +2402,6 @@
       if (!confirm('Radera detta gästboksinlägg?')) return;
       await db.collection('guestbook').doc(id).delete();
       showToast('Inlägg raderat');
-    }
-
-    function escapeHtml(str) {
-      return str.replace(/[&<>"']/g, m => ({
-        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-      }[m]));
     }
 
     db.collection('guestbook')
