@@ -54,7 +54,7 @@
     }
     body.ratrod-mode nav {
       background: rgba(24, 14, 8, 0.96);
-      border-bottom-color: #9a3412;
+      border-bottom: 2px solid #9a3412;
     }
     body.ratrod-mode .nav-brand span { color: #d97706; }
     body.ratrod-mode .hero {
@@ -94,7 +94,8 @@
     body.ratrod-mode .crew-card,
     body.ratrod-mode .perk-card,
     body.ratrod-mode .feature-box,
-    body.ratrod-mode .bay-card {
+    body.ratrod-mode .bay-card,
+    body.ratrod-mode .drag-card {
       background-color: #1f130c;
       border-color: #7c2d12;
       border-top-color: #d97706;
@@ -104,7 +105,8 @@
     body.ratrod-mode .info-chip,
     body.ratrod-mode .cd-unit,
     body.ratrod-mode .poll-option,
-    body.ratrod-mode .upcoming-item {
+    body.ratrod-mode .upcoming-item,
+    body.ratrod-mode .score-row {
       background: #140c08;
       border-color: #5c240d;
       border-left-color: #d97706;
@@ -174,7 +176,8 @@
     body.burnout-mode .gallery-item,
     body.burnout-mode .perk-card,
     body.burnout-mode .feature-box,
-    body.burnout-mode .bay-card {
+    body.burnout-mode .bay-card,
+    body.burnout-mode .drag-card {
       border-color: #ff3d00;
       box-shadow: 0 0 24px rgba(255, 61, 0, 0.35), inset 0 0 20px rgba(255, 61, 0, 0.14);
     }
@@ -249,7 +252,7 @@
       gap: 8px;
     }
     .nav-brand span { color: #ff6f00; }
-    .nav-links { display: flex; gap: 15px; flex-wrap: wrap; }
+    .nav-links { display: flex; gap: 14px; flex-wrap: wrap; }
     .nav-links a {
       color: #ddd;
       text-decoration: none;
@@ -526,6 +529,125 @@
     .action-btn:active { transform: scale(0.98); }
     .btn-copy-wifi { background: linear-gradient(90deg, #2e7d32, #43a047); color: #fff; }
     .btn-do-swish { background: linear-gradient(90deg, #ff5722, #ff9800); color: #111; }
+
+    /* =========================================================================
+       SPELBART DRAGRACING-REAKTIONSTEST & SCOREBOARD
+       ========================================================================= */
+    .drag-layout {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+      gap: 22px;
+      align-items: start;
+    }
+    .drag-card {
+      background: #141419;
+      border: 1px solid #2c2c36;
+      border-top: 4px solid #ff5722;
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.55);
+    }
+    .drag-card h3 {
+      margin: 0 0 12px;
+      font-size: 1.15rem;
+      font-weight: 900;
+      font-style: italic;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    .tree-rack {
+      background: #0a0a0d;
+      border: 2px solid #2b2b35;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .tree-row {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+    }
+    .tree-lamp {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #1d1d24;
+      border: 2px solid #353542;
+      transition: all 0.08s ease;
+    }
+    .tree-lamp.on-amber {
+      background: #ffb300;
+      border-color: #ffe082;
+      box-shadow: 0 0 16px #ffb300, 0 0 26px rgba(255, 179, 0, 0.6);
+    }
+    .tree-lamp.on-green {
+      background: #00e676;
+      border-color: #b9f6ca;
+      box-shadow: 0 0 18px #00e676, 0 0 30px rgba(0, 230, 118, 0.7);
+    }
+    .tree-lamp.on-red {
+      background: #ff1744;
+      border-color: #ff8a80;
+      box-shadow: 0 0 18px #ff1744, 0 0 30px rgba(255, 23, 68, 0.75);
+    }
+    .drag-readout {
+      font-family: 'Courier New', monospace;
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #fbc02d;
+      text-align: center;
+      min-height: 36px;
+    }
+    .btn-stage-hold {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #ff5722, #ff9800);
+      color: #111;
+      font-weight: 900;
+      font-style: italic;
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      cursor: pointer;
+      user-select: none;
+      touch-action: none;
+      box-shadow: 0 6px 20px rgba(255, 87, 34, 0.35);
+      transition: transform 0.08s, background 0.15s;
+    }
+    .btn-stage-hold.holding {
+      background: linear-gradient(90deg, #ffb300, #ff6f00);
+      transform: scale(0.98);
+    }
+    .scoreboard-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .score-row {
+      background: #0c0c10;
+      border: 1px solid #262630;
+      border-left: 4px solid #fbc02d;
+      border-radius: 8px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .score-row.top-1 { border-left-color: #00e676; }
+    .score-name { font-weight: 800; color: #fff; font-size: 0.92rem; }
+    .score-time {
+      font-family: 'Courier New', monospace;
+      font-weight: 900;
+      font-size: 1rem;
+      color: #00e676;
+    }
 
     /* =========================================================================
        NÄSTA GREJ I SIKTE (SYNKAD MED APPENS 'events') & GARAGE-OMRÖSTNING
@@ -1373,6 +1495,7 @@
     <a href="#" class="nav-brand">🏁 Burn Creek <span>Speedshop</span></a>
     <div class="nav-links">
       <a href="#depan">Depån</a>
+      <a href="#reaktionstest">Startgran</a>
       <a href="#aktuellt">I Sikte & Röstning</a>
       <a href="#mekplats">Gästmekplats</a>
       <a href="#crew">Crew & Åk</a>
@@ -1439,7 +1562,14 @@
           </div>
         </div>
 
-        <!-- 5. Veckans Garage-omröstning -->
+        <!-- 5. Startgran Scoreboard-hantering -->
+        <div class="admin-subbox">
+          <h4>🚦 Startgran Scoreboard</h4>
+          <p style="margin:0 0 10px; font-size:0.82rem; color:#ccc;">Rensa topplistan om ni vill starta om en ny tävlingsomgång.</p>
+          <button onclick="clearScoreboard()" style="width:100%; background:#b71c1c; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">🗑 Nollställ Scoreboard</button>
+        </div>
+
+        <!-- 6. Veckans Garage-omröstning -->
         <div class="admin-subbox">
           <h4>🗳️ Veckans Garage-omröstning</h4>
           <input type="text" id="admin-poll-q" class="gb-input" placeholder="Fråga (t.ex. Ford vs. GM i garaget?)" />
@@ -1449,7 +1579,7 @@
           <button onclick="saveNewPoll()" style="width:100%; background:#ff5722; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">🚀 Starta ny omröstning (nollställer röster)</button>
         </div>
 
-        <!-- 6. Lägg till bild i galleriet direkt -->
+        <!-- 7. Lägg till bild i galleriet direkt -->
         <div class="admin-subbox">
           <h4>📸 Lägg till bild i "Glimtar från Garaget"</h4>
           <input type="text" id="admin-gal-caption" class="gb-input" placeholder="Bildtext (t.ex. Fredagsmek på Rancheron)" />
@@ -1457,7 +1587,7 @@
           <button onclick="uploadGalleryPhoto()" id="admin-gal-btn" style="width:100%; background:#ff6f00; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">⬆️ Ladda upp till Galleriet</button>
         </div>
 
-        <!-- 7. Redigera Crew-medlem (Text + Bild) -->
+        <!-- 8. Redigera Crew-medlem (Text + Bild) -->
         <div class="admin-subbox">
           <h4>🏎️ Redigera Crew & Fordon</h4>
           <select id="admin-crew-select" class="gb-select" onchange="loadCrewIntoAdminForm()">
@@ -1510,7 +1640,7 @@
 
     <div class="hero-btns">
       <a href="#crew" class="btn btn-primary"><span>🔥 Se Crewet & Fordonen</span></a>
-      <a href="#mekplats" class="btn btn-secondary"><span>🔧 Boka Gästmekplats</span></a>
+      <a href="#reaktionstest" class="btn btn-secondary"><span>🚦 Testa Startgranen</span></a>
       <a href="#gastbok" class="btn btn-secondary"><span>✍️ Signera Gästboken</span></a>
     </div>
   </header>
@@ -1566,6 +1696,64 @@
           Tar du en dricka, kaffe eller snacks så får du gärna swisha det du tycker det är värt, så vi kan fortsätta att fylla på med mer.
         </p>
         <button class="action-btn btn-do-swish" onclick="triggerSwish()">💸 Kopiera nummer & Öppna Swish</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPELBART DRAGRACING-REAKTIONSTEST & SCOREBOARD -->
+  <section id="reaktionstest" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">🚦 Dragracing Reaktionstest</h2>
+      <p class="section-lead">
+        Håll inne <strong>STAGE / HÅLL BROMSEN</strong>, vänta på grönt ljus och släpp så snabbt som möjligt. Släpper du innan grönt blir det rödlykta!
+      </p>
+    </div>
+
+    <div class="drag-layout">
+      <!-- Spelplan -->
+      <div class="drag-card">
+        <h3>Kör på startgranen</h3>
+        <input type="text" id="drag-driver-name" class="gb-input" maxlength="30" placeholder="Ditt förarnamn (t.ex. Pelle, Tony, Gäst) *" />
+
+        <div class="tree-rack">
+          <div class="tree-row">
+            <div class="tree-lamp" id="lamp-amber-1"></div>
+            <div class="tree-lamp" id="lamp-amber-1r"></div>
+          </div>
+          <div class="tree-row">
+            <div class="tree-lamp" id="lamp-amber-2"></div>
+            <div class="tree-lamp" id="lamp-amber-2r"></div>
+          </div>
+          <div class="tree-row">
+            <div class="tree-lamp" id="lamp-amber-3"></div>
+            <div class="tree-lamp" id="lamp-amber-3r"></div>
+          </div>
+          <div class="tree-row">
+            <div class="tree-lamp" id="lamp-green"></div>
+            <div class="tree-lamp" id="lamp-red"></div>
+          </div>
+        </div>
+
+        <div class="drag-readout" id="drag-readout">Håll knappen nere för att stagea</div>
+
+        <button
+          type="button"
+          class="btn-stage-hold"
+          id="btn-stage-hold"
+          onpointerdown="startDragStage(event)"
+          onpointerup="releaseDragStage(event)"
+          onpointercancel="cancelDragStage()"
+        >
+          🔥 HÅLL BROMSEN (STAGE)
+        </button>
+      </div>
+
+      <!-- Scoreboard -->
+      <div class="drag-card" style="border-top-color: #fbc02d;">
+        <h3 style="color: #fbc02d;">🏆 Snabbaste Reaktionstider</h3>
+        <div class="scoreboard-list" id="drag-scoreboard">
+          <div style="color:#888; font-size:0.85rem;">Laddar topplistan...</div>
+        </div>
       </div>
     </div>
   </section>
@@ -1961,6 +2149,166 @@
       }, 300);
     }
 
+    // =========================================================================
+    // SPELBART DRAGRACING-REAKTIONSTEST & SCOREBOARD
+    // =========================================================================
+    let dragState = 'idle'; // 'idle', 'staging', 'green', 'finished'
+    let dragTimers = [];
+    let greenStartPerf = 0;
+
+    function resetTreeLamps() {
+      ['lamp-amber-1', 'lamp-amber-1r', 'lamp-amber-2', 'lamp-amber-2r', 'lamp-amber-3', 'lamp-amber-3r', 'lamp-green', 'lamp-red']
+        .forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.className = 'tree-lamp';
+        });
+    }
+
+    function clearDragTimers() {
+      dragTimers.forEach(t => clearTimeout(t));
+      dragTimers = [];
+    }
+
+    function startDragStage(e) {
+      if (e) e.preventDefault();
+      const nameInput = document.getElementById('drag-driver-name');
+      const driver = nameInput.value.trim();
+      if (!driver) {
+        showToast('Skriv ditt förarnamn först!');
+        nameInput.focus();
+        return;
+      }
+
+      clearDragTimers();
+      resetTreeLamps();
+      dragState = 'staging';
+
+      const btn = document.getElementById('btn-stage-hold');
+      const readout = document.getElementById('drag-readout');
+      btn.classList.add('holding');
+      btn.textContent = '🚦 HÅLL KVAR TILL GRÖNT...';
+      readout.style.color = '#ffb300';
+      readout.textContent = 'STAGED – Vänta på grönt!';
+
+      // Tänder tre gula rader i följd
+      dragTimers.push(setTimeout(() => {
+        document.getElementById('lamp-amber-1').classList.add('on-amber');
+        document.getElementById('lamp-amber-1r').classList.add('on-amber');
+      }, 350));
+
+      dragTimers.push(setTimeout(() => {
+        document.getElementById('lamp-amber-2').classList.add('on-amber');
+        document.getElementById('lamp-amber-2r').classList.add('on-amber');
+      }, 800));
+
+      dragTimers.push(setTimeout(() => {
+        document.getElementById('lamp-amber-3').classList.add('on-amber');
+        document.getElementById('lamp-amber-3r').classList.add('on-amber');
+      }, 1250));
+
+      // Grönt ljus efter slumpad tid
+      const randomGreenDelay = 1650 + Math.floor(Math.random() * 1400);
+      dragTimers.push(setTimeout(() => {
+        if (dragState !== 'staging') return;
+        document.getElementById('lamp-green').classList.add('on-green');
+        dragState = 'green';
+        greenStartPerf = performance.now();
+        readout.style.color = '#00e676';
+        readout.textContent = '🟢 GRÖNT – SLÄPP NU!';
+        btn.textContent = '🟢 SLÄPP NU!';
+      }, randomGreenDelay));
+    }
+
+    async function releaseDragStage(e) {
+      if (e) e.preventDefault();
+      const btn = document.getElementById('btn-stage-hold');
+      const readout = document.getElementById('drag-readout');
+      const driver = document.getElementById('drag-driver-name').value.trim() || 'Förare';
+
+      if (dragState === 'staging') {
+        // Släppte för tidigt -> Rödlykta
+        clearDragTimers();
+        dragState = 'finished';
+        btn.classList.remove('holding');
+        btn.textContent = '🔴 TJUVSTART – TESTA IGEN';
+        document.getElementById('lamp-red').classList.add('on-red');
+        readout.style.color = '#ff1744';
+        readout.textContent = '🔴 RÖDLYKTA! Tjuvstart!';
+        showToast('Rödlykta – du släppte innan grönt!');
+        return;
+      }
+
+      if (dragState === 'green') {
+        const reactionSec = (performance.now() - greenStartPerf) / 1000;
+        dragState = 'finished';
+        btn.classList.remove('holding');
+        btn.textContent = '🔥 KÖR ETT NYTT FÖRSÖK';
+        readout.style.color = '#00e676';
+        readout.textContent = `⚡ ${reactionSec.toFixed(3)} sek`;
+
+        try {
+          await db.collection('drag_reaction_scores').add({
+            driver: driver,
+            reactionSec: Number(reactionSec.toFixed(3)),
+            timestamp: Date.now()
+          });
+          showToast(`Tid sparad: ${reactionSec.toFixed(3)} s`);
+        } catch (err) {
+          console.error(err);
+          showToast('Kunde inte spara tid – kontrollera Firestore Rules!');
+        }
+      }
+    }
+
+    function cancelDragStage() {
+      if (dragState === 'staging' || dragState === 'green') {
+        clearDragTimers();
+        dragState = 'idle';
+        resetTreeLamps();
+        const btn = document.getElementById('btn-stage-hold');
+        btn.classList.remove('holding');
+        btn.textContent = '🔥 HÅLL BROMSEN (STAGE)';
+        document.getElementById('drag-readout').textContent = 'Håll knappen nere för att stagea';
+      }
+    }
+
+    db.collection('drag_reaction_scores')
+      .orderBy('reactionSec', 'asc')
+      .limit(8)
+      .onSnapshot(snap => {
+        const listEl = document.getElementById('drag-scoreboard');
+        if (snap.empty) {
+          listEl.innerHTML = '<div style="color:#888; font-size:0.85rem;">Inga tider registrerade ännu – bli först på granen!</div>';
+          return;
+        }
+
+        let html = '';
+        let rank = 1;
+        snap.forEach(doc => {
+          const s = doc.data();
+          const medal = rank === 1 ? '🥇' : (rank === 2 ? '🥈' : (rank === 3 ? '🥉' : `#${rank}`));
+          html += `
+            <div class="score-row ${rank === 1 ? 'top-1' : ''}">
+              <span class="score-name">${medal} ${escapeHtml(s.driver || 'Förare')}</span>
+              <span class="score-time">${Number(s.reactionSec).toFixed(3)} s</span>
+            </div>
+          `;
+          rank++;
+        });
+        listEl.innerHTML = html;
+      }, () => {
+        document.getElementById('drag-scoreboard').innerHTML = '<div style="color:#888; font-size:0.85rem;">Kunde inte ladda topplistan.</div>';
+      });
+
+    async function clearScoreboard() {
+      if (!confirm('Nollställa hela startgranens topplista?')) return;
+      const snap = await db.collection('drag_reaction_scores').get();
+      const batch = db.batch();
+      snap.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
+      showToast('Scoreboard nollställd!');
+    }
+
     // --- LIVE DEPÅSTATUS (Speglar appens 'active_members' + manuell status) ---
     const statusPill = document.getElementById('live-status-pill');
     const statusText = document.getElementById('live-status-text');
@@ -2045,7 +2393,7 @@
       const now = Date.now();
       const enriched = appCalendarEvents
         .map(ev => ({ ...ev, _ts: buildEventTimestamp(ev) }))
-        .filter(ev => !isNaN(ev._ts) && ev._ts >= now - (6 * 60 * 60 * 1000)) // Behåll pågående händelser upp till 6h
+        .filter(ev => !isNaN(ev._ts) && ev._ts >= now - (6 * 60 * 60 * 1000))
         .sort((a, b) => a._ts - b._ts);
 
       const titleEl = document.getElementById('cd-event-title');
@@ -2091,7 +2439,6 @@
         }
       }
 
-      // Admin-lista med samtliga kalenderhändelser från appen
       const adminList = document.getElementById('admin-events-list');
       if (adminList) {
         const allSorted = [...appCalendarEvents].sort((a, b) => (a.date || '9999').localeCompare(b.date || '9999'));
