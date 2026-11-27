@@ -825,6 +825,46 @@
       font-family: monospace;
       font-weight: 700;
     }
+
+    .announcement-banner {
+      display: none;
+      width: 100%;
+      margin: 0 0 16px;
+      padding: 14px 15px;
+      border: 1px solid var(--rust-primary);
+      border-left: 5px solid var(--rust-glow);
+      border-radius: 8px;
+      background: linear-gradient(135deg, #2a1b13, #17110e);
+      box-shadow: 0 5px 16px rgba(0,0,0,.35);
+      text-align: left;
+    }
+    .announcement-banner h3 {
+      color: var(--rust-glow);
+      font-family: 'Teko', sans-serif;
+      font-size: 1.35rem;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+    .announcement-banner p {
+      color: var(--cream-text);
+      font-size: .88rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .announcement-editor textarea {
+      width: 100%; min-height: 110px; resize: vertical;
+      padding: 10px; margin: 7px 0 12px;
+      color: var(--cream-text); background: #100d0b;
+      border: 1px solid var(--border-rivet); border-radius: 6px;
+      font: inherit;
+    }
+    .announcement-editor input[type="text"] {
+      width: 100%; padding: 10px; margin: 7px 0 12px;
+      color: var(--cream-text); background: #100d0b;
+      border: 1px solid var(--border-rivet); border-radius: 6px;
+      font: inherit;
+    }
   </style>
 </head>
 <body>
@@ -1053,6 +1093,11 @@
     <div id="home-tab" class="view active">
       <div style="display: flex; flex-direction: column; align-items: center; padding-top: 10px;">
         <img src="logo.png" alt="Burn Creek Speedshop" style="max-width: 280px; width: 82%; height: auto; margin: 6px auto 18px auto; border-radius: 50%; box-shadow: 0 12px 35px rgba(0,0,0,0.95); border: 4px solid var(--rust-primary); display: block;" onerror="this.style.display='none'">
+
+        <div id="announcement-banner" class="announcement-banner" role="status" aria-live="polite">
+          <h3 id="announcement-title"></h3>
+          <p id="announcement-message"></p>
+        </div>
 
         <div class="status-beacon">
           <div class="status-indicator-bar">
@@ -1988,6 +2033,24 @@
 
     <!-- 9. ADMINPANEL & SPECIAL-INSTRUKTIONER -->
     <div id="admin-tab" class="view">
+      <div class="spec-card announcement-editor" id="announcement-admin-editor" style="border-top-color: var(--rust-glow); display: none;">
+        <div class="spec-title">
+          <span>📢 INFORMATIONSBANNER</span>
+          <span class="spec-badge">ENDAST ADMIN</span>
+        </div>
+        <p style="font-size: .8rem; color: var(--cream-muted); margin-bottom: 10px;">Skriv ett viktigt meddelande som visas på startsidan för alla godkända medlemmar.</p>
+        <label for="announcement-title-input" style="font-size: .8rem;">RUBRIK</label>
+        <input id="announcement-title-input" type="text" maxlength="90" placeholder="Exempel: Viktig information">
+        <label for="announcement-message-input" style="font-size: .8rem;">MEDDELANDE</label>
+        <textarea id="announcement-message-input" maxlength="2000" placeholder="Skriv informationen här..."></textarea>
+        <label style="display: flex; align-items: center; gap: 8px; font-size: .85rem; margin-bottom: 12px;">
+          <input id="announcement-active-input" type="checkbox" checked style="width: 18px; height: 18px; accent-color: var(--rust-primary);"> Visa bannern på startsidan
+        </label>
+        <button class="btn-speed btn-wrench" onclick="saveAnnouncement()" style="width: 100%; padding: 11px;">💾 SPARA INFORMATION</button>
+        <button class="btn-speed" onclick="clearAnnouncement()" style="width: 100%; padding: 9px; margin-top: 8px; background: #64251f;">🗑️ TA BORT BANNERN</button>
+        <p id="announcement-admin-status" style="font-size: .78rem; color: var(--cream-muted); margin-top: 9px;" aria-live="polite"></p>
+      </div>
+
       <div class="spec-card">
         <div class="spec-title">
           <span>ANVÄNDARHANTERING</span>
@@ -2075,6 +2138,7 @@
 
   const ADMIN_EMAIL = "fredrik.tengmark@gmail.com";
   let isAdmin = false;
+  let announcementUnsubscribe = null;
   let allCarsCache = [];
   let allEventsCache = [];
   let activeCheckedInNames = [];
@@ -2238,6 +2302,8 @@
       document.getElementById('auth-view').style.display = 'none';
       document.getElementById('pending-view').style.display = 'none';
       document.getElementById('main-view').style.display = 'flex';
+      document.getElementById('announcement-admin-editor').style.display = isAdmin ? 'block' : 'none';
+      loadAnnouncement();
 
       if (isAdmin) {
         document.getElementById('admin-menu-card').style.display = 'flex';
@@ -2279,6 +2345,7 @@
       document.getElementById('auth-view').style.display = 'block';
       document.getElementById('pending-view').style.display = 'none';
       document.getElementById('main-view').style.display = 'none';
+      if (announcementUnsubscribe) { announcementUnsubscribe(); announcementUnsubscribe = null; }
       if (kolvkalleInterval) clearInterval(kolvkalleInterval);
     }
   });
@@ -3298,6 +3365,83 @@
       alert(`Synkronisering klar! Lade till ${added} befintliga medlemmar i listan.`);
     } catch (err) {
       alert('Kunde inte synka profiler: ' + err.message);
+    }
+  }
+
+  // Informationsbanner: innehållet lagras centralt i Firestore och visas för alla inloggade medlemmar.
+  function loadAnnouncement() {
+    if (announcementUnsubscribe) announcementUnsubscribe();
+    announcementUnsubscribe = db.collection('settings').doc('announcement').onSnapshot(doc => {
+      const banner = document.getElementById('announcement-banner');
+      const titleEl = document.getElementById('announcement-title');
+      const messageEl = document.getElementById('announcement-message');
+      if (!banner || !titleEl || !messageEl) return;
+
+      const data = doc.exists ? doc.data() : {};
+      const title = typeof data.title === 'string' ? data.title.trim() : '';
+      const message = typeof data.message === 'string' ? data.message.trim() : '';
+      const visible = data.active === true && (title || message);
+
+      titleEl.textContent = title || 'VIKTIG INFORMATION';
+      messageEl.textContent = message;
+      banner.style.display = visible ? 'block' : 'none';
+
+      if (isAdmin) {
+        const titleInput = document.getElementById('announcement-title-input');
+        const messageInput = document.getElementById('announcement-message-input');
+        const activeInput = document.getElementById('announcement-active-input');
+        if (titleInput && document.activeElement !== titleInput) titleInput.value = title;
+        if (messageInput && document.activeElement !== messageInput) messageInput.value = message;
+        if (activeInput) activeInput.checked = data.active === true;
+      }
+    }, error => {
+      console.error('Kunde inte läsa informationsbannern:', error);
+    });
+  }
+
+  async function saveAnnouncement() {
+    if (!isAdmin || !auth.currentUser || auth.currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+      alert('Du saknar behörighet att ändra informationsbannern.');
+      return;
+    }
+    const title = document.getElementById('announcement-title-input').value.trim();
+    const message = document.getElementById('announcement-message-input').value.trim();
+    const active = document.getElementById('announcement-active-input').checked;
+    const status = document.getElementById('announcement-admin-status');
+    if (!title && !message && active) {
+      status.textContent = 'Skriv en rubrik eller ett meddelande innan du sparar.';
+      return;
+    }
+    try {
+      await db.collection('settings').doc('announcement').set({
+        title: title,
+        message: message,
+        active: active,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedBy: auth.currentUser.email
+      });
+      status.textContent = '✓ Informationen är sparad och visas nu för medlemmarna.';
+    } catch (error) {
+      console.error(error);
+      status.textContent = 'Kunde inte spara. Kontrollera Firestore-reglerna.';
+    }
+  }
+
+  async function clearAnnouncement() {
+    if (!isAdmin || !auth.currentUser || auth.currentUser.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) {
+      alert('Du saknar behörighet att ändra informationsbannern.');
+      return;
+    }
+    try {
+      await db.collection('settings').doc('announcement').set({
+        title: '', message: '', active: false,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        updatedBy: auth.currentUser.email
+      });
+      document.getElementById('announcement-admin-status').textContent = 'Bannern är borttagen från startsidan.';
+    } catch (error) {
+      console.error(error);
+      document.getElementById('announcement-admin-status').textContent = 'Kunde inte ta bort bannern. Kontrollera Firestore-reglerna.';
     }
   }
 
