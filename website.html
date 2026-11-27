@@ -1713,7 +1713,16 @@
       }
     }
 
-  </style>
+  
+    .pit-order-wrap { margin: 22px auto 0; width: min(460px, 100%); }
+    .pit-order-trigger { border: 1px solid #bd6828; border-radius: 999px; padding: 10px 18px; background: #17171b; color: #ffc46b; font: inherit; font-weight: 700; cursor: pointer; }
+    .pit-order-trigger:hover { background: #392218; }
+    #pit-order-card { margin: 12px auto; padding: 16px; border: 1px solid #754420; border-left: 4px solid #ff6a1a; border-radius: 9px; background: #17171b; color: #fff; text-align: left; }
+    #pit-order-card[hidden] { display: none; }
+    #pit-order-card small { color: #ffad4d; letter-spacing: 1.5px; font-weight: 800; }
+    #pit-order-card p { color: #fff; margin: 10px 0; line-height: 1.5; }
+
+</style>
 </head>
 <body>
   <div class="checkered-bar"></div>
@@ -1873,6 +1882,10 @@
       <a href="#crew" class="btn btn-primary"><span>🔥 Se Crewet & Fordonen</span></a>
       <a href="#reaktionstest" class="btn btn-secondary"><span>🚦 Testa Startgranen</span></a>
       <a href="#gastbok" class="btn btn-secondary"><span>✍️ Signera Gästboken</span></a>
+    </div>
+    <div class="pit-order-wrap">
+      <button type="button" class="pit-order-trigger" onclick="drawPitOrder()">🎲 Dra dagens depåorder</button>
+      <div id="pit-order-card" hidden aria-live="polite"><small>📟 BURN CREEK PIT WALL</small><p id="pit-order-text"></p><button type="button" class="pit-order-trigger" onclick="drawPitOrder()">En order till ↻</button></div>
     </div>
   </header>
 
@@ -3052,6 +3065,30 @@
         }
       }
     });
+
+    // --- DAGENS DEPÅORDER ---
+    const pitOrders = [
+      "Döp dagens projektbil som om den vore med i en westernfilm.",
+      "Utse verkstadens mest legendariska kaffekopp.",
+      "Hitta på en slogan som låter som en reklamskylt från 1962.",
+      "Utse dagens Chief of Coffee.",
+      "Hitta på ett namn till ett fiktivt racingteam.",
+      "Vilken bil skulle vinna SM i att se cool ut när den står still?",
+      "Ge den försvunna 10 mm-hylsan ett efterlysningsnamn.",
+      "Hitta på en dramatisk kommentatorsreplik för nästa fikapaus.",
+      "Utse verkstadens mest underskattade pryl.",
+      "Ge nästa projekt ett rockabilly-smeknamn.",
+      "Hitta på en lyxig modellbeteckning för en vanlig kaffekopp.",
+      "Utse dagens bästa verkstadsuttryck."
+    ];
+    let lastPitOrder = -1;
+    function drawPitOrder() {
+      let i;
+      do { i = Math.floor(Math.random() * pitOrders.length); } while (i === lastPitOrder);
+      lastPitOrder = i;
+      document.getElementById('pit-order-text').textContent = pitOrders[i];
+      document.getElementById('pit-order-card').hidden = false;
+    }
 
     // --- KOLV-KALLE VERKSTADSHUMOR ---
     const kolvKalleJokes = [
