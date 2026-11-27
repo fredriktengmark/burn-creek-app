@@ -865,6 +865,40 @@
       border: 1px solid var(--border-rivet); border-radius: 6px;
       font: inherit;
     }
+  
+    /* Rat Rod: rostig durkplåt och bultade stålpaneler */
+    body.theme-ratrod {
+      --rust-primary: #a64e28; --rust-glow: #e19a61; --rust-deep: #65321e;
+      --cream-bg: #f0dfc7; --cream-text: #f1e0cb; --cream-muted: #c3aa91;
+      --cast-iron: #1a1410; --panel-dark: #211813; --card-bg: #292019; --border-rivet: #775039;
+      --rat-plate: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22180%22%20height%3D%22180%22%20viewBox%3D%220%200%20180%20180%22%3E%3Cdefs%3E%3Cfilter%20id%3D%22r%22%3E%3CfeTurbulence%20type%3D%22fractalNoise%22%20baseFrequency%3D%22.045%22%20numOctaves%3D%224%22%20seed%3D%2212%22%2F%3E%3CfeColorMatrix%20type%3D%22matrix%22%20values%3D%22.8%200%200%200%20.12%20.35%200%200%200%20.035%20.12%200%200%200%20.015%200%200%200%201%200%22%2F%3E%3C%2Ffilter%3E%3Cfilter%20id%3D%22g%22%3E%3CfeTurbulence%20baseFrequency%3D%22.75%22%20numOctaves%3D%223%22%20seed%3D%228%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3Cpattern%20id%3D%22d%22%20width%3D%2236%22%20height%3D%2236%22%20patternUnits%3D%22userSpaceOnUse%22%3E%3Cg%20stroke-linecap%3D%22round%22%20stroke-width%3D%225%22%3E%3Cpath%20d%3D%22M8%2017l9%20-9%20M26%2026l-9%20-9%22%20stroke%3D%22%231c100b%22%20transform%3D%22translate%281%202%29%22%2F%3E%3Cpath%20d%3D%22M8%2017l9%20-9%20M26%2026l-9%20-9%22%20stroke%3D%22%23a06b49%22%2F%3E%3Cpath%20d%3D%22M8%2017l9%20-9%20M26%2026l-9%20-9%22%20stroke%3D%22%23593723%22%20stroke-width%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fpattern%3E%3C%2Fdefs%3E%3Crect%20width%3D%22180%22%20height%3D%22180%22%20fill%3D%22%23493327%22%2F%3E%3Crect%20width%3D%22180%22%20height%3D%22180%22%20filter%3D%22url%28%23r%29%22%20opacity%3D%22.8%22%2F%3E%3Crect%20width%3D%22180%22%20height%3D%22180%22%20fill%3D%22url%28%23d%29%22%2F%3E%3Crect%20width%3D%22180%22%20height%3D%22180%22%20filter%3D%22url%28%23g%29%22%20opacity%3D%22.15%22%2F%3E%3C%2Fsvg%3E"); --rat-bolt: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2215%22%20height%3D%2215%22%20viewBox%3D%220%200%2015%2015%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22b%22%20x2%3D%22.8%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23b08058%22%2F%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%2375452a%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23302019%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Ccircle%20cx%3D%227.5%22%20cy%3D%228%22%20r%3D%227%22%20fill%3D%22%23160d08%22%2F%3E%3Ccircle%20cx%3D%227.5%22%20cy%3D%227.5%22%20r%3D%226%22%20fill%3D%22%23533321%22%20stroke%3D%22%23a66b42%22%20stroke-width%3D%22.6%22%2F%3E%3Cpath%20d%3D%22M5%202.5h5l2.5%205-2.5%205H5l-2.5-5z%22%20fill%3D%22url%28%23b%29%22%20stroke%3D%22%233b2316%22%2F%3E%3Cpath%20d%3D%22M5%204l4%205m-2-5%203%202%22%20stroke%3D%22%23c18550%22%20opacity%3D%22.55%22%2F%3E%3C%2Fsvg%3E");
+      background: linear-gradient(#130e0b55,#130e0b88), var(--rat-plate) repeat;
+    }
+    body.theme-ratrod #app-container {
+      border-left: 4px ridge #845438; border-right: 4px ridge #845438;
+      background: linear-gradient(#120d0be0,#120d0be0), var(--rat-plate) repeat;
+    }
+    body.theme-ratrod header, body.theme-ratrod .module-breadcrumb {
+      background: linear-gradient(#21150cb0,#130d0bd9), var(--rat-plate) repeat;
+      border-bottom-color: #9c5b35;
+    }
+    body.theme-ratrod :is(.menu-card,.post-card,.spec-card,.auth-box,.post-creator,.status-beacon,.calc-box) {
+      background: var(--rat-bolt) left 4px top 4px / 13px 13px no-repeat,
+                  var(--rat-bolt) right 4px top 4px / 13px 13px no-repeat,
+                  var(--rat-bolt) left 4px bottom 4px / 13px 13px no-repeat,
+                  var(--rat-bolt) right 4px bottom 4px / 13px 13px no-repeat,
+                  radial-gradient(ellipse at 0% 100%,#7d3b2355,transparent 55%),
+                  linear-gradient(135deg,#35261e,#1c1613 65%,#39261b);
+      border: 2px solid #795038; border-radius: 4px;
+      box-shadow: inset 0 0 12px #08050499, 0 3px 6px #0008;
+      padding: 19px;
+    }
+    body.theme-ratrod :is(.btn-speed,.btn-wrench,.btn-nav-trigger,.btn-quick-menu) {
+      background: linear-gradient(175deg,#815036,#49291c 48%,#2c1c15);
+      border-color: #a46b46; color: #fff0dc;
+      text-shadow: 0 1px 2px #000;
+    }
+
   </style>
 </head>
 <body>
@@ -1983,7 +2017,7 @@
             <span>STANDARD</span>
           </button>
           <button id="theme-btn-ratrod" class="theme-option-btn" onclick="setAppTheme('ratrod')">
-            <span>🛻 Rat Rod / Patina (Ärgad Koppar)</span>
+            <span>🛻 Rat Rod / Patina (Rost & Durkplåt)</span>
             <span>HEMLIGT TEMA</span>
           </button>
           <button id="theme-btn-night" class="theme-option-btn" onclick="setAppTheme('night')">
