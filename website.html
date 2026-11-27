@@ -1722,6 +1722,22 @@
     #pit-order-card small { color: #ffad4d; letter-spacing: 1.5px; font-weight: 800; }
     #pit-order-card p { color: #fff; margin: 10px 0; line-height: 1.5; }
 
+
+/* 10 mm-hylsjakten */
+.bc-socket {display:inline-flex;vertical-align:middle;align-items:center;justify-content:center;width:34px;height:34px;margin-left:10px;border:0;background:transparent;color:#96969c;cursor:pointer;opacity:.72;transition:opacity .2s,transform .2s;}
+.bc-socket:hover,.bc-socket:focus-visible {opacity:1;transform:rotate(-12deg);color:#ffc46b;}
+.bc-socket.found {color:#f5bd32;opacity:1;}
+.bc-hunt {margin:18px auto;padding:16px;max-width:440px;border:1px dashed #aa7438;border-radius:10px;text-align:center;background:#17171b;color:#eee;font-size:.85rem;}
+.bc-hunt strong {color:#ffc46b;display:block;letter-spacing:1px;margin-bottom:8px;}
+.bc-hunt progress {width:85%;accent-color:#ff8f00;}
+.bc-hunt button {background:transparent;border:1px solid #777;color:#ddd;padding:7px 12px;border-radius:6px;cursor:pointer;margin-top:8px;}
+
+
+#public-announcement[data-type="important"]{background:#a51d20;color:white} #public-announcement[data-type="fun"]{background:#f5bd32;color:#171717} #public-announcement[data-type="info"]{background:#24465b;color:white}
+#bay-summary{padding:10px 0;color:#ffad4d} #admin-bay-requests [hidden]{display:none!important} #admin-bay-requests [data-status="pending"]{border-left:3px solid orange} #admin-bay-requests [data-status="approved"]{border-left:3px solid #65b86b} #admin-bay-requests [data-status="rejected"]{border-left:3px solid #df5353}
+.event-details{display:block!important;cursor:pointer}.event-details summary{padding:8px;font-weight:bold}.event-details[open] .upcoming-item-info{padding:8px}
+.gb-reactions{display:flex;gap:8px;margin:10px 0}.gb-reactions button{background:#26262b;color:white;border:1px solid #555;border-radius:20px;padding:7px 12px;cursor:pointer}.gb-entry-photo{width:100%;max-height:420px;object-fit:contain;background:#111;border-radius:10px}.gallery-img-wrap img,.gb-entry-photo{cursor:zoom-in}
+#bc-lightbox{background:#111;color:white;border:1px solid #555;border-radius:12px;padding:12px;max-width:95vw;max-height:95vh;text-align:center}#bc-lightbox::backdrop{background:#000d}#bc-lightbox img{display:block;max-width:88vw;max-height:78vh;object-fit:contain;margin:auto}#bc-lightbox button{display:block;margin-left:auto;background:#333;color:white;border:0;padding:10px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -1757,7 +1773,7 @@
         <!-- 1. Info-banner -->
         <div class="admin-subbox">
           <h4>📢 Info-banner högst upp på sidan</h4>
-          <input type="text" id="admin-banner-input" class="gb-input" placeholder="T.ex. Öppet garage & grill på lördag kl 15!" />
+          <select id="banner-type" class="gb-input"><option value="info">ℹ️ Vanlig information</option><option value="important">⚠️ Viktig information</option><option value="fun">😄 Roligt meddelande</option></select><input type="text" id="admin-banner-input" class="gb-input" placeholder="T.ex. Öppet garage & grill på lördag kl 15!" />
           <div style="display:flex; gap:8px;">
             <button onclick="saveBanner()" style="flex:1; background:#2e7d32; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer;">Publicera Banner</button>
             <button onclick="clearBanner()" style="background:#b71c1c; color:#fff; border:none; padding:10px; border-radius:6px; font-weight:bold; cursor:pointer;">Dölj</button>
@@ -1797,7 +1813,7 @@
         <!-- 4. Gästmek (Synkad med appens 'guests'-samling) -->
         <div class="admin-subbox">
           <h4>🔧 Gästmek-förfrågningar & Bokningar</h4>
-          <div class="admin-mini-list" id="admin-bay-requests">
+          <div id="bay-summary"></div><select id="bay-filter" class="gb-input" onchange="filterBay()"><option value="all">Alla bokningar</option><option value="pending">Väntar</option><option value="approved">Godkända</option><option value="rejected">Nekade</option></select><div class="admin-mini-list" id="admin-bay-requests">
             <div style="color:#888; font-size:0.8rem;">Inga gästmek inlagda ännu.</div>
           </div>
         </div>
@@ -1815,7 +1831,7 @@
           <input type="text" id="admin-poll-q" class="gb-input" placeholder="Fråga (t.ex. Ford vs. GM i garaget?)" />
           <input type="text" id="admin-poll-opt1" class="gb-input" placeholder="Alternativ 1 *" />
           <input type="text" id="admin-poll-opt2" class="gb-input" placeholder="Alternativ 2 *" />
-          <input type="text" id="admin-poll-opt3" class="gb-input" placeholder="Alternativ 3 (valfritt)" />
+          <div class="admin-btn-row"><button class="btn-mini" onclick="setPollClosed(true)">🏁 Avsluta</button><button class="btn-mini" onclick="setPollClosed(false)">↻ Öppna igen</button></div><input type="text" id="admin-poll-opt3" class="gb-input" placeholder="Alternativ 3 (valfritt)" />
           <button onclick="saveNewPoll()" style="width:100%; background:#ff5722; color:#111; border:none; padding:10px; border-radius:6px; font-weight:900; cursor:pointer;">🚀 Starta ny omröstning (nollställer röster)</button>
         </div>
 
@@ -1894,7 +1910,7 @@
   <!-- DEPÅN, GÄST-WIFI & SWISH -->
   <section id="depan" class="section">
     <div class="section-header">
-      <h2 class="section-title">Depån i Brännehylte</h2>
+      <h2 class="section-title">Depån i Brännehylte<button type="button" class="bc-socket" data-socket="1" aria-label="Hittad 10 mm-hylsa 1"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
       <p class="section-lead">
         Hösten 2026 slog vi upp portarna till vår ca 300 m² stora verkstad. Här samsas V8-projekt, 
         svetsloppor, specialbyggda arbetsbänkar och vår egen depåmyshörna.
@@ -2005,7 +2021,7 @@
   <!-- NÄSTA GREJ I SIKTE (SYNKAD MED APPENS KALENDER) & GARAGE-OMRÖSTNING -->
   <section id="aktuellt" class="section" style="padding-top: 10px;">
     <div class="section-header">
-      <h2 class="section-title">I Sikte & Garage-omröstning</h2>
+      <h2 class="section-title">I Sikte & Garage-omröstning<button type="button" class="bc-socket" data-socket="2" aria-label="Hittad 10 mm-hylsa 2"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
       <p class="section-lead">Håll koll på kommande träffar och mekkvällar från kalendern samt lägg din röst i veckans verkstadsfråga:</p>
     </div>
 
@@ -2119,7 +2135,7 @@
   <!-- CREW & BYGGEN -->
   <section id="crew" class="section" style="padding-top: 10px;">
     <div class="section-header">
-      <h2 class="section-title">Startfältet – Crew & Fordon</h2>
+      <h2 class="section-title">Startfältet – Crew & Fordon<button type="button" class="bc-socket" data-socket="3" aria-label="Hittad 10 mm-hylsa 3"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
       <p class="section-lead">Klicka på respektive medlem för att läsa mer om gänget i Burn Creek Speedshop.</p>
     </div>
 
@@ -2169,7 +2185,7 @@
   <!-- DEPÅREGLER -->
   <section id="regler" class="section" style="padding-top: 10px;">
     <div class="rules-box">
-      <h2 class="section-title" style="border-bottom-color: #d32f2f;">⚠️ Depåregler i Garaget</h2>
+      <h2 class="section-title" style="border-bottom-color: #d32f2f;">⚠️ Depåregler i Garaget<button type="button" class="bc-socket" data-socket="4" aria-label="Hittad 10 mm-hylsa 4"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
       <p class="section-lead" style="margin-bottom: 18px;">Välkommen in i värmen! För allas trevnad och lackens överlevnad gäller följande i Burn Creek:</p>
 
       <div class="rules-grid">
@@ -2219,7 +2235,7 @@
   <!-- GALLERI -->
   <section id="galleri" class="section" style="padding-top: 10px;">
     <div class="section-header">
-      <h2 class="section-title">Glimtar från Garaget</h2>
+      <h2 class="section-title">Glimtar från Garaget<button type="button" class="bc-socket" data-socket="5" aria-label="Hittad 10 mm-hylsa 5"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
       <p class="section-lead">Färska bilder från lokalen, bänkarna, bilarna och kvällsmeket i Brännehylte.</p>
     </div>
 
@@ -2275,7 +2291,8 @@
     </div>
   </section>
 
-  <footer>
+  <div class="bc-hunt" id="bc-hunt"><strong>🔍 THE MISSING 10MM</strong><p id="bc-hunt-status" aria-live="polite">Fem hylsor har försvunnit i depån. Kan du hitta dem?</p><progress id="bc-hunt-progress" max="5" value="0" aria-label="Hittade hylsor"></progress><div><button type="button" id="bc-hunt-reset" hidden>Spela igen</button></div></div>
+<footer>
     <strong>Burn Creek Speedshop</strong> • Brännehylte • Est. 2026<br>
     <a href="#gastbok" style="color:#ff6f00; font-weight:bold; text-decoration:none;">↑ Signera gästboken ovan</a><br>
     <span class="admin-trigger" onclick="openLoginModal()">🔒 Admin</span> •
@@ -2669,13 +2686,13 @@
             const daysLeft = Math.max(0, Math.ceil(dMs / (1000 * 60 * 60 * 24)));
             const subInfo = `${ev.date}${ev.time ? ' kl ' + ev.time : ''}${ev.desc ? ' • ' + ev.desc : ''}`;
             return `
-              <div class="upcoming-item">
+              <details class="upcoming-item event-details"><summary>${getCategoryIcon(ev.category)} ${escapeHtml(ev.title)} · ${escapeHtml(ev.date)}</summary>
                 <div class="upcoming-item-info">
                   <strong>${getCategoryIcon(ev.category)} ${escapeHtml(ev.title)}</strong>
                   <small>${escapeHtml(subInfo)}</small>
                 </div>
                 <span class="upcoming-days-badge">${daysLeft === 0 ? 'IDAG' : daysLeft + ' dgr'}</span>
-              </div>
+              </details>
             `;
           }).join('');
         } else {
@@ -2843,7 +2860,7 @@
           : (r.status === 'rejected' ? '❌ Nekad' : '⏳ Förfrågan från hemsidan');
 
         adminHtml += `
-          <div class="admin-mini-item">
+          <div class="admin-mini-item" data-status="${isApproved ? 'approved' : r.status === 'rejected' ? 'rejected' : 'pending'}">
             <strong>${escapeHtml(r.name || 'Gäst')}</strong> • 📅 ${escapeHtml(r.date || 'Ej satt')}
             <div style="color:#ddd; margin-top:2px;">🚗 ${escapeHtml(r.car || '')}</div>
             <div style="font-size:0.75rem; color:#aaa;">Värd/Källa: ${escapeHtml(r.host || '')}</div>
@@ -2872,6 +2889,8 @@
       if (adminContainer) {
         adminContainer.innerHTML = adminHtml || '<div style="color:#888; font-size:0.8rem;">Inga gästmek inlagda ännu.</div>';
       }
+      document.getElementById('bay-summary').textContent = `⏳ ${docs.filter(r=>r.status==='pending').length} väntar · ✅ ${approvedCount} godkända · ❌ ${docs.filter(r=>r.status==='rejected').length} nekade`;
+      filterBay();
       if (approvedCount > 0) {
         publicSection.style.display = 'block';
         publicList.innerHTML = approvedHtml;
@@ -2880,6 +2899,7 @@
       }
     });
 
+    function filterBay(){const f=document.getElementById('bay-filter').value; document.querySelectorAll('#admin-bay-requests [data-status]').forEach(e=>e.hidden=f!=='all'&&e.dataset.status!==f);}
     async function updateBayStatus(id, newStatus) {
       await db.collection('guests').doc(id).update({ status: newStatus });
       showToast(newStatus === 'approved' ? 'Gästmek godkänd!' : 'Förfrågan nekad');
@@ -2913,7 +2933,7 @@
       const votedIndex = localStorage.getItem('bc_poll_voted_' + currentPollData.pollId);
 
       totalEl.textContent = `${totalVotes} ${totalVotes === 1 ? 'röst' : 'röster'}`;
-      hintEl.textContent = votedIndex !== null
+      hintEl.textContent = currentPollData.closed ? "🏁 Avslutad – slutresultat" : votedIndex !== null
         ? '✅ Tack för din röst!'
         : 'Klicka på ett alternativ för att rösta';
 
@@ -2926,7 +2946,7 @@
           <div class="poll-option ${isMyChoice ? 'voted' : ''}" onclick="castPollVote(${idx})">
             <div class="poll-bar-fill" style="width:${pct}%;"></div>
             <div class="poll-option-row">
-              <span>${isMyChoice ? '✔ ' : ''}${escapeHtml(opt)}</span>
+              <span>${totalVotes > 0 && count === Math.max(...votes) ? '🏆 ' : ''}${isMyChoice ? '✔ ' : ''}${escapeHtml(opt)}</span>
               <span class="poll-stats">${pct}% (${count})</span>
             </div>
           </div>
@@ -2942,6 +2962,7 @@
           pollId: d.pollId || 'poll_1',
           question: d.question,
           options: d.options,
+          closed: d.closed === true,
           votes: d.votes || d.options.map(() => 0)
         };
       }
@@ -2960,30 +2981,23 @@
     });
 
     async function castPollVote(index) {
+      if(currentPollData.closed){showToast("Omröstningen är avslutad");return;}
       const storageKey = 'bc_poll_voted_' + currentPollData.pollId;
       if (localStorage.getItem(storageKey) !== null) {
         showToast('Du har redan röstat i denna omgång!');
         return;
       }
 
-      localStorage.setItem(storageKey, String(index));
-      const newVotes = currentPollData.options.map((_, i) => (Number(currentPollData.votes[i]) || 0) + (i === index ? 1 : 0));
-      currentPollData.votes = newVotes;
-      renderPoll();
-
+      if (window.bcVoting) return;
+      window.bcVoting = true;
       try {
-        await db.collection('website_settings').doc('garage_poll').set({
-          pollId: currentPollData.pollId,
-          question: currentPollData.question,
-          options: currentPollData.options,
-          votes: newVotes
-        }, { merge: true });
-        showToast('Din röst är registrerad!');
-      } catch (err) {
-        console.error(err);
-        showToast('Kunde inte spara röst – kontrollera Firestore Rules!');
-      }
+        const ref=db.collection('website_settings').doc('garage_poll');
+        const expected=currentPollData.pollId;
+        await db.runTransaction(async tx=>{const snap=await tx.get(ref);const d=snap.exists?snap.data():currentPollData;if(d.closed || d.pollId!==expected)throw Error('Omröstningen har ändrats');const votes=d.options.map((_,i)=>(Number(d.votes?.[i])||0)+(i===index?1:0));tx.set(ref,{pollId:d.pollId,question:d.question,options:d.options,votes,closed:false},{merge:true});});
+        localStorage.setItem(storageKey,String(index));renderPoll();showToast('Din röst är registrerad!');
+      } catch(e){showToast('Kunde inte spara rösten. Försök igen.');} finally {window.bcVoting=false;}
     }
+    async function setPollClosed(closed){try{await db.collection('website_settings').doc('garage_poll').set({...currentPollData,closed},{merge:true});showToast(closed?'Omröstning avslutad':'Omröstning öppnad');}catch(e){showToast('Kunde inte ändra status');}}
 
     async function saveNewPoll() {
       const q = document.getElementById('admin-poll-q').value.trim();
@@ -3001,6 +3015,7 @@
         pollId: 'poll_' + Date.now(),
         question: q,
         options: options,
+        closed: false,
         votes: options.map(() => 0)
       });
       showToast('Ny garage-omröstning publicerad!');
@@ -3250,7 +3265,10 @@
       const bannerEl = document.getElementById('public-announcement');
       const inputEl = document.getElementById('admin-banner-input');
       if (doc.exists && doc.data().text) {
-        bannerEl.textContent = doc.data().text;
+        const type = ['info','important','fun'].includes(doc.data().type) ? doc.data().type : 'info';
+        bannerEl.dataset.type = type;
+        document.getElementById('banner-type').value = type;
+        bannerEl.textContent = ({info:'ℹ️ ',important:'⚠️ ',fun:'😄 '})[type] + doc.data().text;
         bannerEl.style.display = 'block';
         if (inputEl) inputEl.value = doc.data().text;
       } else {
@@ -3260,7 +3278,7 @@
 
     async function saveBanner() {
       const text = document.getElementById('admin-banner-input').value.trim();
-      await db.collection('website_settings').doc('banner').set({ text: text });
+      await db.collection('website_settings').doc('banner').set({ text: text, type: document.getElementById("banner-type").value });
       showToast('Info-banner uppdaterad!');
     }
 
@@ -3513,6 +3531,7 @@
               <span class="gb-ride">🚗 ${escapeHtml(d.ride || '')}</span>
               <p class="gb-msg">${escapeHtml(d.message)}</p>
               ${photoHtml}
+              <div class="gb-reactions" data-entry="${escapeHtml(doc.id)}">${['🔥','👍','😂'].map((emoji,i)=>`<button type="button" data-reaction="${i}">${emoji} <span>${Number(d.reactions?.[i])||0}</span></button>`).join('')}</div>
               <button class="admin-del-btn" onclick="deleteGuestbookEntry('${doc.id}')">🗑 Radera inlägg</button>
             </div>
           `;
@@ -3520,5 +3539,34 @@
         feed.innerHTML = html;
       });
   </script>
-</body>
+<script>
+(function(){
+ const key='bc_socket_hunt_v1';
+ let found=new Set();
+ try { const saved=JSON.parse(localStorage.getItem(key)||'[]'); if(Array.isArray(saved)) found=new Set(saved.filter(n=>Number.isInteger(n)&&n>=1&&n<=5)); } catch(e){}
+ const buttons=[...document.querySelectorAll('.bc-socket')];
+ const status=document.getElementById('bc-hunt-status'), progress=document.getElementById('bc-hunt-progress'), reset=document.getElementById('bc-hunt-reset');
+ function render(){
+  buttons.forEach(b=>{const hit=found.has(Number(b.dataset.socket)); b.classList.toggle('found',hit); b.setAttribute('aria-pressed',String(hit)); b.title=hit?'Redan hittad!':'En mystisk liten hylsa';});
+  progress.value=found.size;
+  status.textContent=found.size===5?'🏆 CERTIFIED 10MM HUNTER – Alla fem hylsor hittade!':found.size+' / 5 hylsor hittade. Leta vidare på sidan!';
+  reset.hidden=found.size!==5;
+ }
+ function save(){try{localStorage.setItem(key,JSON.stringify([...found]));}catch(e){}}
+ buttons.forEach(b=>b.addEventListener('click',()=>{const n=Number(b.dataset.socket); if(found.has(n))return; found.add(n);save();render(); if(found.size===5)document.getElementById('bc-hunt').scrollIntoView({block:'center'}); }));
+ reset.addEventListener('click',()=>{found.clear();save();render();});render();
+})();
+</script>
+<dialog id="bc-lightbox"><button type="button" aria-label="Stäng" onclick="this.parentElement.close()">✕</button><img alt=""><p></p></dialog>
+<script>
+document.addEventListener('click',async e=>{
+ const img=e.target.closest('.gallery-img-wrap img,.gb-entry-photo');
+ if(img){const d=document.getElementById('bc-lightbox');d.querySelector('img').src=img.src;d.querySelector('img').alt=img.alt;d.querySelector('p').textContent=img.alt;d.showModal();return;}
+ const btn=e.target.closest('.gb-reactions button');if(!btn)return;
+ const id=btn.parentElement.dataset.entry,i=Number(btn.dataset.reaction),key='bc_reaction_'+id+'_'+i;
+ if(localStorage.getItem(key))return showToast('Du har redan reagerat!');
+ btn.disabled=true;try{await db.collection('guestbook').doc(id).update({['reactions.'+i]:firebase.firestore.FieldValue.increment(1)});localStorage.setItem(key,'1');}catch(err){showToast('Reaktionen kunde inte sparas – kontrollera Firestore-reglerna.');}finally{btn.disabled=false;}
+});
+document.getElementById('bc-lightbox').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close();});
+</script></body>
 </html>
