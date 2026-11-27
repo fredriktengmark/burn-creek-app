@@ -1740,6 +1740,18 @@
 #bc-lightbox{background:#111;color:white;border:1px solid #555;border-radius:12px;padding:12px;max-width:95vw;max-height:95vh;text-align:center}#bc-lightbox::backdrop{background:#000d}#bc-lightbox img{display:block;max-width:88vw;max-height:78vh;object-fit:contain;margin:auto}#bc-lightbox button{display:block;margin-left:auto;background:#333;color:white;border:0;padding:10px;cursor:pointer}
 
 .bc-legends{max-width:1000px;margin:0 auto;padding:32px 16px;color:#eee}.bc-legend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.bc-legend-card{background:#161619;border:1px solid #49403a;border-top:3px solid #ff6a1a;border-radius:12px;padding:20px;min-width:0}.bc-legend-card h3{color:#ffb34e;margin:0 0 12px}.bc-odo{display:flex;justify-content:center;gap:4px;margin:16px 0}.bc-odo span{background:linear-gradient(#333,#111 49%,#555 50%,#222 53%);border:1px solid #777;border-radius:4px;color:#fff;font:bold clamp(18px,4vw,30px) monospace;padding:6px}.bc-legend-card button{background:#29292d;color:#fff;border:1px solid #aa6832;border-radius:6px;padding:10px;cursor:pointer;margin:4px 0;width:100%;text-align:left}.bc-legend-card button:disabled{opacity:.7;cursor:default}.bc-legend-card input{width:100%;padding:10px;background:#111;color:#fff;border:1px solid #777;border-radius:5px}.bc-trophy{padding:10px 0;border-bottom:1px solid #444}.bc-trophy.locked{opacity:.65}.bc-legend-card small{color:#bbb}.bc-legend-card ol{padding-left:22px}.bc-legend-card [hidden]{display:none!important}
+
+/* Rat Rod: rusty diamond plate, oxidized steel and hex bolts */
+body.ratrod-mode{--rr-plate:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2284%22%20height%3D%2284%22%20viewBox%3D%220%200%2084%2084%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22a%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23b08060%22%2F%3E%3Cstop%20offset%3D%22.45%22%20stop-color%3D%22%2355372a%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23211b18%22%2F%3E%3C%2FlinearGradient%3E%3Cfilter%20id%3D%22n%22%3E%3CfeTurbulence%20baseFrequency%3D%22.45%22%20numOctaves%3D%223%22%20seed%3D%2212%22%2F%3E%3CfeColorMatrix%20type%3D%22saturate%22%20values%3D%220%22%2F%3E%3C%2Ffilter%3E%3C%2Fdefs%3E%3Crect%20width%3D%2284%22%20height%3D%2284%22%20fill%3D%22%23493b33%22%2F%3E%3Crect%20width%3D%2284%22%20height%3D%2284%22%20filter%3D%22url%28%23n%29%22%20opacity%3D%22.24%22%2F%3E%3Cg%20fill%3D%22url%28%23a%29%22%20stroke%3D%22%23241a15%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M5%2022L17%205%2024%202%2022%209%2010%2026%203%2029Z%22%2F%3E%3Cpath%20d%3D%22M47%2064L59%2047%2066%2044%2064%2051%2052%2068%2045%2071Z%22%2F%3E%3Cpath%20d%3D%22M43%207L60%2019%2063%2026%2056%2024%2039%2012%2036%205Z%22%2F%3E%3Cpath%20d%3D%22M1%2049L18%2061%2021%2068%2014%2066%20-3%2054%20-6%2047Z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");--rr-bolt:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22b%22%20x2%3D%22.8%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%23c38a58%22%2F%3E%3Cstop%20offset%3D%22.5%22%20stop-color%3D%22%23754029%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2335241b%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2213%22%20r%3D%2211%22%20fill%3D%22%231c1511%22%2F%3E%3Cpath%20d%3D%22M7%203H17L22%2012%2017%2021H7L2%2012Z%22%20fill%3D%22url%28%23b%29%22%20stroke%3D%22%23c18a61%22%20stroke-width%3D%22.7%22%2F%3E%3Cpath%20d%3D%22M7%2011L17%2013%22%20stroke%3D%22%2339251a%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%228%22%20cy%3D%227%22%20r%3D%221.5%22%20fill%3D%22%23a84e24%22%2F%3E%3Ccircle%20cx%3D%2217%22%20cy%3D%2216%22%20r%3D%222%22%20fill%3D%22%23522b1b%22%2F%3E%3C%2Fsvg%3E");background-color:#30251f;background-image:radial-gradient(ellipse at 12% 20%,#8c3d1c88,transparent 55%),radial-gradient(ellipse at 85% 65%,#a3502588,transparent 55%),linear-gradient(#17131055,#171310aa),var(--rr-plate);color:#f2dfc9}
+body.ratrod-mode nav,body.ratrod-mode footer{background-image:linear-gradient(#1b1512d9,#241710e8),var(--rr-plate);border-color:#9c5935}
+body.ratrod-mode .hero{background-image:radial-gradient(ellipse,#69351d66,#171310cc),var(--rr-plate)}
+body.ratrod-mode :is(.timing-board,.rules-box,.gb-box,.crew-card,.perk-card,.feature-box,.bay-card,.drag-card,.bc-legend-card,.bc-hunt,.admin-card){position:relative;background-image:radial-gradient(ellipse at 5% 0%,#a54b274d,transparent 45%),radial-gradient(ellipse at 95% 100%,#8b442b66,transparent 45%),linear-gradient(125deg,#332d29,#211c19 65%,#39271e);border:2px solid #865338;border-radius:4px;box-shadow:inset 0 0 20px #0009,0 6px 15px #0008;padding-top:28px}
+body.ratrod-mode :is(.timing-board,.rules-box,.gb-box,.crew-card,.perk-card,.feature-box,.bay-card,.drag-card,.bc-legend-card,.bc-hunt,.admin-card)::before,body.ratrod-mode :is(.timing-board,.rules-box,.gb-box,.crew-card,.perk-card,.feature-box,.bay-card,.drag-card,.bc-legend-card,.bc-hunt,.admin-card)::after{content:'';position:absolute;top:5px;width:18px;height:18px;background:var(--rr-bolt) center/contain no-repeat;pointer-events:none;z-index:2}
+body.ratrod-mode :is(.timing-board,.rules-box,.gb-box,.crew-card,.perk-card,.feature-box,.bay-card,.drag-card,.bc-legend-card,.bc-hunt,.admin-card)::before{left:5px}body.ratrod-mode :is(.timing-board,.rules-box,.gb-box,.crew-card,.perk-card,.feature-box,.bay-card,.drag-card,.bc-legend-card,.bc-hunt,.admin-card)::after{right:5px}
+body.ratrod-mode :is(.btn-primary,.btn-secondary,.action-btn,.btn-gb-submit,.pit-order-trigger,.bc-legend-card button){background-image:linear-gradient(135deg,#a4653c,#69351f 55%,#3b2920);border:1px solid #b27b51;color:#fff0d6;border-radius:4px;box-shadow:inset 0 1px 2px #e5b28a66,0 3px 5px #0008}
+body.ratrod-mode .section-title{color:#f3d9b8;border-bottom:3px solid #a3633e;text-shadow:2px 2px #20150f}
+#aktuellt .features-grid,#omrostning .features-grid{grid-template-columns:1fr}
+
 </style>
 </head>
 <body>
@@ -1747,25 +1759,433 @@
   <div class="race-stripe"></div>
 
   <!-- PUBLIK INFO-BANNER (styrs från Admin) -->
-  <div id="public-announcement"></div>
+  
 
   <nav>
     <a href="#" class="nav-brand">🏁 Burn Creek <span>Speedshop</span></a>
-    <div class="nav-links">
-      <a href="#depan">Depån</a>
-      <a href="#reaktionstest">Startgran</a>
-      <a href="#aktuellt">I Sikte & Röstning</a>
-      <a href="#mekplats">Gästmekplats</a>
-      <a href="#crew">Crew & Åk</a>
-      <a href="#regler">Depåregler</a>
-      <a href="#galleri">Bilder</a>
-      <a href="#gastbok">Gästbok</a>
-<a href="#garage-legends">Garage Legends</a>
-    </div>
+    <div class="nav-links"><a href="#crew">Crew & Åk</a><a href="#aktuellt">Kalender</a><a href="#mekplats">Gästmekplats</a><a href="#depan">Besöksinfo</a><a href="#galleri">Bilder</a><a href="#regler">Depåregler</a><a href="#omrostning">Omröstning</a><a href="#reaktionstest">Startgran</a><a href="#garage-legends">Garage Legends</a><a href="#gastbok">Gästbok</a></div>
   </nav>
 
   <!-- UTÖKAD ADMIN-PANEL (Visas endast när man loggat in med burncreek2026) -->
-  <section id="admin-panel-section">
+  
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="live-status-pill" id="live-status-pill">
+      <span class="status-dot"></span>
+      <span id="live-status-text">Kollar depåstatus i Brännehylte...</span>
+    </div>
+    <br>
+
+    <div class="christmas-tree" id="christmas-tree" onclick="handleTreeEasterEgg()" title="Klicka 5 gånger för Burnout-läge!">
+      <div class="bulb amber"></div>
+      <div class="bulb amber"></div>
+      <div class="bulb amber"></div>
+      <div class="bulb green"></div>
+      <span class="burnout-label">🔥 BURNOUT</span>
+    </div>
+
+    <div class="hero-logo" onclick="handleLogoEasterEgg()" title="Klicka 3 gånger för Rat Rod / Patina-läge">
+      <img src="logo.png" alt="Burn Creek Speedshop Logo">
+    </div>
+
+    <h1>Burn Creek Speedshop</h1>
+    <div class="hero-tag" id="hero-tag"><span>Brännehylte • Est. 2026</span></div>
+
+    <p>
+      I småländska Brännehylte samlas fem biltokiga polare för att skruva V8, 
+      hålla liv i klassiska jänkare och motorcyklar samt dricka alldeles för mycket depåkaffe.
+    </p>
+
+    <div class="hero-btns">
+      <a href="#crew" class="btn btn-primary"><span>🔥 Se Crewet & Fordonen</span></a>
+      <a href="#reaktionstest" class="btn btn-secondary"><span>🚦 Testa Startgranen</span></a>
+      <a href="#gastbok" class="btn btn-secondary"><span>✍️ Signera Gästboken</span></a>
+    </div>
+    <div class="pit-order-wrap">
+      <button type="button" class="pit-order-trigger" onclick="drawPitOrder()">🎲 Dra dagens depåorder</button>
+      <div id="pit-order-card" hidden aria-live="polite"><small>📟 BURN CREEK PIT WALL</small><p id="pit-order-text"></p><button type="button" class="pit-order-trigger" onclick="drawPitOrder()">En order till ↻</button></div>
+    </div>
+  </header>
+<div id="public-announcement"></div>
+<div class="race-stripe"></div>
+<section id="crew" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">Startfältet – Crew & Fordon<button type="button" class="bc-socket" data-socket="3" aria-label="Hittad 10 mm-hylsa 3"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
+      <p class="section-lead">Klicka på respektive medlem för att läsa mer om gänget i Burn Creek Speedshop.</p>
+    </div>
+
+    <div class="crew-grid">
+      <div class="crew-card" id="crew-card-fredrik" style="background-image: url('fredrik.jpg');" onclick="openCrewModal('fredrik')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
+        <div class="crew-card-content">
+          <h3>Fredrik Tengmark</h3>
+          <div class="ride-badge" id="crew-badge-fredrik">Ford Hot Rod • GMC Vandura</div>
+        </div>
+      </div>
+
+      <div class="crew-card" id="crew-card-tony" style="background-image: url('tony.jpg');" onclick="openCrewModal('tony')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
+        <div class="crew-card-content">
+          <h3>Tony Olsson</h3>
+          <div class="ride-badge" id="crew-badge-tony">Buick LeSabre</div>
+        </div>
+      </div>
+
+      <div class="crew-card" id="crew-card-kenneth" style="background-image: url('kenneth.jpg');" onclick="openCrewModal('kenneth')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
+        <div class="crew-card-content">
+          <h3>Kenneth Eklund</h3>
+          <div class="ride-badge" id="crew-badge-kenneth">Ford Ranchero</div>
+        </div>
+      </div>
+
+      <div class="crew-card" id="crew-card-hakan" style="background-image: url('hakan.jpg');" onclick="openCrewModal('hakan')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
+        <div class="crew-card-content">
+          <h3>Håkan Gustafsson</h3>
+          <div class="ride-badge" id="crew-badge-hakan">Ford Galaxie 500 Cab</div>
+        </div>
+      </div>
+
+      <div class="crew-card" id="crew-card-pierre" style="background-image: url('pierre.jpg');" onclick="openCrewModal('pierre')">
+        <span class="crew-click-hint">👆 Klicka för info</span>
+        <div class="crew-card-content">
+          <h3>Pierre Danhall</h3>
+          <div class="ride-badge" id="crew-badge-pierre">Motorcyklar</div>
+        </div>
+      </div>
+    </div>
+  </section>
+<section id="aktuellt" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">Kommande träffar<button type="button" class="bc-socket" data-socket="2" aria-label="Hittad 10 mm-hylsa 2"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
+      <p class="section-lead">Håll koll på kommande träffar och mekkvällar från kalendern:</p>
+    </div>
+
+    <div class="features-grid">
+      <!-- Nästa grej i sikte -->
+      <div class="feature-box">
+        <div>
+          <h3>⏱️ Nästa grej i sikte</h3>
+          <div class="countdown-event-title" id="cd-event-title">Hämtar från kalendern...</div>
+          <div class="countdown-event-sub" id="cd-event-sub"></div>
+        </div>
+
+        <div class="cd-grid">
+          <div class="cd-unit">
+            <strong id="cd-days">00</strong>
+            <span>Dagar</span>
+          </div>
+          <div class="cd-unit">
+            <strong id="cd-hours">00</strong>
+            <span>Timmar</span>
+          </div>
+          <div class="cd-unit">
+            <strong id="cd-mins">00</strong>
+            <span>Minuter</span>
+          </div>
+          <div class="cd-unit">
+            <strong id="cd-secs">00</strong>
+            <span>Sekunder</span>
+          </div>
+        </div>
+
+        <div class="upcoming-list" id="upcoming-events-list" style="display:none;"></div>
+      </div>
+
+    </div>
+  </section>
+<section id="mekplats" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">🔧 Boka Gästmekplats</h2>
+      <p class="section-lead">
+        Behöver du komma in under tak i Brännehylte en dag eller kväll för att meka, svetsa eller byta olja? 
+        Skicka en förfrågan nedan så syns den direkt i vår app och vi hör av oss!
+      </p>
+    </div>
+
+    <div class="bay-layout">
+      <!-- Bokningsformulär -->
+      <div class="bay-card">
+        <h3>Skicka bokningsförfrågan</h3>
+        <input type="text" id="bay-name" class="gb-input" maxlength="50" placeholder="Ditt namn *" />
+        <input type="tel" id="bay-phone" class="gb-input" maxlength="30" placeholder="Telefonnummer (så vi kan svara på SMS/samtal) *" />
+        <input type="text" id="bay-vehicle" class="gb-input" maxlength="60" placeholder="Fordon (t.ex. Cheva Impala -65, Volvo 740) *" />
+        <input type="date" id="bay-date" class="gb-input" />
+
+        <div class="bay-checks">
+          <label class="bay-check-item">
+            <input type="checkbox" id="bay-need-jack" />
+            Domkraft & pallbockar
+          </label>
+          <label class="bay-check-item">
+            <input type="checkbox" id="bay-need-weld" />
+            Svets / slip
+          </label>
+          <label class="bay-check-item">
+            <input type="checkbox" id="bay-need-air" />
+            Tryckluft & el
+          </label>
+          <label class="bay-check-item">
+            <input type="checkbox" id="bay-need-help" />
+            Behöver ett extra handtag
+          </label>
+        </div>
+
+        <textarea id="bay-desc" class="gb-textarea" maxlength="260" placeholder="Vad ska du göra och ungefär hur lång tid räknar du med? *"></textarea>
+
+        <button class="btn-bay-submit" id="bay-submit-btn" onclick="submitBayRequest()">📅 Skicka förfrågan till Crewet</button>
+      </div>
+
+      <!-- Villkor & Inbokade gästmek från appen -->
+      <div class="bay-card" style="border-top-color: #fbc02d;">
+        <h3 style="color: #fbc02d;">📋 Så funkar gästmekplatsen</h3>
+        <ul style="margin: 0; padding-left: 18px; color: #d4d4dc; font-size: 0.92rem; line-height: 1.65;">
+          <li><strong>Kostnad: 150 kr per dag:</strong> Betalas via Fika-Swish (079-347 53 52) – går rakt in i verkstadskassan för el, värme och förbrukning.</li>
+          <li><strong>Alltid med en medlem på plats:</strong> Gästmek sker när någon ur Burn Creek Crew är i lokalen.</li>
+          <li><strong>Eget ansvar:</strong> Allt skruvande sker på egen risk – vi hjälps åt att hålla säkerheten uppe.</li>
+          <li><strong>Städa efter dig:</strong> Sopa golvet, torka upp spill och lägg tillbaka lånade grejer innan du rullar ut (annars utgår straffavgift på en platta öl eller hembakat!).</li>
+        </ul>
+
+        <div id="approved-bay-section" style="margin-top: 18px; display: none;">
+          <h4 style="margin: 0 0 8px; font-size: 0.9rem; text-transform: uppercase; color: #00e676;">✅ Inbokade gästmek i kalendern</h4>
+          <div class="bay-booking-list" id="approved-bay-list"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+<section id="depan" class="section">
+    <div class="section-header">
+      <h2 class="section-title">Depån i Brännehylte<button type="button" class="bc-socket" data-socket="1" aria-label="Hittad 10 mm-hylsa 1"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
+      <p class="section-lead">
+        Hösten 2026 slog vi upp portarna till vår ca 300 m² stora verkstad. Här samsas V8-projekt, 
+        svetsloppor, specialbyggda arbetsbänkar och vår egen depåmyshörna.
+      </p>
+    </div>
+
+    <div class="timing-board">
+      <div class="timing-cell">
+        <strong>~300 m²</strong>
+        <span>Verkstadsyta</span>
+      </div>
+      <div class="timing-cell">
+        <strong>5 MEKAR</strong>
+        <span>Burn Creek Crew</span>
+      </div>
+      <div class="timing-cell">
+        <strong>V8 & 2-HJUL</strong>
+        <span>Jänkare & Hojar</span>
+      </div>
+    </div>
+
+    <div class="perks-grid">
+      <div class="perk-card">
+        <h3>📶 Gästnätverk (WiFi)</h3>
+        <div class="info-chip">
+          <small>Nätverk (SSID)</small>
+          <strong id="wifi-ssid">Burncreekspeedshopsnyltar</strong>
+        </div>
+        <div class="info-chip">
+          <small>Lösenord</small>
+          <strong id="wifi-pass">Jagsnyltarwifi</strong>
+        </div>
+        <button class="action-btn btn-copy-wifi" onclick="copyWifiPassword()">📋 Kopiera WiFi-lösenord</button>
+      </div>
+
+      <div class="perk-card swish-card">
+        <h3>💸 Fika-Swish / Verkstadskassa</h3>
+        <div class="info-chip">
+          <small>Swish-nummer (Fredrik)</small>
+          <strong>079-347 53 52</strong>
+        </div>
+        <p style="margin: 0 0 12px; font-size: 0.88rem; color: #c4c4ce;">
+          Tar du en dricka, kaffe eller snacks så får du gärna swisha det du tycker det är värt, så vi kan fortsätta att fylla på med mer.
+        </p>
+        <button class="action-btn btn-do-swish" onclick="triggerSwish()">💸 Kopiera nummer & Öppna Swish</button>
+      </div>
+    </div>
+  </section>
+<section id="galleri" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">Glimtar från Garaget<button type="button" class="bc-socket" data-socket="5" aria-label="Hittad 10 mm-hylsa 5"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
+      <p class="section-lead">Färska bilder från lokalen, bänkarna, bilarna och kvällsmeket i Brännehylte.</p>
+    </div>
+
+    <div class="gallery-grid" id="dynamic-gallery-grid">
+      <div style="color:#777; font-size:0.9rem;">Inga galleribilder uppladdade ännu.</div>
+    </div>
+  </section>
+<section id="regler" class="section" style="padding-top: 10px;">
+    <div class="rules-box">
+      <h2 class="section-title" style="border-bottom-color: #d32f2f;">⚠️ Depåregler i Garaget<button type="button" class="bc-socket" data-socket="4" aria-label="Hittad 10 mm-hylsa 4"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
+      <p class="section-lead" style="margin-bottom: 18px;">Välkommen in i värmen! För allas trevnad och lackens överlevnad gäller följande i Burn Creek:</p>
+
+      <div class="rules-grid">
+        <div class="rule-item">
+          <div class="rule-num">01</div>
+          <div class="rule-text">
+            <strong>Rör inte verktygen</strong>
+            Fråga alltid innan du lånar – varje nyckel och hylsa har sin bestämda plats.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">02</div>
+          <div class="rule-text">
+            <strong>Inga burkar eller bälten på bilarna</strong>
+            Ställ aldrig ölburkar, kaffemuggar eller luta dig med nitar/bälten mot huvar och skärmar.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">03</div>
+          <div class="rule-text">
+            <strong>Fråga innan du fotar byggen</strong>
+            Pågående projekt stannar i garaget tills ägaren ger klartecken för sociala medier.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">04</div>
+          <div class="rule-text">
+            <strong>Håll golvet rent</strong>
+            Lämna inga skruvar, brickor eller skräp på verkstadsgolvet.
+          </div>
+        </div>
+
+        <div class="rule-item">
+          <div class="rule-num">05</div>
+          <div class="rule-text">
+            <strong>Kaffet är heligt</strong>
+            Tar du sista koppen ur kannan är det din skyldighet att sätta på en ny panna direkt.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+<section id="omrostning" class="section"><h2 class="section-title">Garage-omröstning</h2><div class="features-grid">      <!-- Veckans Garage-omröstning -->
+      <div class="feature-box poll-box">
+        <div>
+          <h3>🗳️ Veckans Garage-omröstning</h3>
+          <div class="poll-question" id="poll-question">Vad regerar i garaget?</div>
+          <div class="poll-options" id="poll-options-list"></div>
+        </div>
+        <div class="poll-footer-note">
+          <span id="poll-status-hint">Klicka på ett alternativ för att rösta</span>
+          <span id="poll-total-votes">0 röster</span>
+        </div>
+      </div>
+</div></section>
+<section id="reaktionstest" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">🚦 Dragracing Reaktionstest</h2>
+      <p class="section-lead">
+        Håll inne <strong>STAGE / HÅLL BROMSEN</strong>, vänta på grönt ljus och släpp så snabbt som möjligt. Släpper du innan grönt blir det rödlykta!
+      </p>
+    </div>
+
+    <div class="drag-layout">
+      <!-- Spelplan -->
+      <div class="drag-card">
+        <h3>Kör på startgranen</h3>
+        <input type="text" id="drag-driver-name" class="gb-input" maxlength="30" placeholder="Ditt förarnamn (t.ex. Pelle, Tony, Gäst) *" />
+
+        <div class="tree-rack">
+          <div class="tree-row">
+            <div class="tree-lamp" id="lamp-amber-1"></div>
+            <div class="tree-lamp" id="lamp-amber-1r"></div>
+          </div>
+          <div class="tree-row">
+            <div class="tree-lamp" id="lamp-amber-2"></div>
+            <div class="tree-lamp" id="lamp-amber-2r"></div>
+          </div>
+          <div class="tree-row">
+            <div class="tree-lamp" id="lamp-amber-3"></div>
+            <div class="tree-lamp" id="lamp-amber-3r"></div>
+          </div>
+          <div class="tree-row">
+            <div class="tree-lamp" id="lamp-green"></div>
+            <div class="tree-lamp" id="lamp-red"></div>
+          </div>
+        </div>
+
+        <div class="drag-readout" id="drag-readout">Håll knappen nere för att stagea</div>
+
+        <button
+          type="button"
+          class="btn-stage-hold"
+          id="btn-stage-hold"
+          onpointerdown="startDragStage(event)"
+          onpointerup="releaseDragStage(event)"
+          onpointercancel="cancelDragStage()"
+        >
+          🔥 HÅLL BROMSEN (STAGE)
+        </button>
+      </div>
+
+      <!-- Scoreboard -->
+      <div class="drag-card" style="border-top-color: #fbc02d;">
+        <h3 style="color: #fbc02d;">🏆 Snabbaste Reaktionstider</h3>
+        <div class="scoreboard-list" id="drag-scoreboard">
+          <div style="color:#888; font-size:0.85rem;">Laddar topplistan...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+<section id="garage-legends" class="bc-legends section"><h2 class="section-title">🏆 Garage Legends</h2><div class="bc-legend-grid">
+
+<article class="bc-legend-card"><h3>Digital trofévägg</h3><small>Dina utmärkelser på denna webbläsare</small><div id="bc-trophies"></div></article>
+<article class="bc-legend-card"><h3>Verkstadsquiz</h3><div id="bc-quiz" aria-live="polite"></div><button id="bc-quiz-start" type="button">Starta quiz – 10 frågor</button><div id="bc-quiz-submit" hidden><label for="bc-quiz-name">Smeknamn på topplistan</label><input id="bc-quiz-name" maxlength="24" autocomplete="off"><button id="bc-quiz-save" type="button">Spara resultat</button></div><p id="bc-quiz-status" role="status"></p><h4>Topplista</h4><ol id="bc-quiz-board"></ol></article>
+</div></section>
+<div class="bc-hunt" id="bc-hunt"><strong>🔍 THE MISSING 10MM</strong><p id="bc-hunt-status" aria-live="polite">Fem hylsor har försvunnit i depån. Kan du hitta dem?</p><progress id="bc-hunt-progress" max="5" value="0" aria-label="Hittade hylsor"></progress><div><button type="button" id="bc-hunt-reset" hidden>Spela igen</button></div></div>
+<section id="gastbok" class="section" style="padding-top: 10px;">
+    <div class="section-header">
+      <h2 class="section-title">✍️ Digital Gästbok</h2>
+      <p class="section-lead">Har du hälsat på i depån eller vill skicka en hälsning till grabbarna? Lägg gärna med en bild på ditt åk!</p>
+    </div>
+
+    <div class="gb-layout">
+      <!-- Formulär -->
+      <div class="gb-box">
+        <h3>Lämna ett avtryck</h3>
+        <input type="text" id="gb-name" class="gb-input" maxlength="40" placeholder="Ditt namn / smeknamn *" />
+        <input type="text" id="gb-ride" class="gb-input" maxlength="50" placeholder="Vad åker du? (t.ex. Chevy Bel Air, Volvo 240, Hoj)" />
+        
+        <select id="gb-badge" class="gb-select">
+          <option value="🏁">🏁 Bara på besök & snackar skit</option>
+          <option value="☕">☕ Kom för kaffet</option>
+          <option value="🔧">🔧 Hjälpte till att skruva</option>
+          <option value="🍺">🍺 Tog med kall dricka</option>
+          <option value="🔥">🔥 Kollade in projekten</option>
+        </select>
+
+        <label class="photo-upload-label" for="gb-photo-input">
+          📷 Lägg till bild på ditt åk (valfritt)
+        </label>
+        <input type="file" id="gb-photo-input" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)" />
+
+        <div class="photo-preview-wrap" id="photo-preview-wrap">
+          <img id="photo-preview-img" src="" alt="Förhandsvisning" />
+          <button type="button" class="remove-photo-btn" onclick="clearPhoto()">✖ Ta bort bild</button>
+        </div>
+
+        <textarea id="gb-message" class="gb-textarea" maxlength="200" placeholder="Skriv din hälsning till grabbarna... *"></textarea>
+
+        <button class="btn-gb-submit" id="gb-submit-btn" onclick="submitGuestbook()">🚀 Skicka till Gästboken</button>
+      </div>
+
+      <!-- Flöde -->
+      <div class="gb-box">
+        <h3>📖 Senaste besökarna</h3>
+        <div class="gb-feed" id="gb-feed">
+          <div style="text-align:center; color:#777; font-size:0.85rem; padding:12px;">Laddar gästboken...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+<section id="besoksraknare" class="bc-legends section"><article class="bc-legend-card"><h3>Besöksräknare</h3><div id="bc-odo" class="bc-odo" aria-label="Besöksräknare">···</div><small id="bc-visit-status" aria-live="polite">Laddar gemensam räknare…</small></article></section>
+<section id="admin-panel-section">
     <div class="admin-card">
       <div class="admin-header">
         <h2>🔓 Burn Creek Admin-kontroll</h2>
@@ -1868,438 +2288,6 @@
       </p>
     </div>
   </section>
-
-  <!-- HERO -->
-  <header class="hero">
-    <div class="live-status-pill" id="live-status-pill">
-      <span class="status-dot"></span>
-      <span id="live-status-text">Kollar depåstatus i Brännehylte...</span>
-    </div>
-    <br>
-
-    <div class="christmas-tree" id="christmas-tree" onclick="handleTreeEasterEgg()" title="Klicka 5 gånger för Burnout-läge!">
-      <div class="bulb amber"></div>
-      <div class="bulb amber"></div>
-      <div class="bulb amber"></div>
-      <div class="bulb green"></div>
-      <span class="burnout-label">🔥 BURNOUT</span>
-    </div>
-
-    <div class="hero-logo" onclick="handleLogoEasterEgg()" title="Klicka 3 gånger för Rat Rod / Patina-läge">
-      <img src="logo.png" alt="Burn Creek Speedshop Logo">
-    </div>
-
-    <h1>Burn Creek Speedshop</h1>
-    <div class="hero-tag" id="hero-tag"><span>Brännehylte • Est. 2026</span></div>
-
-    <p>
-      I småländska Brännehylte samlas fem biltokiga polare för att skruva V8, 
-      hålla liv i klassiska jänkare och motorcyklar samt dricka alldeles för mycket depåkaffe.
-    </p>
-
-    <div class="hero-btns">
-      <a href="#crew" class="btn btn-primary"><span>🔥 Se Crewet & Fordonen</span></a>
-      <a href="#reaktionstest" class="btn btn-secondary"><span>🚦 Testa Startgranen</span></a>
-      <a href="#gastbok" class="btn btn-secondary"><span>✍️ Signera Gästboken</span></a>
-    </div>
-    <div class="pit-order-wrap">
-      <button type="button" class="pit-order-trigger" onclick="drawPitOrder()">🎲 Dra dagens depåorder</button>
-      <div id="pit-order-card" hidden aria-live="polite"><small>📟 BURN CREEK PIT WALL</small><p id="pit-order-text"></p><button type="button" class="pit-order-trigger" onclick="drawPitOrder()">En order till ↻</button></div>
-    </div>
-  </header>
-
-  <div class="race-stripe"></div>
-
-  <!-- DEPÅN, GÄST-WIFI & SWISH -->
-  <section id="depan" class="section">
-    <div class="section-header">
-      <h2 class="section-title">Depån i Brännehylte<button type="button" class="bc-socket" data-socket="1" aria-label="Hittad 10 mm-hylsa 1"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
-      <p class="section-lead">
-        Hösten 2026 slog vi upp portarna till vår ca 300 m² stora verkstad. Här samsas V8-projekt, 
-        svetsloppor, specialbyggda arbetsbänkar och vår egen depåmyshörna.
-      </p>
-    </div>
-
-    <div class="timing-board">
-      <div class="timing-cell">
-        <strong>~300 m²</strong>
-        <span>Verkstadsyta</span>
-      </div>
-      <div class="timing-cell">
-        <strong>5 MEKAR</strong>
-        <span>Burn Creek Crew</span>
-      </div>
-      <div class="timing-cell">
-        <strong>V8 & 2-HJUL</strong>
-        <span>Jänkare & Hojar</span>
-      </div>
-    </div>
-
-    <div class="perks-grid">
-      <div class="perk-card">
-        <h3>📶 Gästnätverk (WiFi)</h3>
-        <div class="info-chip">
-          <small>Nätverk (SSID)</small>
-          <strong id="wifi-ssid">Burncreekspeedshopsnyltar</strong>
-        </div>
-        <div class="info-chip">
-          <small>Lösenord</small>
-          <strong id="wifi-pass">Jagsnyltarwifi</strong>
-        </div>
-        <button class="action-btn btn-copy-wifi" onclick="copyWifiPassword()">📋 Kopiera WiFi-lösenord</button>
-      </div>
-
-      <div class="perk-card swish-card">
-        <h3>💸 Fika-Swish / Verkstadskassa</h3>
-        <div class="info-chip">
-          <small>Swish-nummer (Fredrik)</small>
-          <strong>079-347 53 52</strong>
-        </div>
-        <p style="margin: 0 0 12px; font-size: 0.88rem; color: #c4c4ce;">
-          Tar du en dricka, kaffe eller snacks så får du gärna swisha det du tycker det är värt, så vi kan fortsätta att fylla på med mer.
-        </p>
-        <button class="action-btn btn-do-swish" onclick="triggerSwish()">💸 Kopiera nummer & Öppna Swish</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- SPELBART DRAGRACING-REAKTIONSTEST & SCOREBOARD -->
-  <section id="reaktionstest" class="section" style="padding-top: 10px;">
-    <div class="section-header">
-      <h2 class="section-title">🚦 Dragracing Reaktionstest</h2>
-      <p class="section-lead">
-        Håll inne <strong>STAGE / HÅLL BROMSEN</strong>, vänta på grönt ljus och släpp så snabbt som möjligt. Släpper du innan grönt blir det rödlykta!
-      </p>
-    </div>
-
-    <div class="drag-layout">
-      <!-- Spelplan -->
-      <div class="drag-card">
-        <h3>Kör på startgranen</h3>
-        <input type="text" id="drag-driver-name" class="gb-input" maxlength="30" placeholder="Ditt förarnamn (t.ex. Pelle, Tony, Gäst) *" />
-
-        <div class="tree-rack">
-          <div class="tree-row">
-            <div class="tree-lamp" id="lamp-amber-1"></div>
-            <div class="tree-lamp" id="lamp-amber-1r"></div>
-          </div>
-          <div class="tree-row">
-            <div class="tree-lamp" id="lamp-amber-2"></div>
-            <div class="tree-lamp" id="lamp-amber-2r"></div>
-          </div>
-          <div class="tree-row">
-            <div class="tree-lamp" id="lamp-amber-3"></div>
-            <div class="tree-lamp" id="lamp-amber-3r"></div>
-          </div>
-          <div class="tree-row">
-            <div class="tree-lamp" id="lamp-green"></div>
-            <div class="tree-lamp" id="lamp-red"></div>
-          </div>
-        </div>
-
-        <div class="drag-readout" id="drag-readout">Håll knappen nere för att stagea</div>
-
-        <button
-          type="button"
-          class="btn-stage-hold"
-          id="btn-stage-hold"
-          onpointerdown="startDragStage(event)"
-          onpointerup="releaseDragStage(event)"
-          onpointercancel="cancelDragStage()"
-        >
-          🔥 HÅLL BROMSEN (STAGE)
-        </button>
-      </div>
-
-      <!-- Scoreboard -->
-      <div class="drag-card" style="border-top-color: #fbc02d;">
-        <h3 style="color: #fbc02d;">🏆 Snabbaste Reaktionstider</h3>
-        <div class="scoreboard-list" id="drag-scoreboard">
-          <div style="color:#888; font-size:0.85rem;">Laddar topplistan...</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- NÄSTA GREJ I SIKTE (SYNKAD MED APPENS KALENDER) & GARAGE-OMRÖSTNING -->
-  <section id="aktuellt" class="section" style="padding-top: 10px;">
-    <div class="section-header">
-      <h2 class="section-title">I Sikte & Garage-omröstning<button type="button" class="bc-socket" data-socket="2" aria-label="Hittad 10 mm-hylsa 2"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
-      <p class="section-lead">Håll koll på kommande träffar och mekkvällar från kalendern samt lägg din röst i veckans verkstadsfråga:</p>
-    </div>
-
-    <div class="features-grid">
-      <!-- Nästa grej i sikte -->
-      <div class="feature-box">
-        <div>
-          <h3>⏱️ Nästa grej i sikte</h3>
-          <div class="countdown-event-title" id="cd-event-title">Hämtar från kalendern...</div>
-          <div class="countdown-event-sub" id="cd-event-sub"></div>
-        </div>
-
-        <div class="cd-grid">
-          <div class="cd-unit">
-            <strong id="cd-days">00</strong>
-            <span>Dagar</span>
-          </div>
-          <div class="cd-unit">
-            <strong id="cd-hours">00</strong>
-            <span>Timmar</span>
-          </div>
-          <div class="cd-unit">
-            <strong id="cd-mins">00</strong>
-            <span>Minuter</span>
-          </div>
-          <div class="cd-unit">
-            <strong id="cd-secs">00</strong>
-            <span>Sekunder</span>
-          </div>
-        </div>
-
-        <div class="upcoming-list" id="upcoming-events-list" style="display:none;"></div>
-      </div>
-
-      <!-- Veckans Garage-omröstning -->
-      <div class="feature-box poll-box">
-        <div>
-          <h3>🗳️ Veckans Garage-omröstning</h3>
-          <div class="poll-question" id="poll-question">Vad regerar i garaget?</div>
-          <div class="poll-options" id="poll-options-list"></div>
-        </div>
-        <div class="poll-footer-note">
-          <span id="poll-status-hint">Klicka på ett alternativ för att rösta</span>
-          <span id="poll-total-votes">0 röster</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOKA GÄSTMEKPLATS (SPEGLAD MOT APPENS 'guests') -->
-  <section id="mekplats" class="section" style="padding-top: 10px;">
-    <div class="section-header">
-      <h2 class="section-title">🔧 Boka Gästmekplats</h2>
-      <p class="section-lead">
-        Behöver du komma in under tak i Brännehylte en dag eller kväll för att meka, svetsa eller byta olja? 
-        Skicka en förfrågan nedan så syns den direkt i vår app och vi hör av oss!
-      </p>
-    </div>
-
-    <div class="bay-layout">
-      <!-- Bokningsformulär -->
-      <div class="bay-card">
-        <h3>Skicka bokningsförfrågan</h3>
-        <input type="text" id="bay-name" class="gb-input" maxlength="50" placeholder="Ditt namn *" />
-        <input type="tel" id="bay-phone" class="gb-input" maxlength="30" placeholder="Telefonnummer (så vi kan svara på SMS/samtal) *" />
-        <input type="text" id="bay-vehicle" class="gb-input" maxlength="60" placeholder="Fordon (t.ex. Cheva Impala -65, Volvo 740) *" />
-        <input type="date" id="bay-date" class="gb-input" />
-
-        <div class="bay-checks">
-          <label class="bay-check-item">
-            <input type="checkbox" id="bay-need-jack" />
-            Domkraft & pallbockar
-          </label>
-          <label class="bay-check-item">
-            <input type="checkbox" id="bay-need-weld" />
-            Svets / slip
-          </label>
-          <label class="bay-check-item">
-            <input type="checkbox" id="bay-need-air" />
-            Tryckluft & el
-          </label>
-          <label class="bay-check-item">
-            <input type="checkbox" id="bay-need-help" />
-            Behöver ett extra handtag
-          </label>
-        </div>
-
-        <textarea id="bay-desc" class="gb-textarea" maxlength="260" placeholder="Vad ska du göra och ungefär hur lång tid räknar du med? *"></textarea>
-
-        <button class="btn-bay-submit" id="bay-submit-btn" onclick="submitBayRequest()">📅 Skicka förfrågan till Crewet</button>
-      </div>
-
-      <!-- Villkor & Inbokade gästmek från appen -->
-      <div class="bay-card" style="border-top-color: #fbc02d;">
-        <h3 style="color: #fbc02d;">📋 Så funkar gästmekplatsen</h3>
-        <ul style="margin: 0; padding-left: 18px; color: #d4d4dc; font-size: 0.92rem; line-height: 1.65;">
-          <li><strong>Kostnad: 150 kr per dag:</strong> Betalas via Fika-Swish (079-347 53 52) – går rakt in i verkstadskassan för el, värme och förbrukning.</li>
-          <li><strong>Alltid med en medlem på plats:</strong> Gästmek sker när någon ur Burn Creek Crew är i lokalen.</li>
-          <li><strong>Eget ansvar:</strong> Allt skruvande sker på egen risk – vi hjälps åt att hålla säkerheten uppe.</li>
-          <li><strong>Städa efter dig:</strong> Sopa golvet, torka upp spill och lägg tillbaka lånade grejer innan du rullar ut (annars utgår straffavgift på en platta öl eller hembakat!).</li>
-        </ul>
-
-        <div id="approved-bay-section" style="margin-top: 18px; display: none;">
-          <h4 style="margin: 0 0 8px; font-size: 0.9rem; text-transform: uppercase; color: #00e676;">✅ Inbokade gästmek i kalendern</h4>
-          <div class="bay-booking-list" id="approved-bay-list"></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CREW & BYGGEN -->
-  <section id="crew" class="section" style="padding-top: 10px;">
-    <div class="section-header">
-      <h2 class="section-title">Startfältet – Crew & Fordon<button type="button" class="bc-socket" data-socket="3" aria-label="Hittad 10 mm-hylsa 3"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
-      <p class="section-lead">Klicka på respektive medlem för att läsa mer om gänget i Burn Creek Speedshop.</p>
-    </div>
-
-    <div class="crew-grid">
-      <div class="crew-card" id="crew-card-fredrik" style="background-image: url('fredrik.jpg');" onclick="openCrewModal('fredrik')">
-        <span class="crew-click-hint">👆 Klicka för info</span>
-        <div class="crew-card-content">
-          <h3>Fredrik Tengmark</h3>
-          <div class="ride-badge" id="crew-badge-fredrik">Ford Hot Rod • GMC Vandura</div>
-        </div>
-      </div>
-
-      <div class="crew-card" id="crew-card-tony" style="background-image: url('tony.jpg');" onclick="openCrewModal('tony')">
-        <span class="crew-click-hint">👆 Klicka för info</span>
-        <div class="crew-card-content">
-          <h3>Tony Olsson</h3>
-          <div class="ride-badge" id="crew-badge-tony">Buick LeSabre</div>
-        </div>
-      </div>
-
-      <div class="crew-card" id="crew-card-kenneth" style="background-image: url('kenneth.jpg');" onclick="openCrewModal('kenneth')">
-        <span class="crew-click-hint">👆 Klicka för info</span>
-        <div class="crew-card-content">
-          <h3>Kenneth Eklund</h3>
-          <div class="ride-badge" id="crew-badge-kenneth">Ford Ranchero</div>
-        </div>
-      </div>
-
-      <div class="crew-card" id="crew-card-hakan" style="background-image: url('hakan.jpg');" onclick="openCrewModal('hakan')">
-        <span class="crew-click-hint">👆 Klicka för info</span>
-        <div class="crew-card-content">
-          <h3>Håkan Gustafsson</h3>
-          <div class="ride-badge" id="crew-badge-hakan">Ford Galaxie 500 Cab</div>
-        </div>
-      </div>
-
-      <div class="crew-card" id="crew-card-pierre" style="background-image: url('pierre.jpg');" onclick="openCrewModal('pierre')">
-        <span class="crew-click-hint">👆 Klicka för info</span>
-        <div class="crew-card-content">
-          <h3>Pierre Danhall</h3>
-          <div class="ride-badge" id="crew-badge-pierre">Motorcyklar</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- DEPÅREGLER -->
-  <section id="regler" class="section" style="padding-top: 10px;">
-    <div class="rules-box">
-      <h2 class="section-title" style="border-bottom-color: #d32f2f;">⚠️ Depåregler i Garaget<button type="button" class="bc-socket" data-socket="4" aria-label="Hittad 10 mm-hylsa 4"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
-      <p class="section-lead" style="margin-bottom: 18px;">Välkommen in i värmen! För allas trevnad och lackens överlevnad gäller följande i Burn Creek:</p>
-
-      <div class="rules-grid">
-        <div class="rule-item">
-          <div class="rule-num">01</div>
-          <div class="rule-text">
-            <strong>Rör inte verktygen</strong>
-            Fråga alltid innan du lånar – varje nyckel och hylsa har sin bestämda plats.
-          </div>
-        </div>
-
-        <div class="rule-item">
-          <div class="rule-num">02</div>
-          <div class="rule-text">
-            <strong>Inga burkar eller bälten på bilarna</strong>
-            Ställ aldrig ölburkar, kaffemuggar eller luta dig med nitar/bälten mot huvar och skärmar.
-          </div>
-        </div>
-
-        <div class="rule-item">
-          <div class="rule-num">03</div>
-          <div class="rule-text">
-            <strong>Fråga innan du fotar byggen</strong>
-            Pågående projekt stannar i garaget tills ägaren ger klartecken för sociala medier.
-          </div>
-        </div>
-
-        <div class="rule-item">
-          <div class="rule-num">04</div>
-          <div class="rule-text">
-            <strong>Håll golvet rent</strong>
-            Lämna inga skruvar, brickor eller skräp på verkstadsgolvet.
-          </div>
-        </div>
-
-        <div class="rule-item">
-          <div class="rule-num">05</div>
-          <div class="rule-text">
-            <strong>Kaffet är heligt</strong>
-            Tar du sista koppen ur kannan är det din skyldighet att sätta på en ny panna direkt.
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- GALLERI -->
-  <section id="galleri" class="section" style="padding-top: 10px;">
-    <div class="section-header">
-      <h2 class="section-title">Glimtar från Garaget<button type="button" class="bc-socket" data-socket="5" aria-label="Hittad 10 mm-hylsa 5"><svg width="19" height="23" viewBox="0 0 24 30" aria-hidden="true"><path d="M5 8L8 3H16L19 8V24L16 27H8L5 24Z" fill="currentColor" stroke="#333"/><path d="M5 9H19M5 22H19" stroke="#333"/><path d="M9 5H15L17 8L15 11H9L7 8Z" fill="#333"/><text x="12" y="19" text-anchor="middle" font-size="8" fill="#222">10</text></svg></button></h2>
-      <p class="section-lead">Färska bilder från lokalen, bänkarna, bilarna och kvällsmeket i Brännehylte.</p>
-    </div>
-
-    <div class="gallery-grid" id="dynamic-gallery-grid">
-      <div style="color:#777; font-size:0.9rem;">Inga galleribilder uppladdade ännu.</div>
-    </div>
-  </section>
-
-  <!-- DIGITAL GÄSTBOK DIREKT PÅ HEMSIDAN -->
-  <section id="gastbok" class="section" style="padding-top: 10px;">
-    <div class="section-header">
-      <h2 class="section-title">✍️ Digital Gästbok</h2>
-      <p class="section-lead">Har du hälsat på i depån eller vill skicka en hälsning till grabbarna? Lägg gärna med en bild på ditt åk!</p>
-    </div>
-
-    <div class="gb-layout">
-      <!-- Formulär -->
-      <div class="gb-box">
-        <h3>Lämna ett avtryck</h3>
-        <input type="text" id="gb-name" class="gb-input" maxlength="40" placeholder="Ditt namn / smeknamn *" />
-        <input type="text" id="gb-ride" class="gb-input" maxlength="50" placeholder="Vad åker du? (t.ex. Chevy Bel Air, Volvo 240, Hoj)" />
-        
-        <select id="gb-badge" class="gb-select">
-          <option value="🏁">🏁 Bara på besök & snackar skit</option>
-          <option value="☕">☕ Kom för kaffet</option>
-          <option value="🔧">🔧 Hjälpte till att skruva</option>
-          <option value="🍺">🍺 Tog med kall dricka</option>
-          <option value="🔥">🔥 Kollade in projekten</option>
-        </select>
-
-        <label class="photo-upload-label" for="gb-photo-input">
-          📷 Lägg till bild på ditt åk (valfritt)
-        </label>
-        <input type="file" id="gb-photo-input" accept="image/*" style="display:none;" onchange="handlePhotoSelect(event)" />
-
-        <div class="photo-preview-wrap" id="photo-preview-wrap">
-          <img id="photo-preview-img" src="" alt="Förhandsvisning" />
-          <button type="button" class="remove-photo-btn" onclick="clearPhoto()">✖ Ta bort bild</button>
-        </div>
-
-        <textarea id="gb-message" class="gb-textarea" maxlength="200" placeholder="Skriv din hälsning till grabbarna... *"></textarea>
-
-        <button class="btn-gb-submit" id="gb-submit-btn" onclick="submitGuestbook()">🚀 Skicka till Gästboken</button>
-      </div>
-
-      <!-- Flöde -->
-      <div class="gb-box">
-        <h3>📖 Senaste besökarna</h3>
-        <div class="gb-feed" id="gb-feed">
-          <div style="text-align:center; color:#777; font-size:0.85rem; padding:12px;">Laddar gästboken...</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="bc-hunt" id="bc-hunt"><strong>🔍 THE MISSING 10MM</strong><p id="bc-hunt-status" aria-live="polite">Fem hylsor har försvunnit i depån. Kan du hitta dem?</p><progress id="bc-hunt-progress" max="5" value="0" aria-label="Hittade hylsor"></progress><div><button type="button" id="bc-hunt-reset" hidden>Spela igen</button></div></div>
-<section id="garage-legends" class="bc-legends section"><h2 class="section-title">🏆 Garage Legends</h2><div class="bc-legend-grid">
-<article class="bc-legend-card"><h3>Besöksräknare</h3><div id="bc-odo" class="bc-odo" aria-label="Besöksräknare">···</div><small id="bc-visit-status" aria-live="polite">Laddar gemensam räknare…</small></article>
-<article class="bc-legend-card"><h3>Digital trofévägg</h3><small>Dina utmärkelser på denna webbläsare</small><div id="bc-trophies"></div></article>
-<article class="bc-legend-card"><h3>Verkstadsquiz</h3><div id="bc-quiz" aria-live="polite"></div><button id="bc-quiz-start" type="button">Starta quiz – 10 frågor</button><div id="bc-quiz-submit" hidden><label for="bc-quiz-name">Smeknamn på topplistan</label><input id="bc-quiz-name" maxlength="24" autocomplete="off"><button id="bc-quiz-save" type="button">Spara resultat</button></div><p id="bc-quiz-status" role="status"></p><h4>Topplista</h4><ol id="bc-quiz-board"></ol></article>
-</div></section>
 <footer>
     <strong>Burn Creek Speedshop</strong> • Brännehylte • Est. 2026<br>
     <a href="#gastbok" style="color:#ff6f00; font-weight:bold; text-decoration:none;">↑ Signera gästboken ovan</a><br>
